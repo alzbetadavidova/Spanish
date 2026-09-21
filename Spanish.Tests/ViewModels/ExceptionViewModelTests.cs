@@ -34,6 +34,8 @@ public class ExceptionNotesViewModelTests
     {
         var scenario = new GenderScenario(TestData.Ciudad(), "ciudad", Article.La) { Notes = hasNotes ? Why : [] };
         var vm = new GenderScenarioViewModel(scenario, OnCompleted);
+        var changed = new List<string?>();
+        vm.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
         var before = vm.ShowNotes;
 
         vm.ChooseCommand.Execute(Article.La);
@@ -42,6 +44,7 @@ public class ExceptionNotesViewModelTests
         {
             Assert.That(before, Is.False);
             Assert.That(vm.ShowNotes, Is.EqualTo(hasNotes));
+            Assert.That(changed, Does.Contain(nameof(GenderScenarioViewModel.ShowNotes)));
         });
     }
 
@@ -211,6 +214,17 @@ public class NounEditorExceptionTests
         editor.IsFeminine = true;
 
         Assert.That(editor.TakesElInSingular, Is.False);
+    }
+
+    [Test]
+    public void TakesEl_ExistingMasculineWord_IsSuggestedWhenMadeFeminine()
+    {
+        var agua = new Noun { BaseValue = "agua", Translation = "water", Gender = Gender.Masculine };
+
+        var editor = Create(agua);
+        editor.IsFeminine = true;
+
+        Assert.That(editor.TakesElInSingular, Is.True);
     }
 
     [Test]

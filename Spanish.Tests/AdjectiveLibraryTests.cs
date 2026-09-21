@@ -344,12 +344,17 @@ public class AdjectiveLibraryTests
     [Test]
     public void SeedLibrary_FeminineNounsWithStressedA_TakeEl()
     {
-        var flagged = LoadSeedLibrary().Nouns.Where(n => n.TakesElInSingular).ToList();
+        var nouns = LoadSeedLibrary().Nouns;
+        var feminine = nouns.Where(n => n.Gender == Gender.Feminine).ToList();
 
         Assert.Multiple(() =>
         {
-            Assert.That(flagged.Select(n => n.BaseValue), Does.Contain("agua"));
-            Assert.That(flagged.All(n => n.Gender == Gender.Feminine && n.SingularArticle == Article.El), Is.True);
+            Assert.That(nouns.Where(n => n.TakesElInSingular), Has.All.Matches<Noun>(n => n.Gender == Gender.Feminine));
+            Assert.That(feminine, Has.Some.Matches<Noun>(n => n.BaseValue == "agua" && n.TakesElInSingular));
+            foreach (var noun in feminine)
+            {
+                Assert.That(noun.TakesElInSingular, Is.EqualTo(StressedASuggester.StartsWithStressedA(noun.BaseValue)), noun.BaseValue);
+            }
         });
     }
 

@@ -18,6 +18,7 @@ public class StressedASuggesterTests
     [TestCase("amiga", false)] // a-mi-ga: stress on mi
     [TestCase("ahora", false)] // a-ho-ra
     [TestCase("aorta", false)] // a-or-ta: strong vowels are separate syllables
+    [TestCase("aldea", false)] // al-de-a: also at the end
     [TestCase("azul", false)] // ends in l: stress on the last syllable
     [TestCase("amígdala", false)] // written accent elsewhere
     [TestCase("casa", false)] // does not start with a
