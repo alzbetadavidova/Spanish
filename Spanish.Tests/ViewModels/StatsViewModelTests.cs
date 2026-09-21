@@ -20,7 +20,10 @@ public class StatsViewModelTests
         _vm = new StatsViewModel(new LibraryContext(_library, new InMemoryStore<LearnLibrary>(_library)), _clock);
     }
 
+    /// <summary>The words shown, leaving out the numerals every library has.</summary>
     private IEnumerable<string> Words => _vm.Rows.Where(r => r.Row.Kind != WordKind.Numeral).Select(r => r.Word);
+
+    private IEnumerable<string> AllRows => _vm.Rows.Select(r => r.Word);
 
     [Test]
     public void Initially_SortedByLeastLearned()
@@ -87,17 +90,15 @@ public class StatsViewModelTests
     public void Filters_ByKindAndTopic()
     {
         // All rows, so a word filter that let numerals through would fail.
-        IEnumerable<string> rows = _vm.Rows.Select(r => r.Word);
-
         _vm.SelectedKind = StatsViewModel.KindFilters[2];
-        Assert.That(rows, Is.EqualTo(new[] { "hablar" }));
+        Assert.That(AllRows, Is.EqualTo(new[] { "hablar" }));
 
         _vm.SelectedKind = StatsViewModel.KindFilters[1];
         _vm.SelectedTopic = _vm.TopicFilters.Single(t => t.Value == "city");
-        Assert.That(rows, Is.EqualTo(new[] { "ciudad" }));
+        Assert.That(AllRows, Is.EqualTo(new[] { "ciudad" }));
 
         _vm.SelectedTopic = null;
-        Assert.That(rows.Count(), Is.EqualTo(2));
+        Assert.That(AllRows.Count(), Is.EqualTo(2));
 
         _vm.SelectedKind = StatsViewModel.KindFilters[2];
         _vm.SelectedTopic = _vm.TopicFilters.Single(t => t.Value == "animals");

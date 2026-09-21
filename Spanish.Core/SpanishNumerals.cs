@@ -85,7 +85,8 @@ public static class SpanishNumerals
 
     /// <summary>
     /// 21/3/2025 is veintiuno de marzo de dos mil veinticinco. The day and month may have a leading zero and
-    /// be separated by a dot or a dash; the words may start with el.
+    /// be separated by a dot or a dash; the words may start with el, take del before a year from 2000 on and
+    /// spell September setiembre.
     /// </summary>
     public static NumeralForms Date(DateOnly date)
     {

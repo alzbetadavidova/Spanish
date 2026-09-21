@@ -66,7 +66,7 @@ public class NumeralSessionTests
         Assert.Multiple(() =>
         {
             Assert.That(new Exercise(scenario.Unit, scenario.Type).WordKey, Is.EqualTo("Numeral:números 0–20"));
-            Assert.That(library.Numerals[0].GetProgress(ScenarioType.NumberToText)!.Attempts, Is.EqualTo(1));
+            Assert.That(TestData.NumeralOf(NumeralCategory.Numbers0To20, library).GetProgress(ScenarioType.NumberToText)!.Attempts, Is.EqualTo(1));
         });
     }
 }

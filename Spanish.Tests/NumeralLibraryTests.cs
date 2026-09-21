@@ -19,6 +19,16 @@ public class NumeralLibraryTests
     }
 
     [Test]
+    public void NumeralCategory_NamesAreTheStoredKeys()
+    {
+        // library.json stores progress under these names; renaming one would lose the users' progress.
+        Assert.That(Enum.GetNames<NumeralCategory>(), Is.EqualTo(new[]
+        {
+            "Numbers0To20", "Numbers21To100", "Numbers101To999", "Thousands", "Millions", "Dates", "Times", "DatesWithTimes"
+        }));
+    }
+
+    [Test]
     public void Numerals_AreNotSharedBetweenLibraries()
     {
         var first = new LearnLibrary();

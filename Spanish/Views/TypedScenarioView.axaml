@@ -16,7 +16,8 @@
 
         <!-- Wraps long answers (dates with times); Enter still submits because AcceptsReturn stays off. -->
         <TextBox x:Name="AnswerBox" Text="{Binding Answer}" PlaceholderText="Type your answer"
-                 HorizontalContentAlignment="Center" TextWrapping="Wrap" IsReadOnly="{Binding IsChecked}">
+                 HorizontalContentAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"
+                 IsReadOnly="{Binding IsChecked}">
             <TextBox.KeyBindings>
                 <KeyBinding Gesture="Enter" Command="{Binding SubmitCommand}" />
             </TextBox.KeyBindings>

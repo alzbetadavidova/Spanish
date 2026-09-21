@@ -165,7 +165,7 @@ public class NumeralPagesTests
             Assert.That(typed.IsCorrect, Is.True);
             Assert.That(learn.CurrentScenario, Is.Not.SameAs(typed));
             Assert.That(store.SaveCount, Is.EqualTo(1));
-            Assert.That(_library.Numerals[0].GetProgress(ScenarioType.NumberToText)!.Attempts, Is.EqualTo(1));
+            Assert.That(TestData.NumeralOf(NumeralCategory.Numbers0To20, _library).GetProgress(ScenarioType.NumberToText)!.Attempts, Is.EqualTo(1));
         });
     }
 
