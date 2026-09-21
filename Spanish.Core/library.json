@@ -10,7 +10,7 @@
     {
       "BaseValue": "leche",
       "Translation": "milk",
-      "PluralValue": "leches",
+      "PluralValue": "",
       "Gender": "Feminine",
       "Topics": ["food"]
     },
@@ -27,28 +27,3983 @@
       "PluralValue": "hombres",
       "Gender": "Masculine",
       "Topics": ["people"]
+    },
+    {
+      "BaseValue": "cosa",
+      "Translation": "thing",
+      "PluralValue": "cosas",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "vez",
+      "Translation": "time (occasion)",
+      "PluralValue": "veces",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "tiempo",
+      "Translation": "time; weather",
+      "PluralValue": "tiempos",
+      "Gender": "Masculine",
+      "Topics": ["time", "weather"]
+    },
+    {
+      "BaseValue": "año",
+      "Translation": "year",
+      "PluralValue": "años",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "día",
+      "Translation": "day",
+      "PluralValue": "días",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "vida",
+      "Translation": "life",
+      "PluralValue": "vidas",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "parte",
+      "Translation": "part",
+      "PluralValue": "partes",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "mundo",
+      "Translation": "world",
+      "PluralValue": "mundos",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "forma",
+      "Translation": "form; shape; way",
+      "PluralValue": "formas",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "caso",
+      "Translation": "case",
+      "PluralValue": "casos",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "manera",
+      "Translation": "way; manner",
+      "PluralValue": "maneras",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "lugar",
+      "Translation": "place",
+      "PluralValue": "lugares",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "momento",
+      "Translation": "moment",
+      "PluralValue": "momentos",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "trabajo",
+      "Translation": "work; job",
+      "PluralValue": "trabajos",
+      "Gender": "Masculine",
+      "Topics": ["work"]
+    },
+    {
+      "BaseValue": "país",
+      "Translation": "country",
+      "PluralValue": "países",
+      "Gender": "Masculine",
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "problema",
+      "Translation": "problem",
+      "PluralValue": "problemas",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "hora",
+      "Translation": "hour",
+      "PluralValue": "horas",
+      "Gender": "Feminine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "semana",
+      "Translation": "week",
+      "PluralValue": "semanas",
+      "Gender": "Feminine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "mes",
+      "Translation": "month",
+      "PluralValue": "meses",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "noche",
+      "Translation": "night",
+      "PluralValue": "noches",
+      "Gender": "Feminine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "mañana",
+      "Translation": "morning",
+      "PluralValue": "mañanas",
+      "Gender": "Feminine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "tarde",
+      "Translation": "afternoon; evening",
+      "PluralValue": "tardes",
+      "Gender": "Feminine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "historia",
+      "Translation": "history; story",
+      "PluralValue": "historias",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "verdad",
+      "Translation": "truth",
+      "PluralValue": "verdades",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "palabra",
+      "Translation": "word",
+      "PluralValue": "palabras",
+      "Gender": "Feminine",
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "idea",
+      "Translation": "idea",
+      "PluralValue": "ideas",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "nombre",
+      "Translation": "name",
+      "PluralValue": "nombres",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "número",
+      "Translation": "number",
+      "PluralValue": "números",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "punto",
+      "Translation": "point; dot",
+      "PluralValue": "puntos",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "fin",
+      "Translation": "end",
+      "PluralValue": "fines",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "lado",
+      "Translation": "side",
+      "PluralValue": "lados",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "razón",
+      "Translation": "reason",
+      "PluralValue": "razones",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "grupo",
+      "Translation": "group",
+      "PluralValue": "grupos",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "situación",
+      "Translation": "situation",
+      "PluralValue": "situaciones",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "pregunta",
+      "Translation": "question",
+      "PluralValue": "preguntas",
+      "Gender": "Feminine",
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "respuesta",
+      "Translation": "answer",
+      "PluralValue": "respuestas",
+      "Gender": "Feminine",
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "ejemplo",
+      "Translation": "example",
+      "PluralValue": "ejemplos",
+      "Gender": "Masculine",
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "cambio",
+      "Translation": "change",
+      "PluralValue": "cambios",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "guerra",
+      "Translation": "war",
+      "PluralValue": "guerras",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "paz",
+      "Translation": "peace",
+      "PluralValue": "",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "dinero",
+      "Translation": "money",
+      "PluralValue": "",
+      "Gender": "Masculine",
+      "Topics": ["shopping"]
+    },
+    {
+      "BaseValue": "precio",
+      "Translation": "price",
+      "PluralValue": "precios",
+      "Gender": "Masculine",
+      "Topics": ["shopping"]
+    },
+    {
+      "BaseValue": "cuenta",
+      "Translation": "bill; account",
+      "PluralValue": "cuentas",
+      "Gender": "Feminine",
+      "Topics": ["shopping"]
+    },
+    {
+      "BaseValue": "empresa",
+      "Translation": "company; firm",
+      "PluralValue": "empresas",
+      "Gender": "Feminine",
+      "Topics": ["work"]
+    },
+    {
+      "BaseValue": "gobierno",
+      "Translation": "government",
+      "PluralValue": "gobiernos",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "ley",
+      "Translation": "law",
+      "PluralValue": "leyes",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "sistema",
+      "Translation": "system",
+      "PluralValue": "sistemas",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "programa",
+      "Translation": "programme; program",
+      "PluralValue": "programas",
+      "Gender": "Masculine",
+      "Topics": ["technology"]
+    },
+    {
+      "BaseValue": "servicio",
+      "Translation": "service",
+      "PluralValue": "servicios",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "proyecto",
+      "Translation": "project",
+      "PluralValue": "proyectos",
+      "Gender": "Masculine",
+      "Topics": ["work"]
+    },
+    {
+      "BaseValue": "nivel",
+      "Translation": "level",
+      "PluralValue": "niveles",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "tipo",
+      "Translation": "type; kind",
+      "PluralValue": "tipos",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "sentido",
+      "Translation": "sense; meaning",
+      "PluralValue": "sentidos",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "relación",
+      "Translation": "relationship",
+      "PluralValue": "relaciones",
+      "Gender": "Feminine",
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "experiencia",
+      "Translation": "experience",
+      "PluralValue": "experiencias",
+      "Gender": "Feminine",
+      "Topics": ["work"]
+    },
+    {
+      "BaseValue": "tema",
+      "Translation": "topic; theme",
+      "PluralValue": "temas",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "estado",
+      "Translation": "state",
+      "PluralValue": "estados",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "resultado",
+      "Translation": "result",
+      "PluralValue": "resultados",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "decisión",
+      "Translation": "decision",
+      "PluralValue": "decisiones",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "error",
+      "Translation": "mistake; error",
+      "PluralValue": "errores",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "éxito",
+      "Translation": "success",
+      "PluralValue": "éxitos",
+      "Gender": "Masculine",
+      "Topics": ["work"]
+    },
+    {
+      "BaseValue": "suerte",
+      "Translation": "luck",
+      "PluralValue": "",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "ayuda",
+      "Translation": "help",
+      "PluralValue": "ayudas",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "paso",
+      "Translation": "step",
+      "PluralValue": "pasos",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "camino",
+      "Translation": "path; way",
+      "PluralValue": "caminos",
+      "Gender": "Masculine",
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "viaje",
+      "Translation": "trip; journey",
+      "PluralValue": "viajes",
+      "Gender": "Masculine",
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "fiesta",
+      "Translation": "party",
+      "PluralValue": "fiestas",
+      "Gender": "Feminine",
+      "Topics": ["leisure"]
+    },
+    {
+      "BaseValue": "juego",
+      "Translation": "game",
+      "PluralValue": "juegos",
+      "Gender": "Masculine",
+      "Topics": ["leisure"]
+    },
+    {
+      "BaseValue": "deporte",
+      "Translation": "sport",
+      "PluralValue": "deportes",
+      "Gender": "Masculine",
+      "Topics": ["leisure"]
+    },
+    {
+      "BaseValue": "música",
+      "Translation": "music",
+      "PluralValue": "",
+      "Gender": "Feminine",
+      "Topics": ["leisure"]
+    },
+    {
+      "BaseValue": "película",
+      "Translation": "film; movie",
+      "PluralValue": "películas",
+      "Gender": "Feminine",
+      "Topics": ["leisure"]
+    },
+    {
+      "BaseValue": "libro",
+      "Translation": "book",
+      "PluralValue": "libros",
+      "Gender": "Masculine",
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "canción",
+      "Translation": "song",
+      "PluralValue": "canciones",
+      "Gender": "Feminine",
+      "Topics": ["leisure"]
+    },
+    {
+      "BaseValue": "foto",
+      "Translation": "photo",
+      "PluralValue": "fotos",
+      "Gender": "Feminine",
+      "Topics": ["leisure"]
+    },
+    {
+      "BaseValue": "color",
+      "Translation": "colour; color",
+      "PluralValue": "colores",
+      "Gender": "Masculine",
+      "Topics": ["colors"]
+    },
+    {
+      "BaseValue": "regalo",
+      "Translation": "gift; present",
+      "PluralValue": "regalos",
+      "Gender": "Masculine",
+      "Topics": ["shopping"]
+    },
+    {
+      "BaseValue": "cumpleaños",
+      "Translation": "birthday",
+      "PluralValue": "cumpleaños",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "fecha",
+      "Translation": "date",
+      "PluralValue": "fechas",
+      "Gender": "Feminine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "calendario",
+      "Translation": "calendar",
+      "PluralValue": "calendarios",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "reunión",
+      "Translation": "meeting",
+      "PluralValue": "reuniones",
+      "Gender": "Feminine",
+      "Topics": ["work"]
+    },
+    {
+      "BaseValue": "cita",
+      "Translation": "appointment; date",
+      "PluralValue": "citas",
+      "Gender": "Feminine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "hecho",
+      "Translation": "fact",
+      "PluralValue": "hechos",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "voz",
+      "Translation": "voice",
+      "PluralValue": "voces",
+      "Gender": "Feminine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "sonido",
+      "Translation": "sound",
+      "PluralValue": "sonidos",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "ruido",
+      "Translation": "noise",
+      "PluralValue": "ruidos",
+      "Gender": "Masculine",
+      "Topics": ["city"]
+    },
+    {
+      "BaseValue": "sabor",
+      "Translation": "taste; flavour",
+      "PluralValue": "sabores",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "peso",
+      "Translation": "weight",
+      "PluralValue": "pesos",
+      "Gender": "Masculine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "línea",
+      "Translation": "line",
+      "PluralValue": "líneas",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "lista",
+      "Translation": "list",
+      "PluralValue": "listas",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "cola",
+      "Translation": "queue; tail",
+      "PluralValue": "colas",
+      "Gender": "Feminine",
+      "Topics": ["city", "animals"]
+    },
+    {
+      "BaseValue": "consejo",
+      "Translation": "advice",
+      "PluralValue": "consejos",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "opinión",
+      "Translation": "opinion",
+      "PluralValue": "opiniones",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "plan",
+      "Translation": "plan",
+      "PluralValue": "planes",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "objeto",
+      "Translation": "object",
+      "PluralValue": "objetos",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "herramienta",
+      "Translation": "tool",
+      "PluralValue": "herramientas",
+      "Gender": "Feminine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "máquina",
+      "Translation": "machine",
+      "PluralValue": "máquinas",
+      "Gender": "Feminine",
+      "Topics": ["technology"]
+    },
+    {
+      "BaseValue": "cultura",
+      "Translation": "culture",
+      "PluralValue": "culturas",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "accidente",
+      "Translation": "accident",
+      "PluralValue": "accidentes",
+      "Gender": "Masculine",
+      "Topics": ["health"]
+    },
+    {
+      "BaseValue": "persona",
+      "Translation": "person",
+      "PluralValue": "personas",
+      "Gender": "Feminine",
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "gente",
+      "Translation": "people",
+      "PluralValue": "",
+      "Gender": "Feminine",
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "niño",
+      "Translation": "child; boy",
+      "PluralValue": "niños",
+      "Gender": "Masculine",
+      "Topics": ["people", "family"]
+    },
+    {
+      "BaseValue": "niña",
+      "Translation": "girl (child)",
+      "PluralValue": "niñas",
+      "Gender": "Feminine",
+      "Topics": ["people", "family"]
+    },
+    {
+      "BaseValue": "chico",
+      "Translation": "boy; guy",
+      "PluralValue": "chicos",
+      "Gender": "Masculine",
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "chica",
+      "Translation": "girl",
+      "PluralValue": "chicas",
+      "Gender": "Feminine",
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "amigo",
+      "Translation": "friend",
+      "PluralValue": "amigos",
+      "Gender": "Masculine",
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "amiga",
+      "Translation": "friend (female)",
+      "PluralValue": "amigas",
+      "Gender": "Feminine",
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "señor",
+      "Translation": "gentleman; Mr",
+      "PluralValue": "señores",
+      "Gender": "Masculine",
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "señora",
+      "Translation": "lady; Mrs",
+      "PluralValue": "señoras",
+      "Gender": "Feminine",
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "bebé",
+      "Translation": "baby",
+      "PluralValue": "bebés",
+      "Gender": "Masculine",
+      "Topics": ["family"]
+    },
+    {
+      "BaseValue": "padre",
+      "Translation": "father",
+      "PluralValue": "padres",
+      "Gender": "Masculine",
+      "Topics": ["family"]
+    },
+    {
+      "BaseValue": "madre",
+      "Translation": "mother",
+      "PluralValue": "madres",
+      "Gender": "Feminine",
+      "Topics": ["family"]
+    },
+    {
+      "BaseValue": "hijo",
+      "Translation": "son",
+      "PluralValue": "hijos",
+      "Gender": "Masculine",
+      "Topics": ["family"]
+    },
+    {
+      "BaseValue": "hija",
+      "Translation": "daughter",
+      "PluralValue": "hijas",
+      "Gender": "Feminine",
+      "Topics": ["family"]
+    },
+    {
+      "BaseValue": "hermano",
+      "Translation": "brother",
+      "PluralValue": "hermanos",
+      "Gender": "Masculine",
+      "Topics": ["family"]
+    },
+    {
+      "BaseValue": "hermana",
+      "Translation": "sister",
+      "PluralValue": "hermanas",
+      "Gender": "Feminine",
+      "Topics": ["family"]
+    },
+    {
+      "BaseValue": "abuelo",
+      "Translation": "grandfather",
+      "PluralValue": "abuelos",
+      "Gender": "Masculine",
+      "Topics": ["family"]
+    },
+    {
+      "BaseValue": "abuela",
+      "Translation": "grandmother",
+      "PluralValue": "abuelas",
+      "Gender": "Feminine",
+      "Topics": ["family"]
+    },
+    {
+      "BaseValue": "tío",
+      "Translation": "uncle",
+      "PluralValue": "tíos",
+      "Gender": "Masculine",
+      "Topics": ["family"]
+    },
+    {
+      "BaseValue": "tía",
+      "Translation": "aunt",
+      "PluralValue": "tías",
+      "Gender": "Feminine",
+      "Topics": ["family"]
+    },
+    {
+      "BaseValue": "primo",
+      "Translation": "cousin",
+      "PluralValue": "primos",
+      "Gender": "Masculine",
+      "Topics": ["family"]
+    },
+    {
+      "BaseValue": "prima",
+      "Translation": "cousin (female)",
+      "PluralValue": "primas",
+      "Gender": "Feminine",
+      "Topics": ["family"]
+    },
+    {
+      "BaseValue": "esposo",
+      "Translation": "husband",
+      "PluralValue": "esposos",
+      "Gender": "Masculine",
+      "Topics": ["family"]
+    },
+    {
+      "BaseValue": "esposa",
+      "Translation": "wife",
+      "PluralValue": "esposas",
+      "Gender": "Feminine",
+      "Topics": ["family"]
+    },
+    {
+      "BaseValue": "novio",
+      "Translation": "boyfriend; groom",
+      "PluralValue": "novios",
+      "Gender": "Masculine",
+      "Topics": ["family"]
+    },
+    {
+      "BaseValue": "novia",
+      "Translation": "girlfriend; bride",
+      "PluralValue": "novias",
+      "Gender": "Feminine",
+      "Topics": ["family"]
+    },
+    {
+      "BaseValue": "familia",
+      "Translation": "family",
+      "PluralValue": "familias",
+      "Gender": "Feminine",
+      "Topics": ["family"]
+    },
+    {
+      "BaseValue": "pareja",
+      "Translation": "couple; partner",
+      "PluralValue": "parejas",
+      "Gender": "Feminine",
+      "Topics": ["family"]
+    },
+    {
+      "BaseValue": "vecino",
+      "Translation": "neighbour",
+      "PluralValue": "vecinos",
+      "Gender": "Masculine",
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "jefe",
+      "Translation": "boss",
+      "PluralValue": "jefes",
+      "Gender": "Masculine",
+      "Topics": ["work"]
+    },
+    {
+      "BaseValue": "compañero",
+      "Translation": "colleague; classmate",
+      "PluralValue": "compañeros",
+      "Gender": "Masculine",
+      "Topics": ["work", "school"]
+    },
+    {
+      "BaseValue": "cliente",
+      "Translation": "client; customer",
+      "PluralValue": "clientes",
+      "Gender": "Masculine",
+      "Topics": ["shopping"]
+    },
+    {
+      "BaseValue": "médico",
+      "Translation": "doctor",
+      "PluralValue": "médicos",
+      "Gender": "Masculine",
+      "Topics": ["health", "work"]
+    },
+    {
+      "BaseValue": "enfermera",
+      "Translation": "nurse",
+      "PluralValue": "enfermeras",
+      "Gender": "Feminine",
+      "Topics": ["health", "work"]
+    },
+    {
+      "BaseValue": "profesor",
+      "Translation": "teacher",
+      "PluralValue": "profesores",
+      "Gender": "Masculine",
+      "Topics": ["school", "work"]
+    },
+    {
+      "BaseValue": "estudiante",
+      "Translation": "student",
+      "PluralValue": "estudiantes",
+      "Gender": "Masculine",
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "alumno",
+      "Translation": "pupil",
+      "PluralValue": "alumnos",
+      "Gender": "Masculine",
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "camarero",
+      "Translation": "waiter",
+      "PluralValue": "camareros",
+      "Gender": "Masculine",
+      "Topics": ["food", "work"]
+    },
+    {
+      "BaseValue": "cocinero",
+      "Translation": "cook",
+      "PluralValue": "cocineros",
+      "Gender": "Masculine",
+      "Topics": ["food", "work"]
+    },
+    {
+      "BaseValue": "escritor",
+      "Translation": "writer",
+      "PluralValue": "escritores",
+      "Gender": "Masculine",
+      "Topics": ["work"]
+    },
+    {
+      "BaseValue": "trabajador",
+      "Translation": "worker",
+      "PluralValue": "trabajadores",
+      "Gender": "Masculine",
+      "Topics": ["work"]
+    },
+    {
+      "BaseValue": "cuerpo",
+      "Translation": "body",
+      "PluralValue": "cuerpos",
+      "Gender": "Masculine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "cabeza",
+      "Translation": "head",
+      "PluralValue": "cabezas",
+      "Gender": "Feminine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "cara",
+      "Translation": "face",
+      "PluralValue": "caras",
+      "Gender": "Feminine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "ojo",
+      "Translation": "eye",
+      "PluralValue": "ojos",
+      "Gender": "Masculine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "oreja",
+      "Translation": "ear",
+      "PluralValue": "orejas",
+      "Gender": "Feminine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "nariz",
+      "Translation": "nose",
+      "PluralValue": "narices",
+      "Gender": "Feminine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "boca",
+      "Translation": "mouth",
+      "PluralValue": "bocas",
+      "Gender": "Feminine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "diente",
+      "Translation": "tooth",
+      "PluralValue": "dientes",
+      "Gender": "Masculine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "lengua",
+      "Translation": "tongue; language",
+      "PluralValue": "lenguas",
+      "Gender": "Feminine",
+      "Topics": ["body", "school"]
+    },
+    {
+      "BaseValue": "labio",
+      "Translation": "lip",
+      "PluralValue": "labios",
+      "Gender": "Masculine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "pelo",
+      "Translation": "hair",
+      "PluralValue": "pelos",
+      "Gender": "Masculine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "cuello",
+      "Translation": "neck",
+      "PluralValue": "cuellos",
+      "Gender": "Masculine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "hombro",
+      "Translation": "shoulder",
+      "PluralValue": "hombros",
+      "Gender": "Masculine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "brazo",
+      "Translation": "arm",
+      "PluralValue": "brazos",
+      "Gender": "Masculine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "mano",
+      "Translation": "hand",
+      "PluralValue": "manos",
+      "Gender": "Feminine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "dedo",
+      "Translation": "finger; toe",
+      "PluralValue": "dedos",
+      "Gender": "Masculine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "pecho",
+      "Translation": "chest",
+      "PluralValue": "pechos",
+      "Gender": "Masculine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "espalda",
+      "Translation": "back",
+      "PluralValue": "espaldas",
+      "Gender": "Feminine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "estómago",
+      "Translation": "stomach",
+      "PluralValue": "estómagos",
+      "Gender": "Masculine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "corazón",
+      "Translation": "heart",
+      "PluralValue": "corazones",
+      "Gender": "Masculine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "pierna",
+      "Translation": "leg",
+      "PluralValue": "piernas",
+      "Gender": "Feminine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "rodilla",
+      "Translation": "knee",
+      "PluralValue": "rodillas",
+      "Gender": "Feminine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "pie",
+      "Translation": "foot",
+      "PluralValue": "pies",
+      "Gender": "Masculine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "tobillo",
+      "Translation": "ankle",
+      "PluralValue": "tobillos",
+      "Gender": "Masculine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "piel",
+      "Translation": "skin",
+      "PluralValue": "pieles",
+      "Gender": "Feminine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "hueso",
+      "Translation": "bone",
+      "PluralValue": "huesos",
+      "Gender": "Masculine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "sangre",
+      "Translation": "blood",
+      "PluralValue": "",
+      "Gender": "Feminine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "frente",
+      "Translation": "forehead",
+      "PluralValue": "frentes",
+      "Gender": "Feminine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "barba",
+      "Translation": "beard",
+      "PluralValue": "barbas",
+      "Gender": "Feminine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "garganta",
+      "Translation": "throat",
+      "PluralValue": "gargantas",
+      "Gender": "Feminine",
+      "Topics": ["body"]
+    },
+    {
+      "BaseValue": "salud",
+      "Translation": "health",
+      "PluralValue": "",
+      "Gender": "Feminine",
+      "Topics": ["health"]
+    },
+    {
+      "BaseValue": "enfermedad",
+      "Translation": "illness; disease",
+      "PluralValue": "enfermedades",
+      "Gender": "Feminine",
+      "Topics": ["health"]
+    },
+    {
+      "BaseValue": "dolor",
+      "Translation": "pain; ache",
+      "PluralValue": "dolores",
+      "Gender": "Masculine",
+      "Topics": ["health"]
+    },
+    {
+      "BaseValue": "hospital",
+      "Translation": "hospital",
+      "PluralValue": "hospitales",
+      "Gender": "Masculine",
+      "Topics": ["health", "city"]
+    },
+    {
+      "BaseValue": "medicina",
+      "Translation": "medicine",
+      "PluralValue": "medicinas",
+      "Gender": "Feminine",
+      "Topics": ["health"]
+    },
+    {
+      "BaseValue": "fiebre",
+      "Translation": "fever",
+      "PluralValue": "fiebres",
+      "Gender": "Feminine",
+      "Topics": ["health"]
+    },
+    {
+      "BaseValue": "farmacia",
+      "Translation": "pharmacy; chemist's",
+      "PluralValue": "farmacias",
+      "Gender": "Feminine",
+      "Topics": ["health", "city"]
+    },
+    {
+      "BaseValue": "pastilla",
+      "Translation": "pill; tablet",
+      "PluralValue": "pastillas",
+      "Gender": "Feminine",
+      "Topics": ["health"]
+    },
+    {
+      "BaseValue": "muerte",
+      "Translation": "death",
+      "PluralValue": "muertes",
+      "Gender": "Feminine",
+      "Topics": ["health"]
+    },
+    {
+      "BaseValue": "comida",
+      "Translation": "food; meal",
+      "PluralValue": "comidas",
+      "Gender": "Feminine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "pan",
+      "Translation": "bread",
+      "PluralValue": "panes",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "carne",
+      "Translation": "meat",
+      "PluralValue": "carnes",
+      "Gender": "Feminine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "pollo",
+      "Translation": "chicken",
+      "PluralValue": "pollos",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "pescado",
+      "Translation": "fish (food)",
+      "PluralValue": "pescados",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "jamón",
+      "Translation": "ham",
+      "PluralValue": "jamones",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "queso",
+      "Translation": "cheese",
+      "PluralValue": "quesos",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "huevo",
+      "Translation": "egg",
+      "PluralValue": "huevos",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "arroz",
+      "Translation": "rice",
+      "PluralValue": "arroces",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "pasta",
+      "Translation": "pasta",
+      "PluralValue": "pastas",
+      "Gender": "Feminine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "sopa",
+      "Translation": "soup",
+      "PluralValue": "sopas",
+      "Gender": "Feminine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "ensalada",
+      "Translation": "salad",
+      "PluralValue": "ensaladas",
+      "Gender": "Feminine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "fruta",
+      "Translation": "fruit",
+      "PluralValue": "frutas",
+      "Gender": "Feminine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "manzana",
+      "Translation": "apple",
+      "PluralValue": "manzanas",
+      "Gender": "Feminine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "naranja",
+      "Translation": "orange (fruit)",
+      "PluralValue": "naranjas",
+      "Gender": "Feminine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "plátano",
+      "Translation": "banana",
+      "PluralValue": "plátanos",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "fresa",
+      "Translation": "strawberry",
+      "PluralValue": "fresas",
+      "Gender": "Feminine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "uva",
+      "Translation": "grape",
+      "PluralValue": "uvas",
+      "Gender": "Feminine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "limón",
+      "Translation": "lemon",
+      "PluralValue": "limones",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "tomate",
+      "Translation": "tomato",
+      "PluralValue": "tomates",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "patata",
+      "Translation": "potato",
+      "PluralValue": "patatas",
+      "Gender": "Feminine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "cebolla",
+      "Translation": "onion",
+      "PluralValue": "cebollas",
+      "Gender": "Feminine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "ajo",
+      "Translation": "garlic",
+      "PluralValue": "ajos",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "zanahoria",
+      "Translation": "carrot",
+      "PluralValue": "zanahorias",
+      "Gender": "Feminine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "lechuga",
+      "Translation": "lettuce",
+      "PluralValue": "lechugas",
+      "Gender": "Feminine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "verdura",
+      "Translation": "vegetable",
+      "PluralValue": "verduras",
+      "Gender": "Feminine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "azúcar",
+      "Translation": "sugar",
+      "PluralValue": "",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "sal",
+      "Translation": "salt",
+      "PluralValue": "",
+      "Gender": "Feminine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "aceite",
+      "Translation": "oil",
+      "PluralValue": "aceites",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "mantequilla",
+      "Translation": "butter",
+      "PluralValue": "",
+      "Gender": "Feminine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "chocolate",
+      "Translation": "chocolate",
+      "PluralValue": "chocolates",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "pastel",
+      "Translation": "cake",
+      "PluralValue": "pasteles",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "galleta",
+      "Translation": "biscuit; cookie",
+      "PluralValue": "galletas",
+      "Gender": "Feminine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "helado",
+      "Translation": "ice cream",
+      "PluralValue": "helados",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "café",
+      "Translation": "coffee; café",
+      "PluralValue": "cafés",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "té",
+      "Translation": "tea",
+      "PluralValue": "tés",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "vino",
+      "Translation": "wine",
+      "PluralValue": "vinos",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "cerveza",
+      "Translation": "beer",
+      "PluralValue": "cervezas",
+      "Gender": "Feminine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "zumo",
+      "Translation": "juice",
+      "PluralValue": "zumos",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "bebida",
+      "Translation": "drink",
+      "PluralValue": "bebidas",
+      "Gender": "Feminine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "desayuno",
+      "Translation": "breakfast",
+      "PluralValue": "desayunos",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "almuerzo",
+      "Translation": "lunch",
+      "PluralValue": "almuerzos",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "cena",
+      "Translation": "dinner; supper",
+      "PluralValue": "cenas",
+      "Gender": "Feminine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "restaurante",
+      "Translation": "restaurant",
+      "PluralValue": "restaurantes",
+      "Gender": "Masculine",
+      "Topics": ["food", "city"]
+    },
+    {
+      "BaseValue": "menú",
+      "Translation": "menu",
+      "PluralValue": "menús",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "plato",
+      "Translation": "plate; dish",
+      "PluralValue": "platos",
+      "Gender": "Masculine",
+      "Topics": ["food", "home"]
+    },
+    {
+      "BaseValue": "vaso",
+      "Translation": "glass (for drinking)",
+      "PluralValue": "vasos",
+      "Gender": "Masculine",
+      "Topics": ["food", "home"]
+    },
+    {
+      "BaseValue": "taza",
+      "Translation": "cup; mug",
+      "PluralValue": "tazas",
+      "Gender": "Feminine",
+      "Topics": ["food", "home"]
+    },
+    {
+      "BaseValue": "cuchara",
+      "Translation": "spoon",
+      "PluralValue": "cucharas",
+      "Gender": "Feminine",
+      "Topics": ["food", "home"]
+    },
+    {
+      "BaseValue": "tenedor",
+      "Translation": "fork",
+      "PluralValue": "tenedores",
+      "Gender": "Masculine",
+      "Topics": ["food", "home"]
+    },
+    {
+      "BaseValue": "cuchillo",
+      "Translation": "knife",
+      "PluralValue": "cuchillos",
+      "Gender": "Masculine",
+      "Topics": ["food", "home"]
+    },
+    {
+      "BaseValue": "botella",
+      "Translation": "bottle",
+      "PluralValue": "botellas",
+      "Gender": "Feminine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "postre",
+      "Translation": "dessert",
+      "PluralValue": "postres",
+      "Gender": "Masculine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "pimienta",
+      "Translation": "pepper (spice)",
+      "PluralValue": "",
+      "Gender": "Feminine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "animal",
+      "Translation": "animal",
+      "PluralValue": "animales",
+      "Gender": "Masculine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "perro",
+      "Translation": "dog",
+      "PluralValue": "perros",
+      "Gender": "Masculine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "gato",
+      "Translation": "cat",
+      "PluralValue": "gatos",
+      "Gender": "Masculine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "caballo",
+      "Translation": "horse",
+      "PluralValue": "caballos",
+      "Gender": "Masculine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "vaca",
+      "Translation": "cow",
+      "PluralValue": "vacas",
+      "Gender": "Feminine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "cerdo",
+      "Translation": "pig",
+      "PluralValue": "cerdos",
+      "Gender": "Masculine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "oveja",
+      "Translation": "sheep",
+      "PluralValue": "ovejas",
+      "Gender": "Feminine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "pájaro",
+      "Translation": "bird",
+      "PluralValue": "pájaros",
+      "Gender": "Masculine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "pez",
+      "Translation": "fish (live)",
+      "PluralValue": "peces",
+      "Gender": "Masculine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "ratón",
+      "Translation": "mouse",
+      "PluralValue": "ratones",
+      "Gender": "Masculine",
+      "Topics": ["animals", "technology"]
+    },
+    {
+      "BaseValue": "conejo",
+      "Translation": "rabbit",
+      "PluralValue": "conejos",
+      "Gender": "Masculine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "león",
+      "Translation": "lion",
+      "PluralValue": "leones",
+      "Gender": "Masculine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "tigre",
+      "Translation": "tiger",
+      "PluralValue": "tigres",
+      "Gender": "Masculine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "elefante",
+      "Translation": "elephant",
+      "PluralValue": "elefantes",
+      "Gender": "Masculine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "mono",
+      "Translation": "monkey",
+      "PluralValue": "monos",
+      "Gender": "Masculine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "oso",
+      "Translation": "bear",
+      "PluralValue": "osos",
+      "Gender": "Masculine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "lobo",
+      "Translation": "wolf",
+      "PluralValue": "lobos",
+      "Gender": "Masculine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "serpiente",
+      "Translation": "snake",
+      "PluralValue": "serpientes",
+      "Gender": "Feminine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "rana",
+      "Translation": "frog",
+      "PluralValue": "ranas",
+      "Gender": "Feminine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "tortuga",
+      "Translation": "turtle; tortoise",
+      "PluralValue": "tortugas",
+      "Gender": "Feminine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "pato",
+      "Translation": "duck",
+      "PluralValue": "patos",
+      "Gender": "Masculine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "abeja",
+      "Translation": "bee",
+      "PluralValue": "abejas",
+      "Gender": "Feminine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "mariposa",
+      "Translation": "butterfly",
+      "PluralValue": "mariposas",
+      "Gender": "Feminine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "araña",
+      "Translation": "spider",
+      "PluralValue": "arañas",
+      "Gender": "Feminine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "ballena",
+      "Translation": "whale",
+      "PluralValue": "ballenas",
+      "Gender": "Feminine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "delfín",
+      "Translation": "dolphin",
+      "PluralValue": "delfines",
+      "Gender": "Masculine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "tiburón",
+      "Translation": "shark",
+      "PluralValue": "tiburones",
+      "Gender": "Masculine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "toro",
+      "Translation": "bull",
+      "PluralValue": "toros",
+      "Gender": "Masculine",
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "casa",
+      "Translation": "house; home",
+      "PluralValue": "casas",
+      "Gender": "Feminine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "hogar",
+      "Translation": "home",
+      "PluralValue": "hogares",
+      "Gender": "Masculine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "piso",
+      "Translation": "flat; floor (storey)",
+      "PluralValue": "pisos",
+      "Gender": "Masculine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "apartamento",
+      "Translation": "apartment",
+      "PluralValue": "apartamentos",
+      "Gender": "Masculine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "habitación",
+      "Translation": "room",
+      "PluralValue": "habitaciones",
+      "Gender": "Feminine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "dormitorio",
+      "Translation": "bedroom",
+      "PluralValue": "dormitorios",
+      "Gender": "Masculine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "cocina",
+      "Translation": "kitchen; cooker",
+      "PluralValue": "cocinas",
+      "Gender": "Feminine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "baño",
+      "Translation": "bathroom; bath",
+      "PluralValue": "baños",
+      "Gender": "Masculine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "salón",
+      "Translation": "living room",
+      "PluralValue": "salones",
+      "Gender": "Masculine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "comedor",
+      "Translation": "dining room",
+      "PluralValue": "comedores",
+      "Gender": "Masculine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "jardín",
+      "Translation": "garden",
+      "PluralValue": "jardines",
+      "Gender": "Masculine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "puerta",
+      "Translation": "door",
+      "PluralValue": "puertas",
+      "Gender": "Feminine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "ventana",
+      "Translation": "window",
+      "PluralValue": "ventanas",
+      "Gender": "Feminine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "pared",
+      "Translation": "wall",
+      "PluralValue": "paredes",
+      "Gender": "Feminine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "suelo",
+      "Translation": "floor; ground",
+      "PluralValue": "suelos",
+      "Gender": "Masculine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "techo",
+      "Translation": "ceiling; roof",
+      "PluralValue": "techos",
+      "Gender": "Masculine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "escalera",
+      "Translation": "stairs; ladder",
+      "PluralValue": "escaleras",
+      "Gender": "Feminine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "llave",
+      "Translation": "key",
+      "PluralValue": "llaves",
+      "Gender": "Feminine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "mueble",
+      "Translation": "piece of furniture",
+      "PluralValue": "muebles",
+      "Gender": "Masculine",
+      "Topics": ["furniture"]
+    },
+    {
+      "BaseValue": "mesa",
+      "Translation": "table",
+      "PluralValue": "mesas",
+      "Gender": "Feminine",
+      "Topics": ["furniture"]
+    },
+    {
+      "BaseValue": "silla",
+      "Translation": "chair",
+      "PluralValue": "sillas",
+      "Gender": "Feminine",
+      "Topics": ["furniture"]
+    },
+    {
+      "BaseValue": "sofá",
+      "Translation": "sofa",
+      "PluralValue": "sofás",
+      "Gender": "Masculine",
+      "Topics": ["furniture"]
+    },
+    {
+      "BaseValue": "sillón",
+      "Translation": "armchair",
+      "PluralValue": "sillones",
+      "Gender": "Masculine",
+      "Topics": ["furniture"]
+    },
+    {
+      "BaseValue": "cama",
+      "Translation": "bed",
+      "PluralValue": "camas",
+      "Gender": "Feminine",
+      "Topics": ["furniture"]
+    },
+    {
+      "BaseValue": "armario",
+      "Translation": "wardrobe; cupboard",
+      "PluralValue": "armarios",
+      "Gender": "Masculine",
+      "Topics": ["furniture"]
+    },
+    {
+      "BaseValue": "estantería",
+      "Translation": "bookcase; shelves",
+      "PluralValue": "estanterías",
+      "Gender": "Feminine",
+      "Topics": ["furniture"]
+    },
+    {
+      "BaseValue": "escritorio",
+      "Translation": "desk",
+      "PluralValue": "escritorios",
+      "Gender": "Masculine",
+      "Topics": ["furniture"]
+    },
+    {
+      "BaseValue": "cajón",
+      "Translation": "drawer",
+      "PluralValue": "cajones",
+      "Gender": "Masculine",
+      "Topics": ["furniture"]
+    },
+    {
+      "BaseValue": "lámpara",
+      "Translation": "lamp",
+      "PluralValue": "lámparas",
+      "Gender": "Feminine",
+      "Topics": ["furniture"]
+    },
+    {
+      "BaseValue": "espejo",
+      "Translation": "mirror",
+      "PluralValue": "espejos",
+      "Gender": "Masculine",
+      "Topics": ["furniture"]
+    },
+    {
+      "BaseValue": "alfombra",
+      "Translation": "carpet; rug",
+      "PluralValue": "alfombras",
+      "Gender": "Feminine",
+      "Topics": ["furniture"]
+    },
+    {
+      "BaseValue": "cortina",
+      "Translation": "curtain",
+      "PluralValue": "cortinas",
+      "Gender": "Feminine",
+      "Topics": ["furniture"]
+    },
+    {
+      "BaseValue": "almohada",
+      "Translation": "pillow",
+      "PluralValue": "almohadas",
+      "Gender": "Feminine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "manta",
+      "Translation": "blanket",
+      "PluralValue": "mantas",
+      "Gender": "Feminine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "nevera",
+      "Translation": "fridge",
+      "PluralValue": "neveras",
+      "Gender": "Feminine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "horno",
+      "Translation": "oven",
+      "PluralValue": "hornos",
+      "Gender": "Masculine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "lavadora",
+      "Translation": "washing machine",
+      "PluralValue": "lavadoras",
+      "Gender": "Feminine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "ducha",
+      "Translation": "shower",
+      "PluralValue": "duchas",
+      "Gender": "Feminine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "cuadro",
+      "Translation": "picture; painting",
+      "PluralValue": "cuadros",
+      "Gender": "Masculine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "reloj",
+      "Translation": "clock; watch",
+      "PluralValue": "relojes",
+      "Gender": "Masculine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "televisión",
+      "Translation": "television",
+      "PluralValue": "televisiones",
+      "Gender": "Feminine",
+      "Topics": ["home", "technology"]
+    },
+    {
+      "BaseValue": "luz",
+      "Translation": "light",
+      "PluralValue": "luces",
+      "Gender": "Feminine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "basura",
+      "Translation": "rubbish; garbage",
+      "PluralValue": "",
+      "Gender": "Feminine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "jabón",
+      "Translation": "soap",
+      "PluralValue": "jabones",
+      "Gender": "Masculine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "toalla",
+      "Translation": "towel",
+      "PluralValue": "toallas",
+      "Gender": "Feminine",
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "lunes",
+      "Translation": "Monday",
+      "PluralValue": "lunes",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "martes",
+      "Translation": "Tuesday",
+      "PluralValue": "martes",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "miércoles",
+      "Translation": "Wednesday",
+      "PluralValue": "miércoles",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "jueves",
+      "Translation": "Thursday",
+      "PluralValue": "jueves",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "viernes",
+      "Translation": "Friday",
+      "PluralValue": "viernes",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "sábado",
+      "Translation": "Saturday",
+      "PluralValue": "sábados",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "domingo",
+      "Translation": "Sunday",
+      "PluralValue": "domingos",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "enero",
+      "Translation": "January",
+      "PluralValue": "",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "febrero",
+      "Translation": "February",
+      "PluralValue": "",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "marzo",
+      "Translation": "March",
+      "PluralValue": "",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "abril",
+      "Translation": "April",
+      "PluralValue": "",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "mayo",
+      "Translation": "May",
+      "PluralValue": "",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "junio",
+      "Translation": "June",
+      "PluralValue": "",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "julio",
+      "Translation": "July",
+      "PluralValue": "",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "agosto",
+      "Translation": "August",
+      "PluralValue": "",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "septiembre",
+      "Translation": "September",
+      "PluralValue": "",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "octubre",
+      "Translation": "October",
+      "PluralValue": "",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "noviembre",
+      "Translation": "November",
+      "PluralValue": "",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "diciembre",
+      "Translation": "December",
+      "PluralValue": "",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "primavera",
+      "Translation": "spring",
+      "PluralValue": "primaveras",
+      "Gender": "Feminine",
+      "Topics": ["time", "weather"]
+    },
+    {
+      "BaseValue": "verano",
+      "Translation": "summer",
+      "PluralValue": "veranos",
+      "Gender": "Masculine",
+      "Topics": ["time", "weather"]
+    },
+    {
+      "BaseValue": "otoño",
+      "Translation": "autumn; fall",
+      "PluralValue": "otoños",
+      "Gender": "Masculine",
+      "Topics": ["time", "weather"]
+    },
+    {
+      "BaseValue": "invierno",
+      "Translation": "winter",
+      "PluralValue": "inviernos",
+      "Gender": "Masculine",
+      "Topics": ["time", "weather"]
+    },
+    {
+      "BaseValue": "fin de semana",
+      "Translation": "weekend",
+      "PluralValue": "fines de semana",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "minuto",
+      "Translation": "minute",
+      "PluralValue": "minutos",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "segundo",
+      "Translation": "second",
+      "PluralValue": "segundos",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "siglo",
+      "Translation": "century",
+      "PluralValue": "siglos",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "época",
+      "Translation": "era; period",
+      "PluralValue": "épocas",
+      "Gender": "Feminine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "futuro",
+      "Translation": "future",
+      "PluralValue": "",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "pasado",
+      "Translation": "past",
+      "PluralValue": "",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "mediodía",
+      "Translation": "noon; midday",
+      "PluralValue": "",
+      "Gender": "Masculine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "medianoche",
+      "Translation": "midnight",
+      "PluralValue": "",
+      "Gender": "Feminine",
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "ropa",
+      "Translation": "clothes; clothing",
+      "PluralValue": "",
+      "Gender": "Feminine",
+      "Topics": ["clothes"]
+    },
+    {
+      "BaseValue": "camisa",
+      "Translation": "shirt",
+      "PluralValue": "camisas",
+      "Gender": "Feminine",
+      "Topics": ["clothes"]
+    },
+    {
+      "BaseValue": "camiseta",
+      "Translation": "T-shirt",
+      "PluralValue": "camisetas",
+      "Gender": "Feminine",
+      "Topics": ["clothes"]
+    },
+    {
+      "BaseValue": "pantalón",
+      "Translation": "trousers; pants",
+      "PluralValue": "pantalones",
+      "Gender": "Masculine",
+      "Topics": ["clothes"]
+    },
+    {
+      "BaseValue": "falda",
+      "Translation": "skirt",
+      "PluralValue": "faldas",
+      "Gender": "Feminine",
+      "Topics": ["clothes"]
+    },
+    {
+      "BaseValue": "vestido",
+      "Translation": "dress",
+      "PluralValue": "vestidos",
+      "Gender": "Masculine",
+      "Topics": ["clothes"]
+    },
+    {
+      "BaseValue": "chaqueta",
+      "Translation": "jacket",
+      "PluralValue": "chaquetas",
+      "Gender": "Feminine",
+      "Topics": ["clothes"]
+    },
+    {
+      "BaseValue": "abrigo",
+      "Translation": "coat",
+      "PluralValue": "abrigos",
+      "Gender": "Masculine",
+      "Topics": ["clothes"]
+    },
+    {
+      "BaseValue": "zapato",
+      "Translation": "shoe",
+      "PluralValue": "zapatos",
+      "Gender": "Masculine",
+      "Topics": ["clothes"]
+    },
+    {
+      "BaseValue": "bota",
+      "Translation": "boot",
+      "PluralValue": "botas",
+      "Gender": "Feminine",
+      "Topics": ["clothes"]
+    },
+    {
+      "BaseValue": "calcetín",
+      "Translation": "sock",
+      "PluralValue": "calcetines",
+      "Gender": "Masculine",
+      "Topics": ["clothes"]
+    },
+    {
+      "BaseValue": "sombrero",
+      "Translation": "hat",
+      "PluralValue": "sombreros",
+      "Gender": "Masculine",
+      "Topics": ["clothes"]
+    },
+    {
+      "BaseValue": "bufanda",
+      "Translation": "scarf",
+      "PluralValue": "bufandas",
+      "Gender": "Feminine",
+      "Topics": ["clothes"]
+    },
+    {
+      "BaseValue": "guante",
+      "Translation": "glove",
+      "PluralValue": "guantes",
+      "Gender": "Masculine",
+      "Topics": ["clothes"]
+    },
+    {
+      "BaseValue": "cinturón",
+      "Translation": "belt",
+      "PluralValue": "cinturones",
+      "Gender": "Masculine",
+      "Topics": ["clothes"]
+    },
+    {
+      "BaseValue": "bolso",
+      "Translation": "handbag",
+      "PluralValue": "bolsos",
+      "Gender": "Masculine",
+      "Topics": ["clothes"]
+    },
+    {
+      "BaseValue": "traje",
+      "Translation": "suit",
+      "PluralValue": "trajes",
+      "Gender": "Masculine",
+      "Topics": ["clothes"]
+    },
+    {
+      "BaseValue": "jersey",
+      "Translation": "jumper; sweater",
+      "PluralValue": "jerséis",
+      "Gender": "Masculine",
+      "Topics": ["clothes"]
+    },
+    {
+      "BaseValue": "calle",
+      "Translation": "street",
+      "PluralValue": "calles",
+      "Gender": "Feminine",
+      "Topics": ["city"]
+    },
+    {
+      "BaseValue": "plaza",
+      "Translation": "square",
+      "PluralValue": "plazas",
+      "Gender": "Feminine",
+      "Topics": ["city"]
+    },
+    {
+      "BaseValue": "barrio",
+      "Translation": "neighbourhood",
+      "PluralValue": "barrios",
+      "Gender": "Masculine",
+      "Topics": ["city"]
+    },
+    {
+      "BaseValue": "pueblo",
+      "Translation": "village",
+      "PluralValue": "pueblos",
+      "Gender": "Masculine",
+      "Topics": ["city"]
+    },
+    {
+      "BaseValue": "centro",
+      "Translation": "centre; center",
+      "PluralValue": "centros",
+      "Gender": "Masculine",
+      "Topics": ["city"]
+    },
+    {
+      "BaseValue": "tienda",
+      "Translation": "shop; store",
+      "PluralValue": "tiendas",
+      "Gender": "Feminine",
+      "Topics": ["city", "shopping"]
+    },
+    {
+      "BaseValue": "mercado",
+      "Translation": "market",
+      "PluralValue": "mercados",
+      "Gender": "Masculine",
+      "Topics": ["city", "shopping"]
+    },
+    {
+      "BaseValue": "supermercado",
+      "Translation": "supermarket",
+      "PluralValue": "supermercados",
+      "Gender": "Masculine",
+      "Topics": ["city", "shopping"]
+    },
+    {
+      "BaseValue": "banco",
+      "Translation": "bank; bench",
+      "PluralValue": "bancos",
+      "Gender": "Masculine",
+      "Topics": ["city"]
+    },
+    {
+      "BaseValue": "iglesia",
+      "Translation": "church",
+      "PluralValue": "iglesias",
+      "Gender": "Feminine",
+      "Topics": ["city"]
+    },
+    {
+      "BaseValue": "museo",
+      "Translation": "museum",
+      "PluralValue": "museos",
+      "Gender": "Masculine",
+      "Topics": ["city"]
+    },
+    {
+      "BaseValue": "parque",
+      "Translation": "park",
+      "PluralValue": "parques",
+      "Gender": "Masculine",
+      "Topics": ["city"]
+    },
+    {
+      "BaseValue": "escuela",
+      "Translation": "school",
+      "PluralValue": "escuelas",
+      "Gender": "Feminine",
+      "Topics": ["school", "city"]
+    },
+    {
+      "BaseValue": "universidad",
+      "Translation": "university",
+      "PluralValue": "universidades",
+      "Gender": "Feminine",
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "biblioteca",
+      "Translation": "library",
+      "PluralValue": "bibliotecas",
+      "Gender": "Feminine",
+      "Topics": ["school", "city"]
+    },
+    {
+      "BaseValue": "oficina",
+      "Translation": "office",
+      "PluralValue": "oficinas",
+      "Gender": "Feminine",
+      "Topics": ["work"]
+    },
+    {
+      "BaseValue": "edificio",
+      "Translation": "building",
+      "PluralValue": "edificios",
+      "Gender": "Masculine",
+      "Topics": ["city"]
+    },
+    {
+      "BaseValue": "puente",
+      "Translation": "bridge",
+      "PluralValue": "puentes",
+      "Gender": "Masculine",
+      "Topics": ["city"]
+    },
+    {
+      "BaseValue": "estación",
+      "Translation": "station; season",
+      "PluralValue": "estaciones",
+      "Gender": "Feminine",
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "aeropuerto",
+      "Translation": "airport",
+      "PluralValue": "aeropuertos",
+      "Gender": "Masculine",
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "hotel",
+      "Translation": "hotel",
+      "PluralValue": "hoteles",
+      "Gender": "Masculine",
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "cine",
+      "Translation": "cinema",
+      "PluralValue": "cines",
+      "Gender": "Masculine",
+      "Topics": ["city", "leisure"]
+    },
+    {
+      "BaseValue": "teatro",
+      "Translation": "theatre",
+      "PluralValue": "teatros",
+      "Gender": "Masculine",
+      "Topics": ["city", "leisure"]
+    },
+    {
+      "BaseValue": "coche",
+      "Translation": "car",
+      "PluralValue": "coches",
+      "Gender": "Masculine",
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "autobús",
+      "Translation": "bus",
+      "PluralValue": "autobuses",
+      "Gender": "Masculine",
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "tren",
+      "Translation": "train",
+      "PluralValue": "trenes",
+      "Gender": "Masculine",
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "avión",
+      "Translation": "plane",
+      "PluralValue": "aviones",
+      "Gender": "Masculine",
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "barco",
+      "Translation": "boat; ship",
+      "PluralValue": "barcos",
+      "Gender": "Masculine",
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "bicicleta",
+      "Translation": "bicycle",
+      "PluralValue": "bicicletas",
+      "Gender": "Feminine",
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "moto",
+      "Translation": "motorbike",
+      "PluralValue": "motos",
+      "Gender": "Feminine",
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "taxi",
+      "Translation": "taxi",
+      "PluralValue": "taxis",
+      "Gender": "Masculine",
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "metro",
+      "Translation": "underground; metro; metre",
+      "PluralValue": "metros",
+      "Gender": "Masculine",
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "billete",
+      "Translation": "ticket; banknote",
+      "PluralValue": "billetes",
+      "Gender": "Masculine",
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "maleta",
+      "Translation": "suitcase",
+      "PluralValue": "maletas",
+      "Gender": "Feminine",
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "pasaporte",
+      "Translation": "passport",
+      "PluralValue": "pasaportes",
+      "Gender": "Masculine",
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "mapa",
+      "Translation": "map",
+      "PluralValue": "mapas",
+      "Gender": "Masculine",
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "playa",
+      "Translation": "beach",
+      "PluralValue": "playas",
+      "Gender": "Feminine",
+      "Topics": ["travel", "nature"]
+    },
+    {
+      "BaseValue": "dirección",
+      "Translation": "address; direction",
+      "PluralValue": "direcciones",
+      "Gender": "Feminine",
+      "Topics": ["city"]
+    },
+    {
+      "BaseValue": "carretera",
+      "Translation": "road",
+      "PluralValue": "carreteras",
+      "Gender": "Feminine",
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "tráfico",
+      "Translation": "traffic",
+      "PluralValue": "",
+      "Gender": "Masculine",
+      "Topics": ["city"]
+    },
+    {
+      "BaseValue": "correo",
+      "Translation": "mail; post",
+      "PluralValue": "correos",
+      "Gender": "Masculine",
+      "Topics": ["city"]
+    },
+    {
+      "BaseValue": "naturaleza",
+      "Translation": "nature",
+      "PluralValue": "",
+      "Gender": "Feminine",
+      "Topics": ["nature"]
+    },
+    {
+      "BaseValue": "tierra",
+      "Translation": "earth; land",
+      "PluralValue": "tierras",
+      "Gender": "Feminine",
+      "Topics": ["nature"]
+    },
+    {
+      "BaseValue": "mar",
+      "Translation": "sea",
+      "PluralValue": "mares",
+      "Gender": "Masculine",
+      "Topics": ["nature"]
+    },
+    {
+      "BaseValue": "río",
+      "Translation": "river",
+      "PluralValue": "ríos",
+      "Gender": "Masculine",
+      "Topics": ["nature"]
+    },
+    {
+      "BaseValue": "lago",
+      "Translation": "lake",
+      "PluralValue": "lagos",
+      "Gender": "Masculine",
+      "Topics": ["nature"]
+    },
+    {
+      "BaseValue": "montaña",
+      "Translation": "mountain",
+      "PluralValue": "montañas",
+      "Gender": "Feminine",
+      "Topics": ["nature"]
+    },
+    {
+      "BaseValue": "bosque",
+      "Translation": "forest; woods",
+      "PluralValue": "bosques",
+      "Gender": "Masculine",
+      "Topics": ["nature"]
+    },
+    {
+      "BaseValue": "árbol",
+      "Translation": "tree",
+      "PluralValue": "árboles",
+      "Gender": "Masculine",
+      "Topics": ["nature"]
+    },
+    {
+      "BaseValue": "flor",
+      "Translation": "flower",
+      "PluralValue": "flores",
+      "Gender": "Feminine",
+      "Topics": ["nature"]
+    },
+    {
+      "BaseValue": "planta",
+      "Translation": "plant",
+      "PluralValue": "plantas",
+      "Gender": "Feminine",
+      "Topics": ["nature"]
+    },
+    {
+      "BaseValue": "hierba",
+      "Translation": "grass; herb",
+      "PluralValue": "hierbas",
+      "Gender": "Feminine",
+      "Topics": ["nature"]
+    },
+    {
+      "BaseValue": "campo",
+      "Translation": "countryside; field",
+      "PluralValue": "campos",
+      "Gender": "Masculine",
+      "Topics": ["nature"]
+    },
+    {
+      "BaseValue": "isla",
+      "Translation": "island",
+      "PluralValue": "islas",
+      "Gender": "Feminine",
+      "Topics": ["nature"]
+    },
+    {
+      "BaseValue": "cielo",
+      "Translation": "sky",
+      "PluralValue": "cielos",
+      "Gender": "Masculine",
+      "Topics": ["nature"]
+    },
+    {
+      "BaseValue": "sol",
+      "Translation": "sun",
+      "PluralValue": "soles",
+      "Gender": "Masculine",
+      "Topics": ["nature", "weather"]
+    },
+    {
+      "BaseValue": "luna",
+      "Translation": "moon",
+      "PluralValue": "lunas",
+      "Gender": "Feminine",
+      "Topics": ["nature"]
+    },
+    {
+      "BaseValue": "estrella",
+      "Translation": "star",
+      "PluralValue": "estrellas",
+      "Gender": "Feminine",
+      "Topics": ["nature"]
+    },
+    {
+      "BaseValue": "nube",
+      "Translation": "cloud",
+      "PluralValue": "nubes",
+      "Gender": "Feminine",
+      "Topics": ["weather"]
+    },
+    {
+      "BaseValue": "lluvia",
+      "Translation": "rain",
+      "PluralValue": "lluvias",
+      "Gender": "Feminine",
+      "Topics": ["weather"]
+    },
+    {
+      "BaseValue": "nieve",
+      "Translation": "snow",
+      "PluralValue": "",
+      "Gender": "Feminine",
+      "Topics": ["weather"]
+    },
+    {
+      "BaseValue": "viento",
+      "Translation": "wind",
+      "PluralValue": "vientos",
+      "Gender": "Masculine",
+      "Topics": ["weather"]
+    },
+    {
+      "BaseValue": "tormenta",
+      "Translation": "storm",
+      "PluralValue": "tormentas",
+      "Gender": "Feminine",
+      "Topics": ["weather"]
+    },
+    {
+      "BaseValue": "calor",
+      "Translation": "heat",
+      "PluralValue": "",
+      "Gender": "Masculine",
+      "Topics": ["weather"]
+    },
+    {
+      "BaseValue": "frío",
+      "Translation": "cold",
+      "PluralValue": "",
+      "Gender": "Masculine",
+      "Topics": ["weather"]
+    },
+    {
+      "BaseValue": "aire",
+      "Translation": "air",
+      "PluralValue": "aires",
+      "Gender": "Masculine",
+      "Topics": ["nature"]
+    },
+    {
+      "BaseValue": "fuego",
+      "Translation": "fire",
+      "PluralValue": "fuegos",
+      "Gender": "Masculine",
+      "Topics": ["nature"]
+    },
+    {
+      "BaseValue": "piedra",
+      "Translation": "stone",
+      "PluralValue": "piedras",
+      "Gender": "Feminine",
+      "Topics": ["nature"]
+    },
+    {
+      "BaseValue": "arena",
+      "Translation": "sand",
+      "PluralValue": "arenas",
+      "Gender": "Feminine",
+      "Topics": ["nature"]
+    },
+    {
+      "BaseValue": "hoja",
+      "Translation": "leaf; sheet (of paper)",
+      "PluralValue": "hojas",
+      "Gender": "Feminine",
+      "Topics": ["nature", "school"]
+    },
+    {
+      "BaseValue": "clima",
+      "Translation": "climate",
+      "PluralValue": "climas",
+      "Gender": "Masculine",
+      "Topics": ["weather"]
+    },
+    {
+      "BaseValue": "temperatura",
+      "Translation": "temperature",
+      "PluralValue": "temperaturas",
+      "Gender": "Feminine",
+      "Topics": ["weather"]
+    },
+    {
+      "BaseValue": "paisaje",
+      "Translation": "landscape",
+      "PluralValue": "paisajes",
+      "Gender": "Masculine",
+      "Topics": ["nature"]
+    },
+    {
+      "BaseValue": "sueldo",
+      "Translation": "salary; wage",
+      "PluralValue": "sueldos",
+      "Gender": "Masculine",
+      "Topics": ["work"]
+    },
+    {
+      "BaseValue": "negocio",
+      "Translation": "business",
+      "PluralValue": "negocios",
+      "Gender": "Masculine",
+      "Topics": ["work"]
+    },
+    {
+      "BaseValue": "tarea",
+      "Translation": "task; homework",
+      "PluralValue": "tareas",
+      "Gender": "Feminine",
+      "Topics": ["school", "work"]
+    },
+    {
+      "BaseValue": "examen",
+      "Translation": "exam",
+      "PluralValue": "exámenes",
+      "Gender": "Masculine",
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "clase",
+      "Translation": "class; lesson",
+      "PluralValue": "clases",
+      "Gender": "Feminine",
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "lección",
+      "Translation": "lesson",
+      "PluralValue": "lecciones",
+      "Gender": "Feminine",
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "curso",
+      "Translation": "course; school year",
+      "PluralValue": "cursos",
+      "Gender": "Masculine",
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "nota",
+      "Translation": "grade; note",
+      "PluralValue": "notas",
+      "Gender": "Feminine",
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "papel",
+      "Translation": "paper; role",
+      "PluralValue": "papeles",
+      "Gender": "Masculine",
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "lápiz",
+      "Translation": "pencil",
+      "PluralValue": "lápices",
+      "Gender": "Masculine",
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "bolígrafo",
+      "Translation": "pen",
+      "PluralValue": "bolígrafos",
+      "Gender": "Masculine",
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "cuaderno",
+      "Translation": "notebook",
+      "PluralValue": "cuadernos",
+      "Gender": "Masculine",
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "mochila",
+      "Translation": "backpack; rucksack",
+      "PluralValue": "mochilas",
+      "Gender": "Feminine",
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "ordenador",
+      "Translation": "computer",
+      "PluralValue": "ordenadores",
+      "Gender": "Masculine",
+      "Topics": ["technology"]
+    },
+    {
+      "BaseValue": "teléfono",
+      "Translation": "telephone",
+      "PluralValue": "teléfonos",
+      "Gender": "Masculine",
+      "Topics": ["technology"]
+    },
+    {
+      "BaseValue": "móvil",
+      "Translation": "mobile phone",
+      "PluralValue": "móviles",
+      "Gender": "Masculine",
+      "Topics": ["technology"]
+    },
+    {
+      "BaseValue": "pantalla",
+      "Translation": "screen",
+      "PluralValue": "pantallas",
+      "Gender": "Feminine",
+      "Topics": ["technology"]
+    },
+    {
+      "BaseValue": "mensaje",
+      "Translation": "message",
+      "PluralValue": "mensajes",
+      "Gender": "Masculine",
+      "Topics": ["technology"]
+    },
+    {
+      "BaseValue": "aplicación",
+      "Translation": "app; application",
+      "PluralValue": "aplicaciones",
+      "Gender": "Feminine",
+      "Topics": ["technology"]
+    },
+    {
+      "BaseValue": "red",
+      "Translation": "network; net",
+      "PluralValue": "redes",
+      "Gender": "Feminine",
+      "Topics": ["technology"]
+    },
+    {
+      "BaseValue": "página",
+      "Translation": "page",
+      "PluralValue": "páginas",
+      "Gender": "Feminine",
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "carta",
+      "Translation": "letter",
+      "PluralValue": "cartas",
+      "Gender": "Feminine",
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "periódico",
+      "Translation": "newspaper",
+      "PluralValue": "periódicos",
+      "Gender": "Masculine",
+      "Topics": ["leisure"]
+    },
+    {
+      "BaseValue": "revista",
+      "Translation": "magazine",
+      "PluralValue": "revistas",
+      "Gender": "Feminine",
+      "Topics": ["leisure"]
+    },
+    {
+      "BaseValue": "noticia",
+      "Translation": "news item; piece of news",
+      "PluralValue": "noticias",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "idioma",
+      "Translation": "language",
+      "PluralValue": "idiomas",
+      "Gender": "Masculine",
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "ciencia",
+      "Translation": "science",
+      "PluralValue": "ciencias",
+      "Gender": "Feminine",
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "amor",
+      "Translation": "love",
+      "PluralValue": "amores",
+      "Gender": "Masculine",
+      "Topics": ["emotions"]
+    },
+    {
+      "BaseValue": "miedo",
+      "Translation": "fear",
+      "PluralValue": "miedos",
+      "Gender": "Masculine",
+      "Topics": ["emotions"]
+    },
+    {
+      "BaseValue": "alegría",
+      "Translation": "joy",
+      "PluralValue": "alegrías",
+      "Gender": "Feminine",
+      "Topics": ["emotions"]
+    },
+    {
+      "BaseValue": "tristeza",
+      "Translation": "sadness",
+      "PluralValue": "tristezas",
+      "Gender": "Feminine",
+      "Topics": ["emotions"]
+    },
+    {
+      "BaseValue": "felicidad",
+      "Translation": "happiness",
+      "PluralValue": "felicidades",
+      "Gender": "Feminine",
+      "Topics": ["emotions"]
+    },
+    {
+      "BaseValue": "esperanza",
+      "Translation": "hope",
+      "PluralValue": "esperanzas",
+      "Gender": "Feminine",
+      "Topics": ["emotions"]
+    },
+    {
+      "BaseValue": "sueño",
+      "Translation": "dream; sleep",
+      "PluralValue": "sueños",
+      "Gender": "Masculine",
+      "Topics": ["emotions"]
+    },
+    {
+      "BaseValue": "risa",
+      "Translation": "laugh; laughter",
+      "PluralValue": "risas",
+      "Gender": "Feminine",
+      "Topics": ["emotions"]
+    },
+    {
+      "BaseValue": "sorpresa",
+      "Translation": "surprise",
+      "PluralValue": "sorpresas",
+      "Gender": "Feminine",
+      "Topics": ["emotions"]
+    },
+    {
+      "BaseValue": "paciencia",
+      "Translation": "patience",
+      "PluralValue": "",
+      "Gender": "Feminine",
+      "Topics": ["emotions"]
+    },
+    {
+      "BaseValue": "compra",
+      "Translation": "purchase; shopping",
+      "PluralValue": "compras",
+      "Gender": "Feminine",
+      "Topics": ["shopping"]
+    },
+    {
+      "BaseValue": "oferta",
+      "Translation": "offer; deal",
+      "PluralValue": "ofertas",
+      "Gender": "Feminine",
+      "Topics": ["shopping"]
+    },
+    {
+      "BaseValue": "tarjeta",
+      "Translation": "card",
+      "PluralValue": "tarjetas",
+      "Gender": "Feminine",
+      "Topics": ["shopping"]
+    },
+    {
+      "BaseValue": "bolsa",
+      "Translation": "bag",
+      "PluralValue": "bolsas",
+      "Gender": "Feminine",
+      "Topics": ["shopping"]
+    },
+    {
+      "BaseValue": "caja",
+      "Translation": "box; checkout",
+      "PluralValue": "cajas",
+      "Gender": "Feminine",
+      "Topics": ["shopping"]
+    },
+    {
+      "BaseValue": "talla",
+      "Translation": "size (clothes)",
+      "PluralValue": "tallas",
+      "Gender": "Feminine",
+      "Topics": ["shopping", "clothes"]
+    },
+    {
+      "BaseValue": "euro",
+      "Translation": "euro",
+      "PluralValue": "euros",
+      "Gender": "Masculine",
+      "Topics": ["shopping"]
+    },
+    {
+      "BaseValue": "moneda",
+      "Translation": "coin; currency",
+      "PluralValue": "monedas",
+      "Gender": "Feminine",
+      "Topics": ["shopping"]
+    },
+    {
+      "BaseValue": "fútbol",
+      "Translation": "football; soccer",
+      "PluralValue": "",
+      "Gender": "Masculine",
+      "Topics": ["leisure"]
+    },
+    {
+      "BaseValue": "partido",
+      "Translation": "match; game; party (political)",
+      "PluralValue": "partidos",
+      "Gender": "Masculine",
+      "Topics": ["leisure"]
+    },
+    {
+      "BaseValue": "equipo",
+      "Translation": "team; equipment",
+      "PluralValue": "equipos",
+      "Gender": "Masculine",
+      "Topics": ["leisure", "work"]
+    },
+    {
+      "BaseValue": "pelota",
+      "Translation": "ball",
+      "PluralValue": "pelotas",
+      "Gender": "Feminine",
+      "Topics": ["leisure"]
+    },
+    {
+      "BaseValue": "jugador",
+      "Translation": "player",
+      "PluralValue": "jugadores",
+      "Gender": "Masculine",
+      "Topics": ["leisure"]
+    },
+    {
+      "BaseValue": "piscina",
+      "Translation": "swimming pool",
+      "PluralValue": "piscinas",
+      "Gender": "Feminine",
+      "Topics": ["leisure"]
+    },
+    {
+      "BaseValue": "guitarra",
+      "Translation": "guitar",
+      "PluralValue": "guitarras",
+      "Gender": "Feminine",
+      "Topics": ["leisure"]
+    },
+    {
+      "BaseValue": "piano",
+      "Translation": "piano",
+      "PluralValue": "pianos",
+      "Gender": "Masculine",
+      "Topics": ["leisure"]
+    },
+    {
+      "BaseValue": "baile",
+      "Translation": "dance",
+      "PluralValue": "bailes",
+      "Gender": "Masculine",
+      "Topics": ["leisure"]
+    },
+    {
+      "BaseValue": "ejercicio",
+      "Translation": "exercise",
+      "PluralValue": "ejercicios",
+      "Gender": "Masculine",
+      "Topics": ["school", "leisure"]
+    },
+    {
+      "BaseValue": "solución",
+      "Translation": "solution",
+      "PluralValue": "soluciones",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "información",
+      "Translation": "information",
+      "PluralValue": "",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "sonrisa",
+      "Translation": "smile",
+      "PluralValue": "sonrisas",
+      "Gender": "Feminine",
+      "Topics": ["body", "emotions"]
+    },
+    {
+      "BaseValue": "oportunidad",
+      "Translation": "opportunity; chance",
+      "PluralValue": "oportunidades",
+      "Gender": "Feminine",
+      "Topics": ["work"]
+    },
+    {
+      "BaseValue": "opción",
+      "Translation": "option; choice",
+      "PluralValue": "opciones",
+      "Gender": "Feminine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "calidad",
+      "Translation": "quality",
+      "PluralValue": "calidades",
+      "Gender": "Feminine",
+      "Topics": ["shopping"]
+    },
+    {
+      "BaseValue": "vuelo",
+      "Translation": "flight",
+      "PluralValue": "vuelos",
+      "Gender": "Masculine",
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "salsa",
+      "Translation": "sauce",
+      "PluralValue": "salsas",
+      "Gender": "Feminine",
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "anillo",
+      "Translation": "ring",
+      "PluralValue": "anillos",
+      "Gender": "Masculine",
+      "Topics": ["clothes"]
+    },
+    {
+      "BaseValue": "bar",
+      "Translation": "bar",
+      "PluralValue": "bares",
+      "Gender": "Masculine",
+      "Topics": ["city", "food"]
+    },
+    {
+      "BaseValue": "espacio",
+      "Translation": "space; room",
+      "PluralValue": "espacios",
+      "Gender": "Masculine",
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "entrada",
+      "Translation": "entrance; ticket",
+      "PluralValue": "entradas",
+      "Gender": "Feminine",
+      "Topics": ["city", "leisure"]
     }
   ],
   "Verbs": [
+    {
+      "BaseValue": "ser",
+      "Translation": "to be (permanent)",
+      "PresentConjugations": ["soy", "eres", "es", "somos", "son"],
+      "PreteriteConjugations": ["fui", "fuiste", "fue", "fuimos", "fueron"],
+      "NonPersonalGerund": "siendo"
+    },
+    {
+      "BaseValue": "estar",
+      "Translation": "to be (state, location)",
+      "PresentConjugations": ["estoy", "estás", "está", "estamos", "están"],
+      "PreteriteConjugations": ["estuve", "estuviste", "estuvo", "estuvimos", "estuvieron"],
+      "NonPersonalGerund": "estando"
+    },
+    {
+      "BaseValue": "haber",
+      "Translation": "to have (auxiliary); there is",
+      "PresentConjugations": ["he", "has", "ha", "hemos", "han"],
+      "PreteriteConjugations": ["hube", "hubiste", "hubo", "hubimos", "hubieron"],
+      "NonPersonalGerund": "habiendo"
+    },
+    {
+      "BaseValue": "tener",
+      "Translation": "to have",
+      "PresentConjugations": ["tengo", "tienes", "tiene", "tenemos", "tienen"],
+      "PreteriteConjugations": ["tuve", "tuviste", "tuvo", "tuvimos", "tuvieron"],
+      "NonPersonalGerund": "teniendo"
+    },
+    {
+      "BaseValue": "hacer",
+      "Translation": "to do; to make",
+      "PresentConjugations": ["hago", "haces", "hace", "hacemos", "hacen"],
+      "PreteriteConjugations": ["hice", "hiciste", "hizo", "hicimos", "hicieron"],
+      "NonPersonalGerund": "haciendo"
+    },
+    {
+      "BaseValue": "poder",
+      "Translation": "to be able to; can",
+      "PresentConjugations": ["puedo", "puedes", "puede", "podemos", "pueden"],
+      "PreteriteConjugations": ["pude", "pudiste", "pudo", "pudimos", "pudieron"],
+      "NonPersonalGerund": "pudiendo"
+    },
+    {
+      "BaseValue": "decir",
+      "Translation": "to say; to tell",
+      "PresentConjugations": ["digo", "dices", "dice", "decimos", "dicen"],
+      "PreteriteConjugations": ["dije", "dijiste", "dijo", "dijimos", "dijeron"],
+      "NonPersonalGerund": "diciendo"
+    },
+    {
+      "BaseValue": "ir",
+      "Translation": "to go",
+      "PresentConjugations": ["voy", "vas", "va", "vamos", "van"],
+      "PreteriteConjugations": ["fui", "fuiste", "fue", "fuimos", "fueron"],
+      "NonPersonalGerund": "yendo"
+    },
+    {
+      "BaseValue": "ver",
+      "Translation": "to see; to watch",
+      "PresentConjugations": ["veo", "ves", "ve", "vemos", "ven"],
+      "PreteriteConjugations": ["vi", "viste", "vio", "vimos", "vieron"],
+      "NonPersonalGerund": "viendo"
+    },
+    {
+      "BaseValue": "dar",
+      "Translation": "to give",
+      "PresentConjugations": ["doy", "das", "da", "damos", "dan"],
+      "PreteriteConjugations": ["di", "diste", "dio", "dimos", "dieron"],
+      "NonPersonalGerund": "dando"
+    },
+    {
+      "BaseValue": "saber",
+      "Translation": "to know (facts)",
+      "PresentConjugations": ["sé", "sabes", "sabe", "sabemos", "saben"],
+      "PreteriteConjugations": ["supe", "supiste", "supo", "supimos", "supieron"],
+      "NonPersonalGerund": "sabiendo"
+    },
+    {
+      "BaseValue": "querer",
+      "Translation": "to want; to love",
+      "PresentConjugations": ["quiero", "quieres", "quiere", "queremos", "quieren"],
+      "PreteriteConjugations": ["quise", "quisiste", "quiso", "quisimos", "quisieron"],
+      "NonPersonalGerund": "queriendo"
+    },
+    {
+      "BaseValue": "llegar",
+      "Translation": "to arrive",
+      "PresentConjugations": ["llego", "llegas", "llega", "llegamos", "llegan"],
+      "PreteriteConjugations": ["llegué", "llegaste", "llegó", "llegamos", "llegaron"],
+      "NonPersonalGerund": "llegando"
+    },
+    {
+      "BaseValue": "pasar",
+      "Translation": "to pass; to happen; to spend (time)",
+      "PresentConjugations": ["paso", "pasas", "pasa", "pasamos", "pasan"],
+      "PreteriteConjugations": ["pasé", "pasaste", "pasó", "pasamos", "pasaron"],
+      "NonPersonalGerund": "pasando"
+    },
+    {
+      "BaseValue": "deber",
+      "Translation": "to owe; must",
+      "PresentConjugations": ["debo", "debes", "debe", "debemos", "deben"],
+      "PreteriteConjugations": ["debí", "debiste", "debió", "debimos", "debieron"],
+      "NonPersonalGerund": "debiendo"
+    },
+    {
+      "BaseValue": "poner",
+      "Translation": "to put",
+      "PresentConjugations": ["pongo", "pones", "pone", "ponemos", "ponen"],
+      "PreteriteConjugations": ["puse", "pusiste", "puso", "pusimos", "pusieron"],
+      "NonPersonalGerund": "poniendo"
+    },
+    {
+      "BaseValue": "parecer",
+      "Translation": "to seem",
+      "PresentConjugations": ["parezco", "pareces", "parece", "parecemos", "parecen"],
+      "PreteriteConjugations": ["parecí", "pareciste", "pareció", "parecimos", "parecieron"],
+      "NonPersonalGerund": "pareciendo"
+    },
+    {
+      "BaseValue": "quedar",
+      "Translation": "to stay; to remain; to meet up",
+      "PresentConjugations": ["quedo", "quedas", "queda", "quedamos", "quedan"],
+      "PreteriteConjugations": ["quedé", "quedaste", "quedó", "quedamos", "quedaron"],
+      "NonPersonalGerund": "quedando"
+    },
+    {
+      "BaseValue": "creer",
+      "Translation": "to believe; to think",
+      "PresentConjugations": ["creo", "crees", "cree", "creemos", "creen"],
+      "PreteriteConjugations": ["creí", "creíste", "creyó", "creímos", "creyeron"],
+      "NonPersonalGerund": "creyendo"
+    },
     {
       "BaseValue": "hablar",
       "Translation": "to speak; to talk",
       "PresentConjugations": ["hablo", "hablas", "habla", "hablamos", "hablan"],
       "PreteriteConjugations": ["hablé", "hablaste", "habló", "hablamos", "hablaron"],
       "NonPersonalGerund": "hablando"
+    },
+    {
+      "BaseValue": "llevar",
+      "Translation": "to carry; to wear; to take",
+      "PresentConjugations": ["llevo", "llevas", "lleva", "llevamos", "llevan"],
+      "PreteriteConjugations": ["llevé", "llevaste", "llevó", "llevamos", "llevaron"],
+      "NonPersonalGerund": "llevando"
+    },
+    {
+      "BaseValue": "dejar",
+      "Translation": "to leave; to let",
+      "PresentConjugations": ["dejo", "dejas", "deja", "dejamos", "dejan"],
+      "PreteriteConjugations": ["dejé", "dejaste", "dejó", "dejamos", "dejaron"],
+      "NonPersonalGerund": "dejando"
+    },
+    {
+      "BaseValue": "seguir",
+      "Translation": "to follow; to continue",
+      "PresentConjugations": ["sigo", "sigues", "sigue", "seguimos", "siguen"],
+      "PreteriteConjugations": ["seguí", "seguiste", "siguió", "seguimos", "siguieron"],
+      "NonPersonalGerund": "siguiendo"
+    },
+    {
+      "BaseValue": "encontrar",
+      "Translation": "to find",
+      "PresentConjugations": ["encuentro", "encuentras", "encuentra", "encontramos", "encuentran"],
+      "PreteriteConjugations": ["encontré", "encontraste", "encontró", "encontramos", "encontraron"],
+      "NonPersonalGerund": "encontrando"
+    },
+    {
+      "BaseValue": "llamar",
+      "Translation": "to call",
+      "PresentConjugations": ["llamo", "llamas", "llama", "llamamos", "llaman"],
+      "PreteriteConjugations": ["llamé", "llamaste", "llamó", "llamamos", "llamaron"],
+      "NonPersonalGerund": "llamando"
+    },
+    {
+      "BaseValue": "venir",
+      "Translation": "to come",
+      "PresentConjugations": ["vengo", "vienes", "viene", "venimos", "vienen"],
+      "PreteriteConjugations": ["vine", "viniste", "vino", "vinimos", "vinieron"],
+      "NonPersonalGerund": "viniendo"
+    },
+    {
+      "BaseValue": "pensar",
+      "Translation": "to think",
+      "PresentConjugations": ["pienso", "piensas", "piensa", "pensamos", "piensan"],
+      "PreteriteConjugations": ["pensé", "pensaste", "pensó", "pensamos", "pensaron"],
+      "NonPersonalGerund": "pensando"
+    },
+    {
+      "BaseValue": "salir",
+      "Translation": "to go out; to leave",
+      "PresentConjugations": ["salgo", "sales", "sale", "salimos", "salen"],
+      "PreteriteConjugations": ["salí", "saliste", "salió", "salimos", "salieron"],
+      "NonPersonalGerund": "saliendo"
+    },
+    {
+      "BaseValue": "volver",
+      "Translation": "to return; to come back",
+      "PresentConjugations": ["vuelvo", "vuelves", "vuelve", "volvemos", "vuelven"],
+      "PreteriteConjugations": ["volví", "volviste", "volvió", "volvimos", "volvieron"],
+      "NonPersonalGerund": "volviendo"
+    },
+    {
+      "BaseValue": "tomar",
+      "Translation": "to take; to drink",
+      "PresentConjugations": ["tomo", "tomas", "toma", "tomamos", "toman"],
+      "PreteriteConjugations": ["tomé", "tomaste", "tomó", "tomamos", "tomaron"],
+      "NonPersonalGerund": "tomando"
+    },
+    {
+      "BaseValue": "conocer",
+      "Translation": "to know (people, places)",
+      "PresentConjugations": ["conozco", "conoces", "conoce", "conocemos", "conocen"],
+      "PreteriteConjugations": ["conocí", "conociste", "conoció", "conocimos", "conocieron"],
+      "NonPersonalGerund": "conociendo"
+    },
+    {
+      "BaseValue": "vivir",
+      "Translation": "to live",
+      "PresentConjugations": ["vivo", "vives", "vive", "vivimos", "viven"],
+      "PreteriteConjugations": ["viví", "viviste", "vivió", "vivimos", "vivieron"],
+      "NonPersonalGerund": "viviendo"
+    },
+    {
+      "BaseValue": "sentir",
+      "Translation": "to feel",
+      "PresentConjugations": ["siento", "sientes", "siente", "sentimos", "sienten"],
+      "PreteriteConjugations": ["sentí", "sentiste", "sintió", "sentimos", "sintieron"],
+      "NonPersonalGerund": "sintiendo"
+    },
+    {
+      "BaseValue": "tratar",
+      "Translation": "to try; to treat",
+      "PresentConjugations": ["trato", "tratas", "trata", "tratamos", "tratan"],
+      "PreteriteConjugations": ["traté", "trataste", "trató", "tratamos", "trataron"],
+      "NonPersonalGerund": "tratando"
+    },
+    {
+      "BaseValue": "mirar",
+      "Translation": "to look at; to watch",
+      "PresentConjugations": ["miro", "miras", "mira", "miramos", "miran"],
+      "PreteriteConjugations": ["miré", "miraste", "miró", "miramos", "miraron"],
+      "NonPersonalGerund": "mirando"
+    },
+    {
+      "BaseValue": "contar",
+      "Translation": "to count; to tell",
+      "PresentConjugations": ["cuento", "cuentas", "cuenta", "contamos", "cuentan"],
+      "PreteriteConjugations": ["conté", "contaste", "contó", "contamos", "contaron"],
+      "NonPersonalGerund": "contando"
+    },
+    {
+      "BaseValue": "empezar",
+      "Translation": "to begin; to start",
+      "PresentConjugations": ["empiezo", "empiezas", "empieza", "empezamos", "empiezan"],
+      "PreteriteConjugations": ["empecé", "empezaste", "empezó", "empezamos", "empezaron"],
+      "NonPersonalGerund": "empezando"
+    },
+    {
+      "BaseValue": "esperar",
+      "Translation": "to wait; to hope; to expect",
+      "PresentConjugations": ["espero", "esperas", "espera", "esperamos", "esperan"],
+      "PreteriteConjugations": ["esperé", "esperaste", "esperó", "esperamos", "esperaron"],
+      "NonPersonalGerund": "esperando"
+    },
+    {
+      "BaseValue": "buscar",
+      "Translation": "to look for; to search",
+      "PresentConjugations": ["busco", "buscas", "busca", "buscamos", "buscan"],
+      "PreteriteConjugations": ["busqué", "buscaste", "buscó", "buscamos", "buscaron"],
+      "NonPersonalGerund": "buscando"
+    },
+    {
+      "BaseValue": "entrar",
+      "Translation": "to enter; to go in",
+      "PresentConjugations": ["entro", "entras", "entra", "entramos", "entran"],
+      "PreteriteConjugations": ["entré", "entraste", "entró", "entramos", "entraron"],
+      "NonPersonalGerund": "entrando"
+    },
+    {
+      "BaseValue": "trabajar",
+      "Translation": "to work",
+      "PresentConjugations": ["trabajo", "trabajas", "trabaja", "trabajamos", "trabajan"],
+      "PreteriteConjugations": ["trabajé", "trabajaste", "trabajó", "trabajamos", "trabajaron"],
+      "NonPersonalGerund": "trabajando"
+    },
+    {
+      "BaseValue": "escribir",
+      "Translation": "to write",
+      "PresentConjugations": ["escribo", "escribes", "escribe", "escribimos", "escriben"],
+      "PreteriteConjugations": ["escribí", "escribiste", "escribió", "escribimos", "escribieron"],
+      "NonPersonalGerund": "escribiendo"
+    },
+    {
+      "BaseValue": "perder",
+      "Translation": "to lose; to miss",
+      "PresentConjugations": ["pierdo", "pierdes", "pierde", "perdemos", "pierden"],
+      "PreteriteConjugations": ["perdí", "perdiste", "perdió", "perdimos", "perdieron"],
+      "NonPersonalGerund": "perdiendo"
+    },
+    {
+      "BaseValue": "entender",
+      "Translation": "to understand",
+      "PresentConjugations": ["entiendo", "entiendes", "entiende", "entendemos", "entienden"],
+      "PreteriteConjugations": ["entendí", "entendiste", "entendió", "entendimos", "entendieron"],
+      "NonPersonalGerund": "entendiendo"
+    },
+    {
+      "BaseValue": "pedir",
+      "Translation": "to ask for; to order",
+      "PresentConjugations": ["pido", "pides", "pide", "pedimos", "piden"],
+      "PreteriteConjugations": ["pedí", "pediste", "pidió", "pedimos", "pidieron"],
+      "NonPersonalGerund": "pidiendo"
+    },
+    {
+      "BaseValue": "recibir",
+      "Translation": "to receive",
+      "PresentConjugations": ["recibo", "recibes", "recibe", "recibimos", "reciben"],
+      "PreteriteConjugations": ["recibí", "recibiste", "recibió", "recibimos", "recibieron"],
+      "NonPersonalGerund": "recibiendo"
+    },
+    {
+      "BaseValue": "recordar",
+      "Translation": "to remember; to remind",
+      "PresentConjugations": ["recuerdo", "recuerdas", "recuerda", "recordamos", "recuerdan"],
+      "PreteriteConjugations": ["recordé", "recordaste", "recordó", "recordamos", "recordaron"],
+      "NonPersonalGerund": "recordando"
+    },
+    {
+      "BaseValue": "terminar",
+      "Translation": "to finish; to end",
+      "PresentConjugations": ["termino", "terminas", "termina", "terminamos", "terminan"],
+      "PreteriteConjugations": ["terminé", "terminaste", "terminó", "terminamos", "terminaron"],
+      "NonPersonalGerund": "terminando"
+    },
+    {
+      "BaseValue": "abrir",
+      "Translation": "to open",
+      "PresentConjugations": ["abro", "abres", "abre", "abrimos", "abren"],
+      "PreteriteConjugations": ["abrí", "abriste", "abrió", "abrimos", "abrieron"],
+      "NonPersonalGerund": "abriendo"
+    },
+    {
+      "BaseValue": "cerrar",
+      "Translation": "to close",
+      "PresentConjugations": ["cierro", "cierras", "cierra", "cerramos", "cierran"],
+      "PreteriteConjugations": ["cerré", "cerraste", "cerró", "cerramos", "cerraron"],
+      "NonPersonalGerund": "cerrando"
+    },
+    {
+      "BaseValue": "necesitar",
+      "Translation": "to need",
+      "PresentConjugations": ["necesito", "necesitas", "necesita", "necesitamos", "necesitan"],
+      "PreteriteConjugations": ["necesité", "necesitaste", "necesitó", "necesitamos", "necesitaron"],
+      "NonPersonalGerund": "necesitando"
+    },
+    {
+      "BaseValue": "leer",
+      "Translation": "to read",
+      "PresentConjugations": ["leo", "lees", "lee", "leemos", "leen"],
+      "PreteriteConjugations": ["leí", "leíste", "leyó", "leímos", "leyeron"],
+      "NonPersonalGerund": "leyendo"
+    },
+    {
+      "BaseValue": "caer",
+      "Translation": "to fall",
+      "PresentConjugations": ["caigo", "caes", "cae", "caemos", "caen"],
+      "PreteriteConjugations": ["caí", "caíste", "cayó", "caímos", "cayeron"],
+      "NonPersonalGerund": "cayendo"
+    },
+    {
+      "BaseValue": "cambiar",
+      "Translation": "to change",
+      "PresentConjugations": ["cambio", "cambias", "cambia", "cambiamos", "cambian"],
+      "PreteriteConjugations": ["cambié", "cambiaste", "cambió", "cambiamos", "cambiaron"],
+      "NonPersonalGerund": "cambiando"
+    },
+    {
+      "BaseValue": "oír",
+      "Translation": "to hear",
+      "PresentConjugations": ["oigo", "oyes", "oye", "oímos", "oyen"],
+      "PreteriteConjugations": ["oí", "oíste", "oyó", "oímos", "oyeron"],
+      "NonPersonalGerund": "oyendo"
+    },
+    {
+      "BaseValue": "traer",
+      "Translation": "to bring",
+      "PresentConjugations": ["traigo", "traes", "trae", "traemos", "traen"],
+      "PreteriteConjugations": ["traje", "trajiste", "trajo", "trajimos", "trajeron"],
+      "NonPersonalGerund": "trayendo"
+    },
+    {
+      "BaseValue": "morir",
+      "Translation": "to die",
+      "PresentConjugations": ["muero", "mueres", "muere", "morimos", "mueren"],
+      "PreteriteConjugations": ["morí", "moriste", "murió", "morimos", "murieron"],
+      "NonPersonalGerund": "muriendo"
+    },
+    {
+      "BaseValue": "jugar",
+      "Translation": "to play (games, sports)",
+      "PresentConjugations": ["juego", "juegas", "juega", "jugamos", "juegan"],
+      "PreteriteConjugations": ["jugué", "jugaste", "jugó", "jugamos", "jugaron"],
+      "NonPersonalGerund": "jugando"
+    },
+    {
+      "BaseValue": "pagar",
+      "Translation": "to pay",
+      "PresentConjugations": ["pago", "pagas", "paga", "pagamos", "pagan"],
+      "PreteriteConjugations": ["pagué", "pagaste", "pagó", "pagamos", "pagaron"],
+      "NonPersonalGerund": "pagando"
+    },
+    {
+      "BaseValue": "ayudar",
+      "Translation": "to help",
+      "PresentConjugations": ["ayudo", "ayudas", "ayuda", "ayudamos", "ayudan"],
+      "PreteriteConjugations": ["ayudé", "ayudaste", "ayudó", "ayudamos", "ayudaron"],
+      "NonPersonalGerund": "ayudando"
+    },
+    {
+      "BaseValue": "gustar",
+      "Translation": "to like; to please",
+      "PresentConjugations": ["gusto", "gustas", "gusta", "gustamos", "gustan"],
+      "PreteriteConjugations": ["gusté", "gustaste", "gustó", "gustamos", "gustaron"],
+      "NonPersonalGerund": "gustando"
+    },
+    {
+      "BaseValue": "escuchar",
+      "Translation": "to listen",
+      "PresentConjugations": ["escucho", "escuchas", "escucha", "escuchamos", "escuchan"],
+      "PreteriteConjugations": ["escuché", "escuchaste", "escuchó", "escuchamos", "escucharon"],
+      "NonPersonalGerund": "escuchando"
+    },
+    {
+      "BaseValue": "comer",
+      "Translation": "to eat",
+      "PresentConjugations": ["como", "comes", "come", "comemos", "comen"],
+      "PreteriteConjugations": ["comí", "comiste", "comió", "comimos", "comieron"],
+      "NonPersonalGerund": "comiendo"
+    },
+    {
+      "BaseValue": "beber",
+      "Translation": "to drink",
+      "PresentConjugations": ["bebo", "bebes", "bebe", "bebemos", "beben"],
+      "PreteriteConjugations": ["bebí", "bebiste", "bebió", "bebimos", "bebieron"],
+      "NonPersonalGerund": "bebiendo"
+    },
+    {
+      "BaseValue": "dormir",
+      "Translation": "to sleep",
+      "PresentConjugations": ["duermo", "duermes", "duerme", "dormimos", "duermen"],
+      "PreteriteConjugations": ["dormí", "dormiste", "durmió", "dormimos", "durmieron"],
+      "NonPersonalGerund": "durmiendo"
+    },
+    {
+      "BaseValue": "comprar",
+      "Translation": "to buy",
+      "PresentConjugations": ["compro", "compras", "compra", "compramos", "compran"],
+      "PreteriteConjugations": ["compré", "compraste", "compró", "compramos", "compraron"],
+      "NonPersonalGerund": "comprando"
+    },
+    {
+      "BaseValue": "conducir",
+      "Translation": "to drive",
+      "PresentConjugations": ["conduzco", "conduces", "conduce", "conducimos", "conducen"],
+      "PreteriteConjugations": ["conduje", "condujiste", "condujo", "condujimos", "condujeron"],
+      "NonPersonalGerund": "conduciendo"
+    },
+    {
+      "BaseValue": "estudiar",
+      "Translation": "to study",
+      "PresentConjugations": ["estudio", "estudias", "estudia", "estudiamos", "estudian"],
+      "PreteriteConjugations": ["estudié", "estudiaste", "estudió", "estudiamos", "estudiaron"],
+      "NonPersonalGerund": "estudiando"
+    },
+    {
+      "BaseValue": "aprender",
+      "Translation": "to learn",
+      "PresentConjugations": ["aprendo", "aprendes", "aprende", "aprendemos", "aprenden"],
+      "PreteriteConjugations": ["aprendí", "aprendiste", "aprendió", "aprendimos", "aprendieron"],
+      "NonPersonalGerund": "aprendiendo"
+    },
+    {
+      "BaseValue": "preguntar",
+      "Translation": "to ask (a question)",
+      "PresentConjugations": ["pregunto", "preguntas", "pregunta", "preguntamos", "preguntan"],
+      "PreteriteConjugations": ["pregunté", "preguntaste", "preguntó", "preguntamos", "preguntaron"],
+      "NonPersonalGerund": "preguntando"
     }
   ],
   "Adjectives": [
     {
       "BaseValue": "bajo",
       "Translation": "short; low",
-      "LinkedNouns": ["mujer", "hombre"],
+      "LinkedNouns": ["mujer", "hombre", "precio", "mesa"],
       "Topics": ["people"]
     },
     {
       "BaseValue": "grande",
       "Translation": "big; large",
-      "LinkedNouns": ["ciudad", "hombre"],
+      "LinkedNouns": ["ciudad", "hombre", "casa", "problema"],
       "Topics": ["city"]
     },
     {
@@ -56,9 +4011,1193 @@
       "Translation": "young",
       "MasculinePluralValue": "jóvenes",
       "FemininePluralValue": "jóvenes",
-      "LinkedNouns": ["mujer", "hombre"],
+      "LinkedNouns": ["mujer", "hombre", "profesor", "madre"],
       "Topics": ["people"]
+    },
+    {
+      "BaseValue": "bueno",
+      "Translation": "good",
+      "LinkedNouns": ["idea", "libro", "amigo", "noticia"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "malo",
+      "Translation": "bad",
+      "LinkedNouns": ["noticia", "día", "idea", "resultado"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "pequeño",
+      "Translation": "small; little",
+      "LinkedNouns": ["casa", "perro", "ciudad", "pueblo"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "nuevo",
+      "Translation": "new",
+      "LinkedNouns": ["coche", "casa", "libro", "camisa"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "viejo",
+      "Translation": "old",
+      "LinkedNouns": ["hombre", "casa", "coche", "ciudad"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "mayor",
+      "Translation": "older; elderly",
+      "LinkedNouns": ["hermano", "hermana", "señor", "señora"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "alto",
+      "Translation": "tall; high",
+      "LinkedNouns": ["hombre", "montaña", "edificio", "chica"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "largo",
+      "Translation": "long",
+      "LinkedNouns": ["pelo", "viaje", "película", "falda"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "corto",
+      "Translation": "short (length)",
+      "LinkedNouns": ["pelo", "viaje", "falda", "camino"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "ancho",
+      "Translation": "wide; broad",
+      "LinkedNouns": ["calle", "río", "pantalón", "espalda"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "estrecho",
+      "Translation": "narrow; tight",
+      "LinkedNouns": ["calle", "camino", "falda", "puente"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "gordo",
+      "Translation": "fat",
+      "LinkedNouns": ["gato", "perro", "libro", "vaca"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "delgado",
+      "Translation": "thin; slim",
+      "LinkedNouns": ["chica", "hombre", "pierna", "brazo"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "fuerte",
+      "Translation": "strong",
+      "LinkedNouns": ["hombre", "viento", "café", "mujer"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "débil",
+      "Translation": "weak",
+      "LinkedNouns": ["corazón", "luz", "voz", "niño"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "rápido",
+      "Translation": "fast; quick",
+      "LinkedNouns": ["coche", "tren", "respuesta", "moto"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "lento",
+      "Translation": "slow",
+      "LinkedNouns": ["tren", "tortuga", "música", "paso"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "fácil",
+      "Translation": "easy",
+      "LinkedNouns": ["examen", "pregunta", "tarea", "ejercicio"],
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "difícil",
+      "Translation": "difficult; hard",
+      "LinkedNouns": ["examen", "pregunta", "situación", "problema"],
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "caro",
+      "Translation": "expensive",
+      "LinkedNouns": ["coche", "camisa", "restaurante", "casa"],
+      "Topics": ["shopping"]
+    },
+    {
+      "BaseValue": "barato",
+      "Translation": "cheap",
+      "LinkedNouns": ["billete", "camiseta", "hotel", "comida"],
+      "Topics": ["shopping"]
+    },
+    {
+      "BaseValue": "rico",
+      "Translation": "rich; tasty",
+      "LinkedNouns": ["hombre", "familia", "comida", "pastel"],
+      "Topics": ["people", "food"]
+    },
+    {
+      "BaseValue": "pobre",
+      "Translation": "poor",
+      "LinkedNouns": ["familia", "país", "niño", "gente"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "feliz",
+      "Translation": "happy",
+      "LinkedNouns": ["niño", "familia", "día", "pareja"],
+      "Topics": ["emotions"]
+    },
+    {
+      "BaseValue": "triste",
+      "Translation": "sad",
+      "LinkedNouns": ["canción", "película", "niña", "día"],
+      "Topics": ["emotions"]
+    },
+    {
+      "BaseValue": "contento",
+      "Translation": "glad; pleased",
+      "LinkedNouns": ["niño", "cliente", "madre", "jefe"],
+      "Topics": ["emotions"]
+    },
+    {
+      "BaseValue": "enfadado",
+      "Translation": "angry",
+      "LinkedNouns": ["jefe", "madre", "cliente", "vecino"],
+      "Topics": ["emotions"]
+    },
+    {
+      "BaseValue": "cansado",
+      "Translation": "tired",
+      "LinkedNouns": ["hombre", "estudiante", "madre", "caballo"],
+      "Topics": ["emotions"]
+    },
+    {
+      "BaseValue": "enfermo",
+      "Translation": "ill; sick",
+      "LinkedNouns": ["niño", "abuela", "perro", "vaca"],
+      "Topics": ["health"]
+    },
+    {
+      "BaseValue": "sano",
+      "Translation": "healthy",
+      "LinkedNouns": ["comida", "cuerpo", "niño", "piel"],
+      "Topics": ["health"]
+    },
+    {
+      "BaseValue": "limpio",
+      "Translation": "clean",
+      "LinkedNouns": ["ropa", "baño", "cocina", "vaso"],
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "sucio",
+      "Translation": "dirty",
+      "LinkedNouns": ["ropa", "suelo", "plato", "mano"],
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "lleno",
+      "Translation": "full",
+      "LinkedNouns": ["vaso", "botella", "autobús", "plaza"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "vacío",
+      "Translation": "empty",
+      "LinkedNouns": ["botella", "vaso", "calle", "restaurante"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "abierto",
+      "Translation": "open",
+      "LinkedNouns": ["puerta", "ventana", "tienda", "museo"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "cerrado",
+      "Translation": "closed; shut",
+      "LinkedNouns": ["puerta", "ventana", "banco", "farmacia"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "caliente",
+      "Translation": "hot (temperature)",
+      "LinkedNouns": ["sopa", "café", "ducha", "pan"],
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "frío",
+      "Translation": "cold",
+      "LinkedNouns": ["cerveza", "invierno", "mano", "zumo"],
+      "Topics": ["weather"]
+    },
+    {
+      "BaseValue": "cálido",
+      "Translation": "warm",
+      "LinkedNouns": ["clima", "viento", "color", "noche"],
+      "Topics": ["weather"]
+    },
+    {
+      "BaseValue": "fresco",
+      "Translation": "fresh; cool",
+      "LinkedNouns": ["pescado", "fruta", "pan", "aire"],
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "seco",
+      "Translation": "dry",
+      "LinkedNouns": ["clima", "ropa", "piel", "vino"],
+      "Topics": ["weather"]
+    },
+    {
+      "BaseValue": "mojado",
+      "Translation": "wet",
+      "LinkedNouns": ["ropa", "toalla", "pelo", "suelo"],
+      "Topics": ["weather"]
+    },
+    {
+      "BaseValue": "duro",
+      "Translation": "hard; tough",
+      "LinkedNouns": ["pan", "carne", "trabajo", "cama"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "blando",
+      "Translation": "soft",
+      "LinkedNouns": ["cama", "almohada", "pan", "queso"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "suave",
+      "Translation": "smooth; gentle",
+      "LinkedNouns": ["piel", "voz", "jabón", "toalla"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "ligero",
+      "Translation": "light (weight)",
+      "LinkedNouns": ["maleta", "comida", "ropa", "desayuno"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "pesado",
+      "Translation": "heavy",
+      "LinkedNouns": ["maleta", "mochila", "libro", "mueble"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "claro",
+      "Translation": "clear; light (colour)",
+      "LinkedNouns": ["cielo", "idea", "color", "respuesta"],
+      "Topics": ["colors"]
+    },
+    {
+      "BaseValue": "oscuro",
+      "Translation": "dark",
+      "LinkedNouns": ["noche", "color", "habitación", "pelo"],
+      "Topics": ["colors"]
+    },
+    {
+      "BaseValue": "bonito",
+      "Translation": "pretty; nice",
+      "LinkedNouns": ["casa", "flor", "vestido", "pueblo"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "guapo",
+      "Translation": "good-looking; handsome",
+      "LinkedNouns": ["chico", "chica", "novio", "novia"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "feo",
+      "Translation": "ugly",
+      "LinkedNouns": ["perro", "edificio", "cuadro", "camisa"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "hermoso",
+      "Translation": "beautiful",
+      "LinkedNouns": ["paisaje", "flor", "montaña", "día"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "precioso",
+      "Translation": "lovely; precious",
+      "LinkedNouns": ["vestido", "playa", "bebé", "jardín"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "importante",
+      "Translation": "important",
+      "LinkedNouns": ["reunión", "decisión", "problema", "persona"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "interesante",
+      "Translation": "interesting",
+      "LinkedNouns": ["libro", "película", "idea", "historia"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "aburrido",
+      "Translation": "boring; bored",
+      "LinkedNouns": ["película", "clase", "libro", "partido"],
+      "Topics": ["leisure"]
+    },
+    {
+      "BaseValue": "divertido",
+      "Translation": "fun; funny",
+      "LinkedNouns": ["fiesta", "juego", "película", "amigo"],
+      "Topics": ["leisure"]
+    },
+    {
+      "BaseValue": "simpático",
+      "Translation": "nice; friendly",
+      "LinkedNouns": ["vecino", "camarero", "chica", "profesor"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "antipático",
+      "Translation": "unfriendly",
+      "LinkedNouns": ["vecino", "jefe", "camarero", "señora"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "amable",
+      "Translation": "kind",
+      "LinkedNouns": ["señor", "señora", "enfermera", "médico"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "inteligente",
+      "Translation": "intelligent; clever",
+      "LinkedNouns": ["niño", "estudiante", "mujer", "animal"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "tonto",
+      "Translation": "silly; stupid",
+      "LinkedNouns": ["chico", "idea", "pregunta", "error"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "listo",
+      "Translation": "clever; ready",
+      "LinkedNouns": ["niño", "niña", "comida", "cena"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "tranquilo",
+      "Translation": "calm; quiet",
+      "LinkedNouns": ["calle", "barrio", "noche", "pueblo"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "nervioso",
+      "Translation": "nervous",
+      "LinkedNouns": ["estudiante", "perro", "niño", "madre"],
+      "Topics": ["emotions"]
+    },
+    {
+      "BaseValue": "ocupado",
+      "Translation": "busy; occupied",
+      "LinkedNouns": ["jefe", "médico", "línea", "mesa"],
+      "Topics": ["work"]
+    },
+    {
+      "BaseValue": "libre",
+      "Translation": "free (not busy)",
+      "LinkedNouns": ["mesa", "silla", "día", "tarde"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "seguro",
+      "Translation": "safe; sure",
+      "LinkedNouns": ["lugar", "ciudad", "coche", "casa"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "peligroso",
+      "Translation": "dangerous",
+      "LinkedNouns": ["animal", "calle", "serpiente", "carretera"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "posible",
+      "Translation": "possible",
+      "LinkedNouns": ["respuesta", "cambio", "solución", "error"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "imposible",
+      "Translation": "impossible",
+      "LinkedNouns": ["viaje", "cosa", "sueño", "situación"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "necesario",
+      "Translation": "necessary",
+      "LinkedNouns": ["cambio", "ayuda", "información", "paso"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "útil",
+      "Translation": "useful",
+      "LinkedNouns": ["consejo", "herramienta", "libro", "información"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "inútil",
+      "Translation": "useless",
+      "LinkedNouns": ["máquina", "consejo", "objeto", "ayuda"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "principal",
+      "Translation": "main",
+      "LinkedNouns": ["calle", "puerta", "problema", "plato"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "general",
+      "Translation": "general",
+      "LinkedNouns": ["idea", "plan", "opinión", "situación"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "público",
+      "Translation": "public",
+      "LinkedNouns": ["servicio", "biblioteca", "hospital", "escuela"],
+      "Topics": ["city"]
+    },
+    {
+      "BaseValue": "privado",
+      "Translation": "private",
+      "LinkedNouns": ["hospital", "escuela", "empresa", "vida"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "social",
+      "Translation": "social",
+      "LinkedNouns": ["red", "problema", "relación", "vida"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "político",
+      "Translation": "political",
+      "LinkedNouns": ["partido", "situación", "problema", "guerra"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "económico",
+      "Translation": "economic; economical",
+      "LinkedNouns": ["coche", "situación", "problema", "sistema"],
+      "Topics": ["shopping"]
+    },
+    {
+      "BaseValue": "nacional",
+      "Translation": "national",
+      "LinkedNouns": ["equipo", "fiesta", "museo", "ley"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "internacional",
+      "Translation": "international",
+      "LinkedNouns": ["aeropuerto", "empresa", "equipo", "viaje"],
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "local",
+      "Translation": "local",
+      "LinkedNouns": ["mercado", "tienda", "equipo", "comida"],
+      "Topics": ["city"]
+    },
+    {
+      "BaseValue": "propio",
+      "Translation": "own",
+      "LinkedNouns": ["casa", "coche", "habitación", "negocio"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "verdadero",
+      "Translation": "true; real",
+      "LinkedNouns": ["amigo", "historia", "amor", "razón"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "falso",
+      "Translation": "false; fake",
+      "LinkedNouns": ["pasaporte", "billete", "respuesta", "sonrisa"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "próximo",
+      "Translation": "next",
+      "LinkedNouns": ["semana", "año", "tren", "estación"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "anterior",
+      "Translation": "previous",
+      "LinkedNouns": ["semana", "año", "página", "trabajo"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "siguiente",
+      "Translation": "following; next",
+      "LinkedNouns": ["día", "página", "pregunta", "paso"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "actual",
+      "Translation": "current; present-day",
+      "LinkedNouns": ["situación", "gobierno", "trabajo", "sistema"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "moderno",
+      "Translation": "modern",
+      "LinkedNouns": ["edificio", "música", "casa", "ciudad"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "antiguo",
+      "Translation": "ancient; former",
+      "LinkedNouns": ["iglesia", "edificio", "ciudad", "libro"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "tradicional",
+      "Translation": "traditional",
+      "LinkedNouns": ["comida", "música", "fiesta", "traje"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "normal",
+      "Translation": "normal; ordinary",
+      "LinkedNouns": ["día", "persona", "vida", "precio"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "raro",
+      "Translation": "strange; rare",
+      "LinkedNouns": ["animal", "idea", "ruido", "situación"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "común",
+      "Translation": "common",
+      "LinkedNouns": ["problema", "error", "nombre", "idea"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "especial",
+      "Translation": "special",
+      "LinkedNouns": ["día", "regalo", "oferta", "persona"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "único",
+      "Translation": "only; unique",
+      "LinkedNouns": ["hijo", "hija", "oportunidad", "problema"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "solo",
+      "Translation": "alone; lonely",
+      "LinkedNouns": ["hombre", "mujer", "niño", "perro"],
+      "Topics": ["emotions"]
+    },
+    {
+      "BaseValue": "diferente",
+      "Translation": "different",
+      "LinkedNouns": ["idea", "cultura", "opinión", "país"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "igual",
+      "Translation": "equal; the same",
+      "LinkedNouns": ["número", "precio", "camisa", "parte"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "menor",
+      "Translation": "younger; smaller",
+      "LinkedNouns": ["hermano", "hermana", "hijo", "hija"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "completo",
+      "Translation": "complete; full",
+      "LinkedNouns": ["nombre", "lista", "hotel", "información"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "simple",
+      "Translation": "simple",
+      "LinkedNouns": ["idea", "respuesta", "plan", "vida"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "complicado",
+      "Translation": "complicated",
+      "LinkedNouns": ["problema", "situación", "sistema", "pregunta"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "directo",
+      "Translation": "direct",
+      "LinkedNouns": ["tren", "vuelo", "pregunta", "camino"],
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "correcto",
+      "Translation": "correct; right",
+      "LinkedNouns": ["respuesta", "número", "camino", "palabra"],
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "perfecto",
+      "Translation": "perfect",
+      "LinkedNouns": ["día", "plan", "vida", "momento"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "profundo",
+      "Translation": "deep",
+      "LinkedNouns": ["río", "lago", "piscina", "sueño"],
+      "Topics": ["nature"]
+    },
+    {
+      "BaseValue": "cercano",
+      "Translation": "near; close",
+      "LinkedNouns": ["pueblo", "ciudad", "amigo", "familia"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "dulce",
+      "Translation": "sweet",
+      "LinkedNouns": ["pastel", "fruta", "vino", "voz"],
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "salado",
+      "Translation": "salty",
+      "LinkedNouns": ["queso", "sopa", "galleta", "jamón"],
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "amargo",
+      "Translation": "bitter",
+      "LinkedNouns": ["café", "chocolate", "sabor", "cerveza"],
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "picante",
+      "Translation": "spicy; hot",
+      "LinkedNouns": ["comida", "salsa", "pollo", "plato"],
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "delicioso",
+      "Translation": "delicious",
+      "LinkedNouns": ["pastel", "comida", "cena", "helado"],
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "crudo",
+      "Translation": "raw",
+      "LinkedNouns": ["pescado", "carne", "huevo", "verdura"],
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "maduro",
+      "Translation": "ripe; mature",
+      "LinkedNouns": ["fruta", "plátano", "persona", "tomate"],
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "rojo",
+      "Translation": "red",
+      "LinkedNouns": ["manzana", "tomate", "coche", "flor"],
+      "Topics": ["colors"]
+    },
+    {
+      "BaseValue": "azul",
+      "Translation": "blue",
+      "LinkedNouns": ["cielo", "mar", "camisa", "puerta"],
+      "Topics": ["colors"]
+    },
+    {
+      "BaseValue": "verde",
+      "Translation": "green; unripe",
+      "LinkedNouns": ["árbol", "hierba", "plátano", "camiseta"],
+      "Topics": ["colors"]
+    },
+    {
+      "BaseValue": "amarillo",
+      "Translation": "yellow",
+      "LinkedNouns": ["limón", "flor", "coche", "falda"],
+      "Topics": ["colors"]
+    },
+    {
+      "BaseValue": "negro",
+      "Translation": "black",
+      "LinkedNouns": ["gato", "noche", "zapato", "camiseta"],
+      "Topics": ["colors"]
+    },
+    {
+      "BaseValue": "blanco",
+      "Translation": "white",
+      "LinkedNouns": ["nieve", "vino", "pared", "camisa"],
+      "Topics": ["colors"]
+    },
+    {
+      "BaseValue": "gris",
+      "Translation": "grey; gray",
+      "LinkedNouns": ["cielo", "nube", "abrigo", "piedra"],
+      "Topics": ["colors"]
+    },
+    {
+      "BaseValue": "marrón",
+      "Translation": "brown",
+      "FeminineValue": "marrón",
+      "LinkedNouns": ["zapato", "bota", "oso", "mesa"],
+      "Topics": ["colors"]
+    },
+    {
+      "BaseValue": "naranja",
+      "Translation": "orange (colour)",
+      "LinkedNouns": ["coche", "camiseta", "flor", "color"],
+      "Topics": ["colors"]
+    },
+    {
+      "BaseValue": "rosa",
+      "Translation": "pink",
+      "LinkedNouns": ["vestido", "flor", "bolso", "camisa"],
+      "Topics": ["colors"]
+    },
+    {
+      "BaseValue": "morado",
+      "Translation": "purple",
+      "LinkedNouns": ["vestido", "flor", "uva", "color"],
+      "Topics": ["colors"]
+    },
+    {
+      "BaseValue": "dorado",
+      "Translation": "golden",
+      "LinkedNouns": ["anillo", "color", "luz", "pelo"],
+      "Topics": ["colors"]
+    },
+    {
+      "BaseValue": "plateado",
+      "Translation": "silver; silvery",
+      "LinkedNouns": ["coche", "color", "luz", "moneda"],
+      "Topics": ["colors"]
+    },
+    {
+      "BaseValue": "rubio",
+      "Translation": "blond; fair-haired",
+      "LinkedNouns": ["chico", "chica", "niño", "pelo"],
+      "Topics": ["people", "colors"]
+    },
+    {
+      "BaseValue": "moreno",
+      "Translation": "dark-haired; tanned",
+      "LinkedNouns": ["chico", "chica", "piel", "pelo"],
+      "Topics": ["people", "colors"]
+    },
+    {
+      "BaseValue": "pelirrojo",
+      "Translation": "red-haired",
+      "LinkedNouns": ["chico", "chica", "niño", "niña"],
+      "Topics": ["people", "colors"]
+    },
+    {
+      "BaseValue": "español",
+      "Translation": "Spanish",
+      "FeminineValue": "española",
+      "LinkedNouns": ["comida", "vino", "ciudad", "pueblo"],
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "inglés",
+      "Translation": "English",
+      "LinkedNouns": ["té", "familia", "libro", "palabra"],
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "francés",
+      "Translation": "French",
+      "LinkedNouns": ["vino", "queso", "película", "familia"],
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "alemán",
+      "Translation": "German",
+      "LinkedNouns": ["coche", "cerveza", "familia", "idioma"],
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "italiano",
+      "Translation": "Italian",
+      "LinkedNouns": ["restaurante", "comida", "pasta", "coche"],
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "mexicano",
+      "Translation": "Mexican",
+      "LinkedNouns": ["comida", "restaurante", "música", "pueblo"],
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "chino",
+      "Translation": "Chinese",
+      "LinkedNouns": ["restaurante", "comida", "idioma", "cultura"],
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "japonés",
+      "Translation": "Japanese",
+      "LinkedNouns": ["coche", "comida", "cultura", "idioma"],
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "europeo",
+      "Translation": "European",
+      "LinkedNouns": ["país", "ciudad", "cultura", "idioma"],
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "extranjero",
+      "Translation": "foreign",
+      "LinkedNouns": ["país", "idioma", "estudiante", "moneda"],
+      "Topics": ["travel"]
+    },
+    {
+      "BaseValue": "trabajador",
+      "Translation": "hard-working",
+      "LinkedNouns": ["hombre", "mujer", "estudiante", "equipo"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "perezoso",
+      "Translation": "lazy",
+      "LinkedNouns": ["gato", "estudiante", "hijo", "hija"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "generoso",
+      "Translation": "generous",
+      "LinkedNouns": ["abuelo", "abuela", "amigo", "persona"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "tímido",
+      "Translation": "shy",
+      "LinkedNouns": ["chico", "niña", "estudiante", "persona"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "valiente",
+      "Translation": "brave",
+      "LinkedNouns": ["niño", "mujer", "hombre", "decisión"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "honesto",
+      "Translation": "honest",
+      "LinkedNouns": ["hombre", "persona", "respuesta", "trabajo"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "educado",
+      "Translation": "polite; well-mannered",
+      "LinkedNouns": ["niño", "niña", "chico", "persona"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "serio",
+      "Translation": "serious",
+      "LinkedNouns": ["problema", "cara", "persona", "enfermedad"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "alegre",
+      "Translation": "cheerful",
+      "LinkedNouns": ["niña", "música", "canción", "color"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "loco",
+      "Translation": "crazy; mad",
+      "LinkedNouns": ["idea", "hombre", "noche", "perro"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "famoso",
+      "Translation": "famous",
+      "LinkedNouns": ["escritor", "restaurante", "playa", "película"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "popular",
+      "Translation": "popular",
+      "LinkedNouns": ["canción", "deporte", "juego", "restaurante"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "preocupado",
+      "Translation": "worried",
+      "LinkedNouns": ["madre", "padre", "médico", "cara"],
+      "Topics": ["emotions"]
+    },
+    {
+      "BaseValue": "sorprendido",
+      "Translation": "surprised",
+      "LinkedNouns": ["niño", "madre", "cara", "jefe"],
+      "Topics": ["emotions"]
+    },
+    {
+      "BaseValue": "asustado",
+      "Translation": "scared; frightened",
+      "LinkedNouns": ["niño", "gato", "niña", "perro"],
+      "Topics": ["emotions"]
+    },
+    {
+      "BaseValue": "emocionado",
+      "Translation": "excited",
+      "LinkedNouns": ["niño", "estudiante", "novia", "equipo"],
+      "Topics": ["emotions"]
+    },
+    {
+      "BaseValue": "enamorado",
+      "Translation": "in love",
+      "LinkedNouns": ["pareja", "chico", "chica", "novio"],
+      "Topics": ["emotions"]
+    },
+    {
+      "BaseValue": "casado",
+      "Translation": "married",
+      "LinkedNouns": ["hombre", "mujer", "hermano", "hermana"],
+      "Topics": ["family"]
+    },
+    {
+      "BaseValue": "soltero",
+      "Translation": "single; unmarried",
+      "LinkedNouns": ["hombre", "mujer", "hermano", "hermana"],
+      "Topics": ["family"]
+    },
+    {
+      "BaseValue": "vivo",
+      "Translation": "alive; lively",
+      "LinkedNouns": ["animal", "planta", "color", "ciudad"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "muerto",
+      "Translation": "dead",
+      "LinkedNouns": ["árbol", "planta", "hoja", "pájaro"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "dormido",
+      "Translation": "asleep",
+      "LinkedNouns": ["niño", "niña", "bebé", "gato"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "herido",
+      "Translation": "injured; hurt",
+      "LinkedNouns": ["pie", "pierna", "animal", "jugador"],
+      "Topics": ["health"]
+    },
+    {
+      "BaseValue": "agradable",
+      "Translation": "pleasant; nice",
+      "LinkedNouns": ["tarde", "persona", "clima", "sorpresa"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "cómodo",
+      "Translation": "comfortable",
+      "LinkedNouns": ["sofá", "silla", "cama", "zapato"],
+      "Topics": ["furniture"]
+    },
+    {
+      "BaseValue": "incómodo",
+      "Translation": "uncomfortable",
+      "LinkedNouns": ["silla", "sofá", "situación", "zapato"],
+      "Topics": ["furniture"]
+    },
+    {
+      "BaseValue": "redondo",
+      "Translation": "round",
+      "LinkedNouns": ["mesa", "cara", "pelota", "plato"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "cuadrado",
+      "Translation": "square",
+      "LinkedNouns": ["mesa", "ventana", "caja", "plato"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "ruidoso",
+      "Translation": "noisy",
+      "LinkedNouns": ["calle", "vecino", "bar", "máquina"],
+      "Topics": ["city"]
+    },
+    {
+      "BaseValue": "silencioso",
+      "Translation": "silent; quiet",
+      "LinkedNouns": ["noche", "casa", "coche", "calle"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "brillante",
+      "Translation": "bright; brilliant",
+      "LinkedNouns": ["luz", "sol", "estrella", "idea"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "soleado",
+      "Translation": "sunny",
+      "LinkedNouns": ["día", "tarde", "mañana", "playa"],
+      "Topics": ["weather"]
+    },
+    {
+      "BaseValue": "nublado",
+      "Translation": "cloudy; overcast",
+      "LinkedNouns": ["día", "cielo", "tarde", "mañana"],
+      "Topics": ["weather"]
+    },
+    {
+      "BaseValue": "lluvioso",
+      "Translation": "rainy",
+      "LinkedNouns": ["día", "tarde", "mes", "semana"],
+      "Topics": ["weather"]
+    },
+    {
+      "BaseValue": "húmedo",
+      "Translation": "humid; damp",
+      "LinkedNouns": ["clima", "aire", "toalla", "ropa"],
+      "Topics": ["weather"]
+    },
+    {
+      "BaseValue": "enorme",
+      "Translation": "huge; enormous",
+      "LinkedNouns": ["casa", "problema", "árbol", "ballena"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "salvaje",
+      "Translation": "wild",
+      "LinkedNouns": ["animal", "caballo", "flor", "naturaleza"],
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "favorito",
+      "Translation": "favourite; favorite",
+      "LinkedNouns": ["color", "canción", "libro", "comida"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "querido",
+      "Translation": "dear; beloved",
+      "LinkedNouns": ["amigo", "abuela", "hermano", "madre"],
+      "Topics": ["family"]
+    },
+    {
+      "BaseValue": "conocido",
+      "Translation": "well-known; familiar",
+      "LinkedNouns": ["escritor", "cara", "calle", "canción"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "roto",
+      "Translation": "broken",
+      "LinkedNouns": ["silla", "ventana", "vaso", "brazo"],
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "vegetariano",
+      "Translation": "vegetarian",
+      "LinkedNouns": ["restaurante", "comida", "plato", "cocinero"],
+      "Topics": ["food"]
+    },
+    {
+      "BaseValue": "excelente",
+      "Translation": "excellent",
+      "LinkedNouns": ["idea", "resultado", "comida", "trabajo"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "terrible",
+      "Translation": "terrible",
+      "LinkedNouns": ["día", "noticia", "error", "tormenta"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "maravilloso",
+      "Translation": "wonderful; marvellous",
+      "LinkedNouns": ["día", "noche", "idea", "viaje"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "caluroso",
+      "Translation": "hot (weather)",
+      "LinkedNouns": ["día", "verano", "tarde", "noche"],
+      "Topics": ["weather"]
+    },
+    {
+      "BaseValue": "ordenado",
+      "Translation": "tidy; organised",
+      "LinkedNouns": ["habitación", "casa", "escritorio", "estudiante"],
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "desordenado",
+      "Translation": "untidy; messy",
+      "LinkedNouns": ["habitación", "cocina", "armario", "escritorio"],
+      "Topics": ["home"]
+    },
+    {
+      "BaseValue": "elegante",
+      "Translation": "elegant; smart",
+      "LinkedNouns": ["vestido", "traje", "señora", "restaurante"],
+      "Topics": ["clothes"]
+    },
+    {
+      "BaseValue": "estupendo",
+      "Translation": "great; terrific",
+      "LinkedNouns": ["día", "idea", "comida", "viaje"],
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "puntual",
+      "Translation": "punctual; on time",
+      "LinkedNouns": ["tren", "persona", "autobús", "jefe"],
+      "Topics": ["time"]
+    },
+    {
+      "BaseValue": "amplio",
+      "Translation": "spacious; wide",
+      "LinkedNouns": ["salón", "habitación", "cocina", "jardín"],
+      "Topics": ["home"]
     }
   ],
-  "Topics": ["city", "food", "people"]
+  "Topics": ["animals", "basics", "body", "city", "clothes", "colors", "emotions", "family", "food", "furniture", "health", "home", "leisure", "nature", "people", "school", "shopping", "technology", "time", "travel", "weather", "work"]
 }

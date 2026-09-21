@@ -311,8 +311,7 @@ public class AdjectiveLibraryTests
     [Test]
     public void SeedLibrary_AdjectivesAreValidAndPracticable()
     {
-        var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "library.json");
-        var library = JsonSerializer.Deserialize<LearnLibrary>(File.ReadAllText(path), JsonFileStore<LearnLibrary>.Options)!;
+        var library = LoadSeedLibrary();
 
         Assert.That(library.Adjectives, Is.Not.Empty);
         Assert.Multiple(() =>
@@ -323,5 +322,28 @@ public class AdjectiveLibraryTests
                 Assert.That(library.CanPractice(adjective, ScenarioType.PairWithNoun), Is.True, adjective.BaseValue);
             }
         });
+    }
+
+    [Test]
+    public void SeedLibrary_NounsAndVerbsAreValidAndPracticable()
+    {
+        var library = LoadSeedLibrary();
+
+        Assert.Multiple(() =>
+        {
+            foreach (var unit in library.Nouns.Cast<LearnUnit>().Concat(library.Verbs))
+            {
+                Assert.That(library.Validate(unit, unit), Is.Empty, unit.BaseValue);
+                // Nouns without a common plural (e.g. salud) leave it empty and skip the plural scenario.
+                var scenarios = unit.SupportedScenarios.Where(t => t != ScenarioType.Plural);
+                Assert.That(scenarios.All(t => library.CanPractice(unit, t)), Is.True, unit.BaseValue);
+            }
+        });
+    }
+
+    private static LearnLibrary LoadSeedLibrary()
+    {
+        var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "library.json");
+        return JsonSerializer.Deserialize<LearnLibrary>(File.ReadAllText(path), JsonFileStore<LearnLibrary>.Options)!;
     }
 }
