@@ -10,14 +10,25 @@ public static class DisplayNames
         WordKind.Noun => "noun",
         WordKind.Verb => "verb",
         WordKind.Adjective => "adjective",
+        WordKind.Numeral => "numeral",
         _ => "word"
     };
 
     public static string Plural(WordKind kind) => $"{Singular(kind)}s";
 
+    public static string Subtype(NumeralSubtype subtype) => subtype switch
+    {
+        NumeralSubtype.Date => "Date",
+        NumeralSubtype.Time => "Time",
+        NumeralSubtype.DateAndTime => "Date and time",
+        _ => "Number"
+    };
+
     public static string Scenario(ScenarioType type) => type switch
     {
         ScenarioType.PairWithNoun => "Pair with noun",
+        ScenarioType.NumberToText => "Number to text",
+        ScenarioType.TextToNumber => "Text to number",
         _ => type.ToString()
     };
 }

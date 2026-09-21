@@ -58,6 +58,7 @@
                             <ToggleButton Classes="chip" Content="Nouns" IsChecked="{Binding IncludeNouns}" Margin="0,0,8,0" />
                             <ToggleButton Classes="chip" Content="Verbs" IsChecked="{Binding IncludeVerbs}" Margin="0,0,8,0" />
                             <ToggleButton Classes="chip" Content="Adjectives" IsChecked="{Binding IncludeAdjectives}" Margin="0,0,8,0" />
+                            <ToggleButton Classes="chip" Content="Numerals" IsChecked="{Binding IncludeNumerals}" Margin="0,0,8,0" />
                         </UniformGrid>
                     </Grid>
                 </Border>
@@ -78,6 +79,10 @@
                             <ItemsControl ItemsSource="{Binding AdjectiveScenarios}" IsEnabled="{Binding IncludeAdjectives}"
                                           ItemTemplate="{StaticResource ChipTemplate}"
                                           ItemsPanel="{StaticResource FourColumns}" />
+                            <TextBlock Text="Numerals" Classes="muted" Margin="0,6,0,6" />
+                            <ItemsControl ItemsSource="{Binding NumeralScenarios}" IsEnabled="{Binding IncludeNumerals}"
+                                          ItemTemplate="{StaticResource ChipTemplate}"
+                                          ItemsPanel="{StaticResource FourColumns}" />
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -89,7 +94,8 @@
                             <ItemsControl ItemsSource="{Binding Topics}"
                                           ItemTemplate="{StaticResource ChipTemplate}"
                                           ItemsPanel="{StaticResource FourColumns}" />
-                            <TextBlock Text="None selected means all topics." Classes="muted" />
+                            <TextBlock Text="None selected means all topics. Numerals are included regardless of topics." Classes="muted"
+                                       TextWrapping="Wrap" />
                         </StackPanel>
                     </Grid>
                 </Border>

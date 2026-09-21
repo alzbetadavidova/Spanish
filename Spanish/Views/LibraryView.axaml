@@ -16,6 +16,9 @@
             <TabItem Header="Adjectives" FontSize="15">
                 <views:WordListView DataContext="{Binding Adjectives}" />
             </TabItem>
+            <TabItem Header="Numerals" FontSize="15">
+                <views:NumeralListView DataContext="{Binding Numerals}" />
+            </TabItem>
             <TabItem Header="Topics" FontSize="15">
                 <views:TopicsView DataContext="{Binding Topics}" />
             </TabItem>
