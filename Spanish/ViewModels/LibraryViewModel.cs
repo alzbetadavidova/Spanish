@@ -15,6 +15,7 @@ public partial class LibraryViewModel : ObservableObject, IPage
     {
         Nouns = new WordListViewModel(context, WordKind.Noun);
         Verbs = new WordListViewModel(context, WordKind.Verb);
+        Adjectives = new WordListViewModel(context, WordKind.Adjective);
         Topics = new TopicsViewModel(context);
         // Tabs edit the same library; keep every tab (and open editors) in sync. While the page is
         // hidden (e.g. answers saved on the Learn page) the refresh waits until it is shown again.
@@ -32,17 +33,19 @@ public partial class LibraryViewModel : ObservableObject, IPage
 
     public WordListViewModel Nouns { get; }
     public WordListViewModel Verbs { get; }
+    public WordListViewModel Adjectives { get; }
     public TopicsViewModel Topics { get; }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CurrentList), nameof(AddLabel), nameof(IsAddVisible))]
     private int _selectedTabIndex;
 
-    /// <summary>The nouns or verbs list of the selected tab; null on the topics tab.</summary>
+    /// <summary>The word list of the selected tab; null on the topics tab.</summary>
     public WordListViewModel? CurrentList => SelectedTabIndex switch
     {
         0 => Nouns,
         1 => Verbs,
+        2 => Adjectives,
         _ => null
     };
 
@@ -64,11 +67,12 @@ public partial class LibraryViewModel : ObservableObject, IPage
     {
         Nouns.Refresh();
         Verbs.Refresh();
+        Adjectives.Refresh();
         Topics.Refresh();
     }
 }
 
-/// <summary>Searchable list of nouns or verbs with an editor for the selected one.</summary>
+/// <summary>Searchable list of one kind of word with an editor for the selected one.</summary>
 public partial class WordListViewModel : ObservableObject
 {
     private readonly LibraryContext _context;
@@ -84,16 +88,15 @@ public partial class WordListViewModel : ObservableObject
     }
 
     public WordKind Kind { get; }
-    public string AddLabel => Kind == WordKind.Noun ? "Add noun" : "Add verb";
-    public string SearchPlaceholder => Kind == WordKind.Noun ? "Search nouns" : "Search verbs";
+    public string AddLabel => $"Add {DisplayNames.Singular(Kind)}";
+    public string SearchPlaceholder => $"Search {DisplayNames.Plural(Kind)}";
     public ObservableCollection<LearnUnit> Items { get; } = [];
 
     public string CountText
     {
         get
         {
-            var noun = Kind == WordKind.Noun ? "noun" : "verb";
-            return Items.Count == 1 ? $"1 {noun}" : $"{Items.Count} {noun}s";
+            return Items.Count == 1 ? $"1 {DisplayNames.Singular(Kind)}" : $"{Items.Count} {DisplayNames.Plural(Kind)}";
         }
     }
 
@@ -129,7 +132,7 @@ public partial class WordListViewModel : ObservableObject
     public void Refresh()
     {
         var selected = Selected;
-        var units = Kind == WordKind.Noun ? _context.Library.Nouns.Cast<LearnUnit>() : _context.Library.Verbs;
+        var units = _context.Library.Units.Where(u => u.Kind == Kind);
         var search = SearchText.Trim();
         Items.Clear();
         foreach (var unit in units
@@ -146,12 +149,15 @@ public partial class WordListViewModel : ObservableObject
         _restoringSelection = true;
         Selected = selected is not null && Items.Contains(selected) ? selected : null;
         _restoringSelection = false;
-        Editor?.RefreshTopics();
+        Editor?.RefreshChoices();
     }
 
-    private WordEditorViewModel CreateEditor(LearnUnit? unit) => Kind == WordKind.Noun
-        ? new NounEditorViewModel(_context, unit as Noun, _callbacks)
-        : new VerbEditorViewModel(_context, unit as Verb, _callbacks);
+    private WordEditorViewModel CreateEditor(LearnUnit? unit) => Kind switch
+    {
+        WordKind.Noun => new NounEditorViewModel(_context, unit as Noun, _callbacks),
+        WordKind.Adjective => new AdjectiveEditorViewModel(_context, unit as Adjective, _callbacks),
+        _ => new VerbEditorViewModel(_context, unit as Verb, _callbacks)
+    };
 
     private void OnSaved(LearnUnit unit)
     {
@@ -327,5 +333,5 @@ public partial class TopicsViewModel : ObservableObject
         }
     }
 
-    private static string Label(LearnUnit unit) => $"{unit.BaseValue} · {(unit.Kind == WordKind.Noun ? "noun" : "verb")}";
+    private static string Label(LearnUnit unit) => $"{unit.BaseValue} · {DisplayNames.Singular(unit.Kind)}";
 }

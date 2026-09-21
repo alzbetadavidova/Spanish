@@ -21,7 +21,7 @@ public class StatsRowViewModel(StatsRow row, DateTime now)
 {
     public StatsRow Row { get; } = row;
     public string Word => Row.Word;
-    public string Kind => Row.Kind == WordKind.Noun ? "noun" : "verb";
+    public string Kind => DisplayNames.Singular(Row.Kind);
     public string Translation => Row.Translation;
     public double OverallPercent => Math.Round((Row.OverallIndex ?? 0) * 100);
     public string OverallText => Row.OverallIndex is null ? "new" : $"{OverallPercent:0}%";
@@ -34,7 +34,7 @@ public class StatsRowViewModel(StatsRow row, DateTime now)
         get
         {
             var practiced = Row.Breakdown
-                .Select(b => b.Index is { } index ? $"{b.Type} {Math.Round(index * 100):0}" : null)
+                .Select(b => b.Index is { } index ? $"{DisplayNames.Scenario(b.Type)} {Math.Round(index * 100):0}" : null)
                 .OfType<string>()
                 .ToList();
             return practiced.Count == 0 ? "not practiced" : string.Join(" · ", practiced);
@@ -73,7 +73,7 @@ public partial class StatsViewModel : ObservableObject, IPage
     }
 
     public static IReadOnlyList<Option<WordKind?>> KindFilters { get; } =
-        [new(null, "All word types"), new(WordKind.Noun, "Nouns"), new(WordKind.Verb, "Verbs")];
+        [new(null, "All word types"), new(WordKind.Noun, "Nouns"), new(WordKind.Verb, "Verbs"), new(WordKind.Adjective, "Adjectives")];
 
     public ObservableCollection<Option<string?>> TopicFilters { get; } = [];
     public ObservableCollection<StatsRowViewModel> Rows { get; } = [];

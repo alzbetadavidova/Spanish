@@ -13,6 +13,20 @@
       "PluralValue": "leches",
       "Gender": "Feminine",
       "Topics": ["food"]
+    },
+    {
+      "BaseValue": "mujer",
+      "Translation": "woman",
+      "PluralValue": "mujeres",
+      "Gender": "Feminine",
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "hombre",
+      "Translation": "man",
+      "PluralValue": "hombres",
+      "Gender": "Masculine",
+      "Topics": ["people"]
     }
   ],
   "Verbs": [
@@ -24,5 +38,27 @@
       "NonPersonalGerund": "hablando"
     }
   ],
-  "Topics": ["city", "food"]
+  "Adjectives": [
+    {
+      "BaseValue": "bajo",
+      "Translation": "short; low",
+      "LinkedNouns": ["mujer", "hombre"],
+      "Topics": ["people"]
+    },
+    {
+      "BaseValue": "grande",
+      "Translation": "big; large",
+      "LinkedNouns": ["ciudad", "hombre"],
+      "Topics": ["city"]
+    },
+    {
+      "BaseValue": "joven",
+      "Translation": "young",
+      "MasculinePluralValue": "jóvenes",
+      "FemininePluralValue": "jóvenes",
+      "LinkedNouns": ["mujer", "hombre"],
+      "Topics": ["people"]
+    }
+  ],
+  "Topics": ["city", "food", "people"]
 }

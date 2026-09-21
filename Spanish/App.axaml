@@ -47,6 +47,7 @@
         <DataTemplate DataType="vm:GenderScenarioViewModel"><views:GenderScenarioView /></DataTemplate>
         <DataTemplate DataType="vm:NounEditorViewModel"><views:NounEditorView /></DataTemplate>
         <DataTemplate DataType="vm:VerbEditorViewModel"><views:VerbEditorView /></DataTemplate>
+        <DataTemplate DataType="vm:AdjectiveEditorViewModel"><views:AdjectiveEditorView /></DataTemplate>
     </Application.DataTemplates>
 
     <Application.Styles>

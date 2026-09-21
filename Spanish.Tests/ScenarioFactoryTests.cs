@@ -9,7 +9,7 @@ public class ScenarioFactoryTests
     {
         var noun = TestData.Ciudad();
 
-        var card = (CardScenario)new ScenarioFactory(new FakeRandom()).Create(noun, ScenarioType.Card, Direction.EnglishToSpanish);
+        var card = (CardScenario)new ScenarioFactory(new FakeRandom(), new LearnLibrary()).Create(noun, ScenarioType.Card, Direction.EnglishToSpanish);
 
         Assert.That(card, Is.EqualTo(new CardScenario(noun, Direction.EnglishToSpanish, "city, town", "la ciudad", "las ciudades")));
     }
@@ -20,7 +20,7 @@ public class ScenarioFactoryTests
         var noun = TestData.Perro();
         noun.PluralValue = string.Empty;
 
-        var card = (CardScenario)new ScenarioFactory(new FakeRandom()).Create(noun, ScenarioType.Card, Direction.EnglishToSpanish);
+        var card = (CardScenario)new ScenarioFactory(new FakeRandom(), new LearnLibrary()).Create(noun, ScenarioType.Card, Direction.EnglishToSpanish);
 
         Assert.That(card.BackDetail, Is.Null);
     }
@@ -30,7 +30,7 @@ public class ScenarioFactoryTests
     {
         var verb = TestData.Hablar();
 
-        var card = (CardScenario)new ScenarioFactory(new FakeRandom()).Create(verb, ScenarioType.Card, Direction.SpanishToEnglish);
+        var card = (CardScenario)new ScenarioFactory(new FakeRandom(), new LearnLibrary()).Create(verb, ScenarioType.Card, Direction.SpanishToEnglish);
 
         Assert.That(card, Is.EqualTo(new CardScenario(verb, Direction.SpanishToEnglish, "hablar", "to speak, talk", null)));
     }
@@ -39,7 +39,7 @@ public class ScenarioFactoryTests
     [TestCase(1, Direction.SpanishToEnglish)]
     public void Create_MixedDirection_PicksAtRandom(int roll, Direction expected)
     {
-        var card = (CardScenario)new ScenarioFactory(new FakeRandom(roll)).Create(TestData.Ciudad(), ScenarioType.Card, Direction.Mixed);
+        var card = (CardScenario)new ScenarioFactory(new FakeRandom(roll), new LearnLibrary()).Create(TestData.Ciudad(), ScenarioType.Card, Direction.Mixed);
 
         Assert.That(card.Direction, Is.EqualTo(expected));
     }
@@ -47,7 +47,7 @@ public class ScenarioFactoryTests
     [Test]
     public void Create_FillEnglishToSpanish_Noun_AcceptsWithOrWithoutArticle()
     {
-        var fill = (TypedScenario)new ScenarioFactory(new FakeRandom()).Create(TestData.Ciudad(), ScenarioType.Fill, Direction.EnglishToSpanish);
+        var fill = (TypedScenario)new ScenarioFactory(new FakeRandom(), new LearnLibrary()).Create(TestData.Ciudad(), ScenarioType.Fill, Direction.EnglishToSpanish);
 
         Assert.Multiple(() =>
         {
@@ -61,7 +61,7 @@ public class ScenarioFactoryTests
     [Test]
     public void Create_FillEnglishToSpanish_Verb_ExpectsInfinitive()
     {
-        var fill = (TypedScenario)new ScenarioFactory(new FakeRandom()).Create(TestData.Hablar(), ScenarioType.Fill, Direction.EnglishToSpanish);
+        var fill = (TypedScenario)new ScenarioFactory(new FakeRandom(), new LearnLibrary()).Create(TestData.Hablar(), ScenarioType.Fill, Direction.EnglishToSpanish);
 
         Assert.That(fill.ExpectedAnswers, Is.EqualTo(new[] { "hablar" }));
     }
@@ -69,7 +69,7 @@ public class ScenarioFactoryTests
     [Test]
     public void Create_FillSpanishToEnglish_Noun_ExpectsTranslations()
     {
-        var fill = (TypedScenario)new ScenarioFactory(new FakeRandom()).Create(TestData.Ciudad(), ScenarioType.Fill, Direction.SpanishToEnglish);
+        var fill = (TypedScenario)new ScenarioFactory(new FakeRandom(), new LearnLibrary()).Create(TestData.Ciudad(), ScenarioType.Fill, Direction.SpanishToEnglish);
 
         Assert.Multiple(() =>
         {
@@ -82,7 +82,7 @@ public class ScenarioFactoryTests
     [Test]
     public void Create_FillSpanishToEnglish_Verb_MakesLeadingToOptional()
     {
-        var fill = (TypedScenario)new ScenarioFactory(new FakeRandom()).Create(TestData.Hablar(), ScenarioType.Fill, Direction.SpanishToEnglish);
+        var fill = (TypedScenario)new ScenarioFactory(new FakeRandom(), new LearnLibrary()).Create(TestData.Hablar(), ScenarioType.Fill, Direction.SpanishToEnglish);
 
         Assert.That(fill.ExpectedAnswers, Is.EqualTo(new[] { "to speak", "talk", "speak", "to talk" }));
     }
@@ -93,7 +93,7 @@ public class ScenarioFactoryTests
     {
         var noun = TestData.Ciudad();
 
-        var gender = (GenderScenario)new ScenarioFactory(new FakeRandom(roll)).Create(noun, ScenarioType.Gender, Direction.Mixed);
+        var gender = (GenderScenario)new ScenarioFactory(new FakeRandom(roll), new LearnLibrary()).Create(noun, ScenarioType.Gender, Direction.Mixed);
 
         Assert.That(gender, Is.EqualTo(new GenderScenario(noun, word, expected)));
     }
@@ -105,7 +105,7 @@ public class ScenarioFactoryTests
         noun.PluralValue = string.Empty;
         var random = new FakeRandom(1);
 
-        var gender = (GenderScenario)new ScenarioFactory(random).Create(noun, ScenarioType.Gender, Direction.Mixed);
+        var gender = (GenderScenario)new ScenarioFactory(random, new LearnLibrary()).Create(noun, ScenarioType.Gender, Direction.Mixed);
 
         Assert.That(gender.Expected, Is.EqualTo(Article.El));
         Assert.That(random.Requests, Is.Empty);
@@ -114,7 +114,7 @@ public class ScenarioFactoryTests
     [Test]
     public void Create_Plural_AcceptsWithOrWithoutArticle()
     {
-        var plural = (TypedScenario)new ScenarioFactory(new FakeRandom()).Create(TestData.Perro(), ScenarioType.Plural, Direction.Mixed);
+        var plural = (TypedScenario)new ScenarioFactory(new FakeRandom(), new LearnLibrary()).Create(TestData.Perro(), ScenarioType.Plural, Direction.Mixed);
 
         Assert.Multiple(() =>
         {
@@ -131,7 +131,7 @@ public class ScenarioFactoryTests
     [TestCase(9, "ustedes", "hablan")]
     public void Create_Present_RandomSubject(int roll, string subject, string form)
     {
-        var present = (TypedScenario)new ScenarioFactory(new FakeRandom(roll)).Create(TestData.Hablar(), ScenarioType.Present, Direction.Mixed);
+        var present = (TypedScenario)new ScenarioFactory(new FakeRandom(roll), new LearnLibrary()).Create(TestData.Hablar(), ScenarioType.Present, Direction.Mixed);
 
         Assert.Multiple(() =>
         {
@@ -146,7 +146,7 @@ public class ScenarioFactoryTests
     [Test]
     public void Create_Preterite_UsesPreteriteForms()
     {
-        var preterite = (TypedScenario)new ScenarioFactory(new FakeRandom(2)).Create(TestData.Hablar(), ScenarioType.Preterite, Direction.Mixed);
+        var preterite = (TypedScenario)new ScenarioFactory(new FakeRandom(2), new LearnLibrary()).Create(TestData.Hablar(), ScenarioType.Preterite, Direction.Mixed);
 
         Assert.That(preterite.Instruction, Is.EqualTo("Conjugate · preterite (past)"));
         Assert.That(preterite.ExpectedAnswers, Is.EqualTo(new[] { "habló", "Él habló" }));
@@ -155,7 +155,7 @@ public class ScenarioFactoryTests
     [Test]
     public void Create_Gerund_ExpectsGerund()
     {
-        var gerund = (TypedScenario)new ScenarioFactory(new FakeRandom()).Create(TestData.Hablar(), ScenarioType.Gerund, Direction.Mixed);
+        var gerund = (TypedScenario)new ScenarioFactory(new FakeRandom(), new LearnLibrary()).Create(TestData.Hablar(), ScenarioType.Gerund, Direction.Mixed);
 
         Assert.Multiple(() =>
         {
@@ -168,7 +168,7 @@ public class ScenarioFactoryTests
     [Test]
     public void Create_CannotPractice_Throws()
     {
-        var factory = new ScenarioFactory(new FakeRandom());
+        var factory = new ScenarioFactory(new FakeRandom(), new LearnLibrary());
 
         Assert.Multiple(() =>
         {
@@ -182,7 +182,7 @@ public class ScenarioFactoryTests
     {
         var unit = new UnknownUnit { BaseValue = "x" };
 
-        Assert.That(() => new ScenarioFactory(new FakeRandom()).Create(unit, ScenarioType.Gender, Direction.Mixed),
+        Assert.That(() => new ScenarioFactory(new FakeRandom(), new LearnLibrary()).Create(unit, ScenarioType.Gender, Direction.Mixed),
             Throws.ArgumentException.With.Message.Contains("Unsupported scenario"));
     }
 }

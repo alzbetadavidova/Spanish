@@ -28,6 +28,7 @@ public abstract partial class WordEditorViewModel : ObservableObject
         RefreshTopics();
     }
 
+    protected LibraryContext Context => _context;
     public LearnUnit? Existing { get; }
     public bool IsNew => Existing is null;
     public abstract string Title { get; }
@@ -87,6 +88,9 @@ public abstract partial class WordEditorViewModel : ObservableObject
         }
         OnPropertyChanged(nameof(HasTopics));
     }
+
+    /// <summary>Brings every library-based choice (topics, and e.g. linked nouns) up to date.</summary>
+    public virtual void RefreshChoices() => RefreshTopics();
 
     [RelayCommand]
     private async Task Save()
@@ -274,4 +278,111 @@ public partial class VerbEditorViewModel : WordEditorViewModel
     }
 
     private static string At(string[] forms, int index) => index < forms.Length ? forms[index] ?? string.Empty : string.Empty;
+}
+
+public partial class AdjectiveEditorViewModel : WordEditorViewModel
+{
+    private readonly HashSet<string> _nounBaseline = new(StringComparer.OrdinalIgnoreCase);
+
+    public AdjectiveEditorViewModel(LibraryContext context, Adjective? existing, EditorCallbacks callbacks)
+        : base(context, existing, callbacks)
+    {
+        _feminine = existing?.FeminineValue ?? string.Empty;
+        _masculinePlural = existing?.MasculinePluralValue ?? string.Empty;
+        _femininePlural = existing?.FemininePluralValue ?? string.Empty;
+        RefreshNouns();
+    }
+
+    public override string Title => IsNew ? "New adjective" : "Edit adjective";
+
+    /// <summary>The nouns the adjective can be paired with.</summary>
+    public ObservableCollection<ToggleOption<string>> Nouns { get; } = [];
+    public bool HasNouns => Nouns.Count > 0;
+
+    // The form boxes hold only manual fixes; an empty box uses the suggestion shown as its placeholder.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(Suggested))]
+    private string _feminine;
+
+    [ObservableProperty]
+    private string _masculinePlural;
+
+    [ObservableProperty]
+    private string _femininePlural;
+
+    [ObservableProperty]
+    private string? _nounsError;
+
+    /// <summary>The regular forms of the Spanish word, used where no form is typed.</summary>
+    public AdjectiveForms Suggested => AdjectiveFormSuggester.Suggest(Spanish, Feminine);
+
+    public override void RefreshChoices()
+    {
+        base.RefreshChoices();
+        RefreshNouns();
+    }
+
+    protected override void OnSpanishEdited(string value) => OnPropertyChanged(nameof(Suggested));
+
+    protected override LearnUnit BuildCandidate()
+    {
+        var suggested = Suggested;
+        return new Adjective
+        {
+            // A typed form that matches the suggestion is not a fix; keep following the word.
+            FeminineValue = Override(Feminine, suggested.Feminine),
+            MasculinePluralValue = Override(MasculinePlural, suggested.MasculinePlural),
+            FemininePluralValue = Override(FemininePlural, suggested.FemininePlural),
+            LinkedNouns = Nouns.Where(n => n.IsSelected).Select(n => n.Value).ToList()
+        };
+    }
+
+    protected override void ShowErrors(IReadOnlyList<ValidationError> errors)
+    {
+        base.ShowErrors(errors);
+        NounsError = Message(errors, nameof(Adjective.LinkedNouns));
+    }
+
+    private static string Override(string typed, string suggested)
+    {
+        var form = typed.Trim();
+        return form == suggested ? string.Empty : form;
+    }
+
+    /// <summary>
+    /// Rebuilds the noun chips from the library. Chips the user changed keep their state; the others
+    /// follow the adjective's current links.
+    /// </summary>
+    private void RefreshNouns()
+    {
+        var edited = Nouns
+            .Where(n => n.IsSelected != _nounBaseline.Contains(n.Value))
+            .ToDictionary(n => n.Value, n => n.IsSelected, StringComparer.OrdinalIgnoreCase);
+        var linked = (Existing as Adjective)?.LinkedNouns ?? [];
+
+        foreach (var chip in Nouns)
+        {
+            chip.PropertyChanged -= OnNounToggled;
+        }
+        Nouns.Clear();
+        _nounBaseline.Clear();
+        foreach (var noun in Context.Library.Nouns
+                     .Select(n => n.BaseValue)
+                     .Distinct(StringComparer.OrdinalIgnoreCase)
+                     .Order(StringComparer.CurrentCultureIgnoreCase))
+        {
+            var current = linked.Contains(noun, StringComparer.OrdinalIgnoreCase);
+            if (current)
+            {
+                _nounBaseline.Add(noun);
+            }
+            var chip = new ToggleOption<string>(noun, noun, edited.GetValueOrDefault(noun, current));
+            chip.PropertyChanged += OnNounToggled;
+            Nouns.Add(chip);
+        }
+        OnPropertyChanged(nameof(HasNouns));
+    }
+
+    // IsSelected is the only property of a chip that changes.
+    private void OnNounToggled(object? sender, System.ComponentModel.PropertyChangedEventArgs e) => NounsError = null;
 }

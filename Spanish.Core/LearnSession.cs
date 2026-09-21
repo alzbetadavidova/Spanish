@@ -2,19 +2,24 @@ namespace Spanish.Core;
 
 public record Exercise(LearnUnit Unit, ScenarioType Type)
 {
-    public string Key => $"{Unit.Kind}:{Unit.BaseValue.ToLowerInvariant()}:{Type}";
+    public string Key => $"{WordKey}:{Type}";
+
+    /// <summary>Identifies the word regardless of the scenario.</summary>
+    public string WordKey => $"{Unit.Kind}:{Unit.BaseValue.ToLowerInvariant()}";
 }
 
 /// <summary>Picks exercises one by one according to <see cref="SessionSettings"/> and records the answers.</summary>
 public class LearnSession
 {
     public const int RecentCapacity = 5;
+    public const int RecentWordCapacity = 3;
 
     private readonly LearnLibrary _library;
     private readonly ScenarioFactory _factory;
     private readonly IRandomSource _random;
     private readonly IClock _clock;
     private readonly LearnCache _recent = new(RecentCapacity);
+    private readonly LearnCache _recentWords = new(RecentWordCapacity);
 
     public LearnSession(LearnLibrary library, SessionSettings settings, ScenarioFactory factory, IRandomSource random, IClock clock)
     {
@@ -47,7 +52,9 @@ public class LearnSession
         ArgumentNullException.ThrowIfNull(settings);
         return library.Units
             .Where(settings.Includes)
-            .SelectMany(u => settings.ScenarioTypesFor(u.Kind).Where(u.CanPractice).Select(t => new Exercise(u, t)))
+            .SelectMany(u => settings.ScenarioTypesFor(u.Kind)
+                .Where(t => library.CanPractice(u, t))
+                .Select(t => new Exercise(u, t)))
             .ToList();
     }
 
@@ -60,13 +67,24 @@ public class LearnSession
             return null;
         }
 
-        // Avoid repeating recent exercises, but always leave at least one to choose from.
+        // Candidates, from most to least preferred: neither a recent exercise nor a recent word, then not a
+        // recent exercise, then anything. Never repeating an exercise straight away wins over word variety.
+        // The depths always leave at least one exercise and one word to choose from.
         var depth = Math.Min(RecentCapacity, exercises.Count - 1);
         var fresh = exercises.Where(e => !_recent.Has(e.Key, depth)).ToList();
         if (fresh.Count == 0)
         {
             // Only possible when exercises share a key, e.g. duplicate words in a hand-edited file.
             fresh = exercises.ToList();
+        }
+
+        // Prefer another word too, so a word doesn't come back straight away in a different scenario.
+        var wordCount = exercises.Select(e => e.WordKey).Distinct().Count();
+        var wordDepth = Math.Min(RecentWordCapacity, wordCount - 1);
+        var freshWords = fresh.Where(e => !_recentWords.Has(e.WordKey, wordDepth)).ToList();
+        if (freshWords.Count > 0)
+        {
+            fresh = freshWords;
         }
 
         var best = fresh.Min(SortKey);
@@ -79,7 +97,10 @@ public class LearnSession
     {
         ArgumentNullException.ThrowIfNull(scenario);
         scenario.Unit.RecordAnswer(scenario.Type, correct, _clock.Now);
-        _recent.Add(new Exercise(scenario.Unit, scenario.Type).Key);
+        var exercise = new Exercise(scenario.Unit, scenario.Type);
+        _recent.Add(exercise.Key);
+        // A word picked again by the fallback moves to the front, so the history keeps distinct words.
+        _recentWords.Touch(exercise.WordKey);
         Answered++;
         if (correct)
         {

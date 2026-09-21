@@ -9,7 +9,7 @@ public class LearnSessionTests
     private LearnSession CreateSession(LearnLibrary library, SessionSettings settings, FakeRandom? random = null)
     {
         random ??= new FakeRandom();
-        return new LearnSession(library, settings, new ScenarioFactory(random), random, _clock);
+        return new LearnSession(library, settings, new ScenarioFactory(random, library), random, _clock);
     }
 
     [Test]
@@ -17,7 +17,7 @@ public class LearnSessionTests
     {
         var library = new LearnLibrary();
         var settings = new SessionSettings();
-        var factory = new ScenarioFactory(new FakeRandom());
+        var factory = new ScenarioFactory(new FakeRandom(), library);
         var random = new FakeRandom();
 
         Assert.Multiple(() =>
@@ -353,5 +353,43 @@ public class LearnCacheTests
     public void Constructor_NonPositiveCapacity_Throws()
     {
         Assert.That(() => new LearnCache(0), Throws.TypeOf<ArgumentOutOfRangeException>());
+    }
+
+    [Test]
+    public void Touch_MovesExistingKeyToFrontAndAddsNewOnes()
+    {
+        var cache = new LearnCache(3);
+        cache.Add("a");
+        cache.Add("b");
+        cache.Add("c");
+
+        cache.Touch("a"); // b, c, a
+        cache.Touch("d"); // c, a, d
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(cache.Has("a", 2), Is.True);
+            Assert.That(cache.Has("d", 1), Is.True);
+            Assert.That(cache.Has("c", 3), Is.True);
+            Assert.That(cache.Has("c", 2), Is.False);
+            Assert.That(cache.Has("b", 3), Is.False);
+        });
+    }
+
+    [Test]
+    public void Touch_ExistingKeyWhileNotFull_MovesItToFront()
+    {
+        var cache = new LearnCache(3);
+        cache.Add("a");
+        cache.Add("b");
+
+        cache.Touch("a"); // b, a
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(cache.Has("a", 1), Is.True);
+            Assert.That(cache.Has("b", 1), Is.False);
+            Assert.That(cache.Has("b", 2), Is.True);
+        });
     }
 }

@@ -8,13 +8,15 @@ public enum ScenarioType
     Plural, // show a spanish singular noun, type the plural
     Present, // conjugate a verb in present tense
     Preterite, // conjugate a verb in simple past tense
-    Gerund // type the gerund of a verb
+    Gerund, // type the gerund of a verb
+    PairWithNoun // show an adjective and a noun, type the noun with the agreeing adjective form
 }
 
 public enum WordKind
 {
     Noun,
-    Verb
+    Verb,
+    Adjective
 }
 
 public enum Direction

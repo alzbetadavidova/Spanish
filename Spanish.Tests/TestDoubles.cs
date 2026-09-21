@@ -99,6 +99,31 @@ public static class TestData
         Topics = ["city"]
     };
 
+    public static Noun Mujer() => new()
+    {
+        BaseValue = "mujer",
+        Translation = "woman",
+        Gender = Gender.Feminine,
+        PluralValue = "mujeres"
+    };
+
+    /// <summary>Linked to "mujer" and "perro".</summary>
+    public static Adjective Bajo() => new()
+    {
+        BaseValue = "bajo",
+        Translation = "short; low",
+        LinkedNouns = ["mujer", "perro"],
+        Topics = ["animals"]
+    };
+
+    /// <summary>ciudad, perro and mujer, plus the adjective bajo.</summary>
+    public static LearnLibrary AdjectiveLibrary() => new()
+    {
+        Nouns = [Ciudad(), Perro(), Mujer()],
+        Adjectives = [Bajo()],
+        Topics = ["city", "animals"]
+    };
+
     public static LearnLibrary Library() => new()
     {
         Nouns = [Ciudad(), Perro()],
