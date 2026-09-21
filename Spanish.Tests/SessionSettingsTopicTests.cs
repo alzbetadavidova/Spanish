@@ -82,7 +82,7 @@ public class NullSafeModelTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(library.Units, Is.Empty);
+            Assert.That(library.Words, Is.Empty);
             Assert.That(library.Topics, Is.Empty);
             Assert.That(noun.BaseValue, Is.Empty);
             Assert.That(noun.TranslationAlternatives, Is.Empty);

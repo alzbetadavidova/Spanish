@@ -20,7 +20,7 @@ public class StatsViewModelTests
         _vm = new StatsViewModel(new LibraryContext(_library, new InMemoryStore<LearnLibrary>(_library)), _clock);
     }
 
-    private IEnumerable<string> Words => _vm.Rows.Select(r => r.Word);
+    private IEnumerable<string> Words => _vm.Rows.Where(r => r.Row.Kind != WordKind.Numeral).Select(r => r.Word);
 
     [Test]
     public void Initially_SortedByLeastLearned()
@@ -237,7 +237,7 @@ public class MainWindowViewModelTests
 
         vm.SelectedNav = vm.NavItems[2];
         Assert.That(vm.CurrentPage, Is.TypeOf<StatsViewModel>());
-        Assert.That(((StatsViewModel)vm.CurrentPage!).Rows, Has.Count.EqualTo(1));
+        Assert.That(((StatsViewModel)vm.CurrentPage!).Rows, Has.Count.EqualTo(1 + vm.Context.Library.Numerals.Count));
 
         vm.SelectedNav = null;
         Assert.That(vm.CurrentPage, Is.TypeOf<StatsViewModel>());

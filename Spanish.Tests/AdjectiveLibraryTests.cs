@@ -6,11 +6,11 @@ namespace Spanish.Tests;
 public class AdjectiveLibraryTests
 {
     [Test]
-    public void Units_IncludeAdjectives()
+    public void Words_IncludeAdjectives()
     {
         var library = TestData.AdjectiveLibrary();
 
-        Assert.That(library.Units.Select(u => u.BaseValue), Is.EqualTo(new[] { "ciudad", "perro", "mujer", "bajo" }));
+        Assert.That(library.Words.Select(u => u.BaseValue), Is.EqualTo(new[] { "ciudad", "perro", "mujer", "bajo" }));
     }
 
     [Test]

@@ -13,9 +13,9 @@ public class LearnLibraryTests
     }
 
     [Test]
-    public void Units_ContainsNounsThenVerbs()
+    public void Words_ContainsNounsThenVerbs()
     {
-        Assert.That(_library.Units.Select(u => u.BaseValue), Is.EqualTo(new[] { "ciudad", "perro", "hablar" }));
+        Assert.That(_library.Words.Select(u => u.BaseValue), Is.EqualTo(new[] { "ciudad", "perro", "hablar" }));
     }
 
     [Test]
@@ -201,7 +201,7 @@ public class LearnLibraryTests
             Assert.That(_library.Remove(noun), Is.True);
             Assert.That(_library.Remove(verb), Is.True);
             Assert.That(_library.Remove(new UnknownUnit()), Is.False);
-            Assert.That(_library.Units.Count(), Is.EqualTo(1));
+            Assert.That(_library.Words.Count(), Is.EqualTo(1));
         });
     }
 

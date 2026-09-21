@@ -61,7 +61,7 @@ public class AdjectiveSessionTests
     [Test]
     public void GetExercises_IncludesAdjectiveScenarios()
     {
-        var settings = new SessionSettings { IncludeNouns = false, IncludeVerbs = false };
+        var settings = new SessionSettings { IncludeNouns = false, IncludeVerbs = false, IncludeNumerals = false };
 
         var exercises = LearnSession.GetExercises(TestData.AdjectiveLibrary(), settings);
 
@@ -77,6 +77,7 @@ public class AdjectiveSessionTests
         {
             IncludeNouns = false,
             IncludeVerbs = false,
+            IncludeNumerals = false,
             AdjectiveScenarioTypes = [ScenarioType.PairWithNoun]
         };
         var random = new FakeRandom();
@@ -103,6 +104,7 @@ public class LearnSessionWordHistoryTests
         NounScenarioTypes = [ScenarioType.Card, ScenarioType.Gender],
         IncludeVerbs = false,
         IncludeAdjectives = false,
+        IncludeNumerals = false,
         Order = SessionOrder.Random
     };
 
@@ -243,7 +245,7 @@ public class LearnSessionWordHistoryTests
     public void Next_PairWhoseNounsAreMissing_IsNotOffered()
     {
         var library = new LearnLibrary { Adjectives = [TestData.Bajo()] };
-        var settings = new SessionSettings { IncludeNouns = false, IncludeVerbs = false };
+        var settings = new SessionSettings { IncludeNouns = false, IncludeVerbs = false, IncludeNumerals = false };
         var session = CreateSession(library, settings);
 
         Assert.Multiple(() =>

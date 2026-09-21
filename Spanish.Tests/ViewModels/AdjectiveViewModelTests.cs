@@ -338,6 +338,7 @@ public class AdjectiveLibraryPagesTests
         {
             IncludeNouns = false,
             IncludeVerbs = false,
+            IncludeNumerals = false,
             AdjectiveScenarioTypes = [ScenarioType.PairWithNoun]
         };
 

@@ -49,7 +49,7 @@ public class JsonFileStoreTests
 
         var result = await Store(seed: seed).LoadAsync();
 
-        Assert.That(result.Value.Units.Count(), Is.EqualTo(3));
+        Assert.That(result.Value.Words.Count(), Is.EqualTo(3));
     }
 
     [Test]
@@ -80,7 +80,7 @@ public class JsonFileStoreTests
         await store.SaveAsync(new LearnLibrary());
 
         Assert.That(() => JsonDocument.Parse(File.ReadAllText(store.Path)), Throws.Nothing);
-        Assert.That((await store.LoadAsync()).Value.Units, Is.Empty);
+        Assert.That((await store.LoadAsync()).Value.Words, Is.Empty);
     }
 
     [Test]
@@ -121,7 +121,7 @@ public class JsonFileStoreTests
         {
             Assert.That(result.CorruptFileBackupPath, Is.Not.Null);
             Assert.That(File.Exists(result.CorruptFileBackupPath), Is.True);
-            Assert.That(result.Value.Units.Count(), Is.EqualTo(3));
+            Assert.That(result.Value.Words.Count(), Is.EqualTo(3));
         });
     }
 
@@ -158,7 +158,7 @@ public class JsonFileStoreTests
             Assert.That(library.Topics, Is.Empty);
             Assert.That(library.Nouns[0].TranslationAlternatives, Is.Empty);
             Assert.That(library.Nouns[0].Topics, Is.Empty);
-            Assert.That(LearnStats.Build(library), Has.Count.EqualTo(1));
+            Assert.That(LearnStats.Build(library), Has.Count.EqualTo(1 + library.Numerals.Count));
         });
     }
 

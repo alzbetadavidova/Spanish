@@ -23,6 +23,7 @@ public class LearnViewModelTests
     {
         IncludeVerbs = false,
         IncludeAdjectives = false,
+        IncludeNumerals = false,
         NounScenarioTypes = [ScenarioType.Gender]
     };
 
@@ -46,7 +47,7 @@ public class LearnViewModelTests
     [Test]
     public void Constructor_NothingMatches_IsEmpty()
     {
-        var learn = Create(new SessionSettings { IncludeNouns = false, IncludeVerbs = false, IncludeAdjectives = false });
+        var learn = Create(new SessionSettings { IncludeNouns = false, IncludeVerbs = false, IncludeAdjectives = false, IncludeNumerals = false });
 
         Assert.That(learn.IsEmpty, Is.True);
         Assert.That(learn.SummaryChips[0], Is.EqualTo("No word types"));
@@ -367,10 +368,11 @@ public class LearnViewModelTests
     {
         Assert.Multiple(() =>
         {
-            Assert.That(Create(new SessionSettings()).SummaryChips[0], Is.EqualTo("Nouns, verbs, adjectives"));
-            Assert.That(Create(new SessionSettings { IncludeNouns = false }).SummaryChips[0], Is.EqualTo("Verbs, adjectives"));
-            Assert.That(Create(new SessionSettings { IncludeNouns = false, IncludeVerbs = false }).SummaryChips[0], Is.EqualTo("Adjectives"));
-            Assert.That(Create(new SessionSettings { IncludeVerbs = false, IncludeAdjectives = false }).SummaryChips[0], Is.EqualTo("Nouns"));
+            Assert.That(Create(new SessionSettings()).SummaryChips[0], Is.EqualTo("Nouns, verbs, adjectives, numerals"));
+            Assert.That(Create(new SessionSettings { IncludeNouns = false, IncludeNumerals = false }).SummaryChips[0], Is.EqualTo("Verbs, adjectives"));
+            Assert.That(Create(new SessionSettings { IncludeNouns = false, IncludeVerbs = false, IncludeNumerals = false }).SummaryChips[0], Is.EqualTo("Adjectives"));
+            Assert.That(Create(new SessionSettings { IncludeVerbs = false, IncludeAdjectives = false, IncludeNumerals = false }).SummaryChips[0], Is.EqualTo("Nouns"));
+            Assert.That(Create(new SessionSettings { IncludeNouns = false, IncludeVerbs = false, IncludeAdjectives = false }).SummaryChips[0], Is.EqualTo("Numerals"));
         });
     }
 }
@@ -384,6 +386,7 @@ public class SessionSettingsViewModelTests
         var settings = new SessionSettings
         {
             IncludeVerbs = false,
+            IncludeNumerals = false,
             NounScenarioTypes = [ScenarioType.Plural],
             Topics = ["city"],
             Order = SessionOrder.Random,
@@ -396,6 +399,7 @@ public class SessionSettingsViewModelTests
         {
             Assert.That(vm.IncludeNouns, Is.True);
             Assert.That(vm.IncludeVerbs, Is.False);
+            Assert.That(vm.IncludeNumerals, Is.False);
             Assert.That(vm.NounScenarios.Where(s => s.IsSelected).Select(s => s.Value), Is.EqualTo(new[] { ScenarioType.Plural }));
             Assert.That(vm.VerbScenarios.Select(s => s.Label), Is.EqualTo(new[] { "Card", "Fill", "Present", "Preterite", "Gerund" }));
             Assert.That(vm.Topics.Select(t => t.Label), Is.EqualTo(new[] { "animals", "city" }));
@@ -411,6 +415,9 @@ public class SessionSettingsViewModelTests
     public void Changes_UpdateMatchCount()
     {
         var vm = new SessionSettingsViewModel(TestData.Library(), new SessionSettings());
+        Assert.That(vm.MatchText, Is.EqualTo("26 exercises match"));
+
+        vm.IncludeNumerals = false;
         Assert.That(vm.MatchText, Is.EqualTo("10 exercises match"));
 
         vm.IncludeVerbs = false;
@@ -421,6 +428,40 @@ public class SessionSettingsViewModelTests
 
         vm.IncludeNouns = false;
         Assert.That(vm.MatchCount, Is.Zero);
+    }
+
+    [Test]
+    public void NumeralChoices_LoadAndApply()
+    {
+        var settings = new SessionSettings
+        {
+            IncludeNouns = false,
+            IncludeVerbs = false,
+            IncludeAdjectives = false,
+            NumeralScenarioTypes = [ScenarioType.TextToNumber]
+        };
+
+        var vm = new SessionSettingsViewModel(TestData.Library(), settings);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(vm.IncludeNumerals, Is.True);
+            Assert.That(vm.NumeralScenarios.Select(s => s.Label), Is.EqualTo(new[] { "Number to text", "Text to number" }));
+            Assert.That(vm.NumeralScenarios.Where(s => s.IsSelected).Select(s => s.Value), Is.EqualTo(new[] { ScenarioType.TextToNumber }));
+            Assert.That(vm.MatchCount, Is.EqualTo(8));
+        });
+
+        vm.NumeralScenarios.Single(s => s.Value == ScenarioType.NumberToText).IsSelected = true;
+        Assert.That(vm.MatchCount, Is.EqualTo(16));
+
+        vm.IncludeNumerals = false;
+        var applied = vm.ToSettings();
+        Assert.Multiple(() =>
+        {
+            Assert.That(vm.MatchCount, Is.Zero);
+            Assert.That(applied.IncludeNumerals, Is.False);
+            Assert.That(applied.NumeralScenarioTypes, Is.EqualTo(new[] { ScenarioType.NumberToText, ScenarioType.TextToNumber }));
+        });
     }
 
     [Test]

@@ -518,14 +518,18 @@ public class LibraryViewModelTests
             Assert.That(vm.Adjectives.Editor, Is.TypeOf<AdjectiveEditorViewModel>());
         });
 
-        vm.SelectedTabIndex = 3;
-        vm.AddCommand.Execute(null);
-        Assert.Multiple(() =>
+        // Numerals and topics have no word list.
+        foreach (var tab in new[] { 3, 4 })
         {
-            Assert.That(vm.CurrentList, Is.Null);
-            Assert.That(vm.IsAddVisible, Is.False);
-            Assert.That(vm.AddLabel, Is.Empty);
-        });
+            vm.SelectedTabIndex = tab;
+            vm.AddCommand.Execute(null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(vm.CurrentList, Is.Null);
+                Assert.That(vm.IsAddVisible, Is.False);
+                Assert.That(vm.AddLabel, Is.Empty);
+            });
+        }
     }
 
     [Test]
