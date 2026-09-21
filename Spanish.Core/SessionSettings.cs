@@ -11,15 +11,19 @@ public record SessionSettings
     public static readonly IReadOnlyList<ScenarioType> DefaultAdjectiveScenarioTypes =
         [ScenarioType.Card, ScenarioType.Fill, ScenarioType.PairWithNoun];
 
+    public static readonly IReadOnlyList<ScenarioType> DefaultNumeralScenarioTypes = Numeral.ScenarioTypes;
+
     // Setters replace null (possible in hand-edited JSON) with an empty list.
     private readonly IReadOnlyList<ScenarioType> _nounScenarioTypes = DefaultNounScenarioTypes;
     private readonly IReadOnlyList<ScenarioType> _verbScenarioTypes = DefaultVerbScenarioTypes;
     private readonly IReadOnlyList<ScenarioType> _adjectiveScenarioTypes = DefaultAdjectiveScenarioTypes;
+    private readonly IReadOnlyList<ScenarioType> _numeralScenarioTypes = DefaultNumeralScenarioTypes;
     private readonly IReadOnlyList<string> _topics = [];
 
     public bool IncludeNouns { get; init; } = true;
     public bool IncludeVerbs { get; init; } = true;
     public bool IncludeAdjectives { get; init; } = true;
+    public bool IncludeNumerals { get; init; } = true;
 
     public IReadOnlyList<ScenarioType> NounScenarioTypes
     {
@@ -37,6 +41,12 @@ public record SessionSettings
     {
         get => _adjectiveScenarioTypes;
         init => _adjectiveScenarioTypes = value ?? [];
+    }
+
+    public IReadOnlyList<ScenarioType> NumeralScenarioTypes
+    {
+        get => _numeralScenarioTypes;
+        init => _numeralScenarioTypes = value ?? [];
     }
 
     /// <summary>Topics to practice; empty means all topics (including words without a topic).</summary>
@@ -57,9 +67,11 @@ public record SessionSettings
             WordKind.Noun => IncludeNouns,
             WordKind.Verb => IncludeVerbs,
             WordKind.Adjective => IncludeAdjectives,
+            WordKind.Numeral => IncludeNumerals,
             _ => false
         };
-        return kindIncluded && (Topics.Count == 0 || Topics.Any(unit.HasTopic));
+        // Numerals have no topics, so the topic filter does not apply to them.
+        return kindIncluded && (Topics.Count == 0 || unit.Kind == WordKind.Numeral || Topics.Any(unit.HasTopic));
     }
 
     public IReadOnlyList<ScenarioType> ScenarioTypesFor(WordKind kind) => kind switch
@@ -67,6 +79,7 @@ public record SessionSettings
         WordKind.Noun => NounScenarioTypes,
         WordKind.Verb => VerbScenarioTypes,
         WordKind.Adjective => AdjectiveScenarioTypes,
+        WordKind.Numeral => NumeralScenarioTypes,
         _ => []
     };
 

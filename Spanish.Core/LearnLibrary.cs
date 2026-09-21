@@ -22,8 +22,31 @@ public class LearnLibrary : IJsonOnDeserialized
     private List<string> _topics = [];
     public List<string> Topics { get => _topics; set => _topics = value ?? []; }
 
+    /// <summary>The built-in numerals. They are not stored; only their <see cref="NumeralProgress"/> is.</summary>
     [JsonIgnore]
-    public IEnumerable<LearnUnit> Units => Nouns.Cast<LearnUnit>().Concat(Verbs).Concat(Adjectives);
+    public IReadOnlyList<Numeral> Numerals { get; } = Numeral.CreateBuiltIn();
+
+    /// <summary>The progress of the practiced numerals. Setting it replaces the progress of every numeral.</summary>
+    public Dictionary<NumeralCategory, Dictionary<ScenarioType, LearnProgress>> NumeralProgress
+    {
+        get => Numerals.Where(n => n.Progress.Count > 0).ToDictionary(n => n.Category, n => n.Progress);
+        set
+        {
+            foreach (var numeral in Numerals)
+            {
+                // Null (possible in hand-edited JSON) means no progress.
+                numeral.Progress = value?.GetValueOrDefault(numeral.Category) ?? [];
+            }
+        }
+    }
+
+    /// <summary>The user's words, which can be edited and put into topics.</summary>
+    [JsonIgnore]
+    public IEnumerable<LearnUnit> Words => Nouns.Cast<LearnUnit>().Concat(Verbs).Concat(Adjectives);
+
+    /// <summary>Everything that can be practiced: the words and the built-in numerals.</summary>
+    [JsonIgnore]
+    public IEnumerable<LearnUnit> Units => Words.Concat(Numerals);
 
     /// <summary>Removes null entries a hand-edited file may contain (e.g. <c>"Topics": [null]</c>).</summary>
     public void OnDeserialized()
@@ -67,13 +90,17 @@ public class LearnLibrary : IJsonOnDeserialized
     public IReadOnlyList<ValidationError> Validate(LearnUnit candidate, LearnUnit? existing = null)
     {
         ArgumentNullException.ThrowIfNull(candidate);
+        if (candidate is Numeral)
+        {
+            return [new(nameof(LearnUnit.BaseValue), "Numerals are built in and can't be edited.")];
+        }
         var errors = new List<ValidationError>();
 
         if (string.IsNullOrWhiteSpace(candidate.BaseValue))
         {
             errors.Add(new(nameof(LearnUnit.BaseValue), "Enter the Spanish word."));
         }
-        else if (Units.Any(u => u.Kind == candidate.Kind && !ReferenceEquals(u, existing) && SameWord(u.BaseValue, candidate.BaseValue)))
+        else if (Words.Any(u => u.Kind == candidate.Kind && !ReferenceEquals(u, existing) && SameWord(u.BaseValue, candidate.BaseValue)))
         {
             errors.Add(new(nameof(LearnUnit.BaseValue), $"\"{candidate.BaseValue.Trim()}\" is already in your library."));
         }
@@ -157,6 +184,7 @@ public class LearnLibrary : IJsonOnDeserialized
         }
     }
 
+    /// <summary>Removes a word; built-in numerals are never removed.</summary>
     public bool Remove(LearnUnit unit) => unit switch
     {
         Noun noun => RemoveNoun(noun),
@@ -240,7 +268,7 @@ public class LearnLibrary : IJsonOnDeserialized
         var trimmed = ValidateTopicName(newName, except: Topics[index]);
         var current = Topics[index];
         Topics[index] = trimmed;
-        foreach (var unit in Units)
+        foreach (var unit in Words)
         {
             unit.Topics = unit.Topics.Select(t => SameWord(t, current) ? trimmed : t).ToList();
         }
@@ -251,15 +279,20 @@ public class LearnLibrary : IJsonOnDeserialized
         var index = IndexOfTopic(name);
         var current = Topics[index];
         Topics.RemoveAt(index);
-        foreach (var unit in Units)
+        foreach (var unit in Words)
         {
             unit.Topics.RemoveAll(t => SameWord(t, current));
         }
     }
 
+    /// <exception cref="ArgumentException">The topic does not exist, or the unit is a numeral (numerals have no topics).</exception>
     public void SetTopicMembership(string topic, LearnUnit unit, bool isMember)
     {
         ArgumentNullException.ThrowIfNull(unit);
+        if (unit is Numeral)
+        {
+            throw new ArgumentException("Numerals have no topics.", nameof(unit));
+        }
         var name = Topics[IndexOfTopic(topic)];
         if (isMember && !unit.HasTopic(name))
         {

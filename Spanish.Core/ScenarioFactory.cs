@@ -3,6 +3,8 @@ namespace Spanish.Core;
 public class ScenarioFactory(IRandomSource random, LearnLibrary library)
 {
     public const string PairInstruction = "Put the adjective with the noun";
+    public const string NumberToTextInstruction = "Write it in Spanish words";
+    public const string TextToNumberInstruction = "Write it in digits";
 
     private static readonly string[] Subjects = Verb.ConjugationsDefinitions.Keys.ToArray();
 
@@ -25,6 +27,7 @@ public class ScenarioFactory(IRandomSource random, LearnLibrary library)
             (Verb verb, ScenarioType.Preterite) => CreateConjugation(verb, type, "Conjugate · preterite (past)", verb.PreteriteConjugations),
             (Verb verb, ScenarioType.Gerund) => CreateGerund(verb),
             (Adjective adjective, ScenarioType.PairWithNoun) => CreatePair(adjective),
+            (Numeral numeral, ScenarioType.NumberToText or ScenarioType.TextToNumber) => CreateNumeral(numeral, type),
             _ => throw new ArgumentException($"Unsupported scenario {type}.", nameof(type))
         };
         // A pair also explains its noun, so it adds its own notes.
@@ -122,6 +125,23 @@ public class ScenarioFactory(IRandomSource random, LearnLibrary library)
             $"{adjective.BaseValue} + {nounForm}", detail, [phrase, $"{article.ToText()} {phrase}"]);
         return WithNotes(pair, [..Irregularities.For(adjective, ScenarioType.PairWithNoun), ..Irregularities.OfPairedNoun(noun)]);
     }
+
+    /// <summary>A random value of the numeral's category, e.g. 21 -> veintiuno or the other way round.</summary>
+    private TypedScenario CreateNumeral(Numeral numeral, ScenarioType type)
+    {
+        var forms = numeral.Draw(random);
+        return type == ScenarioType.NumberToText
+            ? new TypedScenario(numeral, type, NumberToTextInstruction, forms.Digits[0], null, forms.Words)
+            : new TypedScenario(numeral, type, TextToNumberInstruction, forms.Words[0], DigitsFormat(numeral.Subtype), forms.Digits);
+    }
+
+    private static string? DigitsFormat(NumeralSubtype subtype) => subtype switch
+    {
+        NumeralSubtype.Date => "day/month/year",
+        NumeralSubtype.Time => "hour:minute, 24-hour clock",
+        NumeralSubtype.DateAndTime => "day/month/year hour:minute",
+        _ => null
+    };
 
     /// <summary>Scenarios without notes keep the shared empty list, so they compare equal.</summary>
     private static Scenario WithNotes(Scenario scenario, IReadOnlyList<Irregularity> notes) =>
