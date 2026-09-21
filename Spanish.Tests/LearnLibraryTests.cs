@@ -66,6 +66,32 @@ public class LearnLibraryTests
     }
 
     [Test]
+    public void Validate_EditToOtherExistingWord_ReportsDuplicate()
+    {
+        var errors = _library.Validate(new Noun { BaseValue = "Perro", Translation = "x" }, _library.Nouns[0]);
+
+        Assert.That(errors.Single().Field, Is.EqualTo(nameof(LearnUnit.BaseValue)));
+    }
+
+    [Test]
+    public void Save_InvalidEdit_LeavesExistingUnchanged()
+    {
+        var existing = _library.Nouns[0];
+
+        Assert.That(() => _library.Save(new Noun { BaseValue = "perro", Translation = "dog" }, existing),
+            Throws.TypeOf<LibraryValidationException>());
+        Assert.That(() => _library.Save(new Verb { BaseValue = "urbe", Translation = "x" }, existing),
+            Throws.ArgumentException);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(existing.BaseValue, Is.EqualTo("ciudad"));
+            Assert.That(existing.Translation, Is.EqualTo("city; town"));
+            Assert.That(existing.Topics, Is.EqualTo(new[] { "city" }));
+        });
+    }
+
+    [Test]
     public void Validate_UnknownTopic_ReportsTopic()
     {
         var noun = new Noun { BaseValue = "mesa", Translation = "table", Topics = ["home", "city"] };

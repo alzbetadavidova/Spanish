@@ -7,7 +7,7 @@ using Spanish.Core;
 
 namespace Spanish.ViewModels;
 
-public abstract partial class ScenarioViewModel(Scenario scenario, Func<bool, Task> onCompleted) : ObservableObject
+public abstract partial class ScenarioViewModel(Scenario scenario, Func<Scenario, bool, Task> onCompleted) : ObservableObject
 {
     public Scenario Scenario { get; } = scenario;
 
@@ -23,10 +23,10 @@ public abstract partial class ScenarioViewModel(Scenario scenario, Func<bool, Ta
             return;
         }
         IsCompleted = true;
-        await onCompleted(correct);
+        await onCompleted(Scenario, correct);
     }
 
-    public static ScenarioViewModel Create(Scenario scenario, Func<bool, Task> onCompleted) => scenario switch
+    public static ScenarioViewModel Create(Scenario scenario, Func<Scenario, bool, Task> onCompleted) => scenario switch
     {
         CardScenario card => new CardScenarioViewModel(card, onCompleted),
         TypedScenario typed => new TypedScenarioViewModel(typed, onCompleted),
@@ -38,7 +38,7 @@ public abstract partial class ScenarioViewModel(Scenario scenario, Func<bool, Ta
         direction == Direction.EnglishToSpanish ? "English to Spanish" : "Spanish to English";
 }
 
-public partial class CardScenarioViewModel(CardScenario scenario, Func<bool, Task> onCompleted)
+public partial class CardScenarioViewModel(CardScenario scenario, Func<Scenario, bool, Task> onCompleted)
     : ScenarioViewModel(scenario, onCompleted)
 {
     public override string Heading => $"Card · {DirectionLabel(scenario.Direction)}";
@@ -60,7 +60,7 @@ public partial class CardScenarioViewModel(CardScenario scenario, Func<bool, Tas
     private Task DidNotKnow() => CompleteAsync(false);
 }
 
-public partial class TypedScenarioViewModel(TypedScenario scenario, Func<bool, Task> onCompleted)
+public partial class TypedScenarioViewModel(TypedScenario scenario, Func<Scenario, bool, Task> onCompleted)
     : ScenarioViewModel(scenario, onCompleted)
 {
     public override string Heading => scenario.Instruction;
@@ -109,7 +109,7 @@ public partial class TypedScenarioViewModel(TypedScenario scenario, Func<bool, T
     }
 }
 
-public partial class GenderScenarioViewModel(GenderScenario scenario, Func<bool, Task> onCompleted)
+public partial class GenderScenarioViewModel(GenderScenario scenario, Func<Scenario, bool, Task> onCompleted)
     : ScenarioViewModel(scenario, onCompleted)
 {
     public static IReadOnlyList<Option<Article>> Articles { get; } =
@@ -119,7 +119,7 @@ public partial class GenderScenarioViewModel(GenderScenario scenario, Func<bool,
 
     public override string Heading => "Pick the article";
     public string Word => scenario.Word;
-    public string? Translation => scenario.Noun.Translation;
+    public string Translation => scenario.Noun.TranslationDisplay;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsChecked), nameof(IsCorrect), nameof(IsIncorrect), nameof(Feedback))]

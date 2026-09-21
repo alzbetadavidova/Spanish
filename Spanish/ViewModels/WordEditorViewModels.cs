@@ -16,6 +16,7 @@ public abstract partial class WordEditorViewModel : ObservableObject
 {
     private readonly LibraryContext _context;
     private readonly EditorCallbacks _callbacks;
+    private readonly Dictionary<string, bool> _topicBaseline = new(StringComparer.OrdinalIgnoreCase);
 
     protected WordEditorViewModel(LibraryContext context, LearnUnit? existing, EditorCallbacks callbacks)
     {
@@ -24,10 +25,7 @@ public abstract partial class WordEditorViewModel : ObservableObject
         Existing = existing;
         _spanish = existing?.BaseValue ?? string.Empty;
         _english = existing?.Translation ?? string.Empty;
-        foreach (var topic in context.Library.Topics.Order())
-        {
-            Topics.Add(new ToggleOption<string>(topic, topic, existing?.HasTopic(topic) == true));
-        }
+        RefreshTopics();
     }
 
     public LearnUnit? Existing { get; }
@@ -68,6 +66,27 @@ public abstract partial class WordEditorViewModel : ObservableObject
     {
     }
     partial void OnEnglishChanged(string value) => EnglishError = null;
+
+    /// <summary>
+    /// Rebuilds the topic chips from the library. Chips the user changed keep their state; the others
+    /// follow the word's current topics (which may have changed on the Topics tab).
+    /// </summary>
+    public void RefreshTopics()
+    {
+        var edited = Topics
+            .Where(t => t.IsSelected != _topicBaseline.GetValueOrDefault(t.Value))
+            .ToDictionary(t => t.Value, t => t.IsSelected, StringComparer.OrdinalIgnoreCase);
+
+        Topics.Clear();
+        _topicBaseline.Clear();
+        foreach (var topic in _context.Library.Topics.Order())
+        {
+            var current = Existing?.HasTopic(topic) == true;
+            _topicBaseline[topic] = current;
+            Topics.Add(new ToggleOption<string>(topic, topic, edited.GetValueOrDefault(topic, current)));
+        }
+        OnPropertyChanged(nameof(HasTopics));
+    }
 
     [RelayCommand]
     private async Task Save()

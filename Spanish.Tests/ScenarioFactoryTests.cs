@@ -160,7 +160,7 @@ public class ScenarioFactoryTests
         Assert.Multiple(() =>
         {
             Assert.That(gerund.Instruction, Is.EqualTo("Type the gerund"));
-            Assert.That(gerund.PromptDetail, Is.EqualTo("to speak; talk"));
+            Assert.That(gerund.PromptDetail, Is.EqualTo("to speak, talk"));
             Assert.That(gerund.ExpectedAnswers, Is.EqualTo(new[] { "hablando" }));
         });
     }

@@ -85,9 +85,11 @@ public partial class StatsViewModel : ObservableObject, IPage
     private Option<string?>? _selectedTopic;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(WordHeader), nameof(TranslationHeader), nameof(OverallHeader), nameof(AttemptsHeader), nameof(LastPracticedHeader))]
     private StatsColumn _sortColumn = StatsColumn.Overall;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(WordHeader), nameof(TranslationHeader), nameof(OverallHeader), nameof(AttemptsHeader), nameof(LastPracticedHeader))]
     private bool _sortDescending;
 
     public bool IsEmpty => Rows.Count == 0;
@@ -116,11 +118,6 @@ public partial class StatsViewModel : ObservableObject, IPage
             SortDescending = false;
         }
         FillRows();
-        OnPropertyChanged(nameof(WordHeader));
-        OnPropertyChanged(nameof(TranslationHeader));
-        OnPropertyChanged(nameof(OverallHeader));
-        OnPropertyChanged(nameof(AttemptsHeader));
-        OnPropertyChanged(nameof(LastPracticedHeader));
     }
 
     public void Refresh()

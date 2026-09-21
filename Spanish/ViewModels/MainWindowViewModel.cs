@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -38,21 +36,26 @@ public partial class MainWindowViewModel(
 
     public bool IsLoading => NavItems.Count == 0 && LoadError is null;
 
+    /// <summary>Loads the data and builds the pages. Failures are shown through <see cref="LoadError"/>.</summary>
     public async Task InitializeAsync()
     {
-        LoadResult<LearnLibrary> library;
-        LoadResult<SessionSettings> settings;
         try
         {
-            library = await libraryStore.LoadAsync();
-            settings = await settingsStore.LoadAsync();
+            await LoadAsync();
         }
-        catch (Exception e) when (e is IOException or UnauthorizedAccessException or JsonException)
+        catch (Exception e)
         {
+            // Top-level boundary: this runs from the window's Opened handler, where an exception would
+            // end the app while it still shows "Loading". Show the reason instead.
             LoadError = $"Couldn't open your library: {e.Message}";
             OnPropertyChanged(nameof(IsLoading));
-            return;
         }
+    }
+
+    private async Task LoadAsync()
+    {
+        var library = await libraryStore.LoadAsync();
+        var settings = await settingsStore.LoadAsync();
 
         if (library.CorruptFileBackupPath is not null)
         {

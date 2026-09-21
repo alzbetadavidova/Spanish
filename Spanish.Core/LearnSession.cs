@@ -24,13 +24,20 @@ public class LearnSession
         ArgumentNullException.ThrowIfNull(random);
         ArgumentNullException.ThrowIfNull(clock);
         _library = library;
-        Settings = settings;
+        _settings = settings;
         _factory = factory;
         _random = random;
         _clock = clock;
     }
 
-    public SessionSettings Settings { get; }
+    private SessionSettings _settings;
+
+    /// <summary>Can be replaced mid-session (e.g. after a topic rename) without losing the counters.</summary>
+    public SessionSettings Settings
+    {
+        get => _settings;
+        set => _settings = value ?? throw new ArgumentNullException(nameof(value));
+    }
     public int Answered { get; private set; }
     public int CorrectCount { get; private set; }
 
@@ -56,6 +63,11 @@ public class LearnSession
         // Avoid repeating recent exercises, but always leave at least one to choose from.
         var depth = Math.Min(RecentCapacity, exercises.Count - 1);
         var fresh = exercises.Where(e => !_recent.Has(e.Key, depth)).ToList();
+        if (fresh.Count == 0)
+        {
+            // Only possible when exercises share a key, e.g. duplicate words in a hand-edited file.
+            fresh = exercises.ToList();
+        }
 
         var best = fresh.Min(SortKey);
         var candidates = fresh.Where(e => SortKey(e) == best).ToList();

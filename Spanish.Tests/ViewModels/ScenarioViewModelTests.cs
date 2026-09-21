@@ -10,7 +10,7 @@ public class ScenarioViewModelTests
     [SetUp]
     public void Setup() => _completions.Clear();
 
-    private Task OnCompleted(bool correct)
+    private Task OnCompleted(Scenario scenario, bool correct)
     {
         _completions.Add(correct);
         return Task.CompletedTask;
@@ -180,7 +180,7 @@ public class ScenarioViewModelTests
             Assert.That(gender.IsIncorrect, Is.False);
             Assert.That(gender.Heading, Is.EqualTo("Pick the article"));
             Assert.That(gender.Word, Is.EqualTo("ciudades"));
-            Assert.That(gender.Translation, Is.EqualTo("city; town"));
+            Assert.That(gender.Translation, Is.EqualTo("city, town"));
             Assert.That(GenderScenarioViewModel.Articles.Select(a => a.Label), Is.EqualTo(new[] { "el", "la", "los", "las" }));
         });
     }

@@ -54,6 +54,21 @@ public class AnswerCheckerTests
         Assert.That(result, Is.EqualTo(new AnswerResult(AnswerOutcome.Correct, "town")));
     }
 
+    [TestCase("está", AnswerOutcome.Correct, "está")]
+    [TestCase("esta", AnswerOutcome.Correct, "esta")]
+    public void Check_ExactMatchOnLaterAlternative_BeatsAccentMatchOnEarlier(string given, AnswerOutcome outcome, string expected)
+    {
+        var result = AnswerChecker.Check(given, ["esta", "está"]);
+
+        Assert.That(result, Is.EqualTo(new AnswerResult(outcome, expected)));
+    }
+
+    [Test]
+    public void Check_DecomposedInput_IsCorrect()
+    {
+        Assert.That(AnswerChecker.Check("año", ["año"]).Outcome, Is.EqualTo(AnswerOutcome.Correct));
+    }
+
     [TestCase("ciudades")]
     [TestCase("")]
     [TestCase("   ")]

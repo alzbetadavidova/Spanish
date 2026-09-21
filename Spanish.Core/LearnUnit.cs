@@ -4,15 +4,25 @@ namespace Spanish.Core;
 
 public abstract class LearnUnit
 {
+    // Setters replace null (possible in hand-edited JSON) with an empty value.
+    private string _baseValue = string.Empty;
+    private string _translation = string.Empty;
+    private List<string> _topics = [];
+    private Dictionary<ScenarioType, LearnProgress> _progress = [];
+
     /// <summary>The spanish word. For verbs the infinitive.</summary>
-    public string BaseValue { get; set; } = string.Empty;
+    public string BaseValue { get => _baseValue; set => _baseValue = value ?? string.Empty; }
 
     /// <summary>English translation; alternatives are separated by a semicolon.</summary>
-    public string Translation { get; set; } = string.Empty;
+    public string Translation { get => _translation; set => _translation = value ?? string.Empty; }
 
-    public List<string> Topics { get; set; } = [];
+    public List<string> Topics { get => _topics; set => _topics = value ?? []; }
 
-    public Dictionary<ScenarioType, LearnProgress> Progress { get; set; } = [];
+    public Dictionary<ScenarioType, LearnProgress> Progress { get => _progress; set => _progress = value ?? []; }
+
+    /// <summary>The translation alternatives for display, e.g. "city, town".</summary>
+    [JsonIgnore]
+    public string TranslationDisplay => string.Join(", ", TranslationAlternatives);
 
     [JsonIgnore]
     public abstract WordKind Kind { get; }
@@ -74,7 +84,8 @@ public class Noun : LearnUnit
         [ScenarioType.Card, ScenarioType.Fill, ScenarioType.Gender, ScenarioType.Plural];
 
     public Gender Gender { get; set; }
-    public string PluralValue { get; set; } = string.Empty;
+    private string _pluralValue = string.Empty;
+    public string PluralValue { get => _pluralValue; set => _pluralValue = value ?? string.Empty; }
 
     public override WordKind Kind => WordKind.Noun;
     public override IReadOnlyList<ScenarioType> SupportedScenarios => Scenarios;
@@ -126,9 +137,12 @@ public class Verb : LearnUnit
     public static readonly IReadOnlyList<string> PersonLabels =
         ["yo", "tú", "él / ella / usted", "nosotros / nosotras", "ellos / ellas / ustedes"];
 
-    public string[] PresentConjugations { get; set; } = EmptyConjugations();
-    public string[] PreteriteConjugations { get; set; } = EmptyConjugations();
-    public string NonPersonalGerund { get; set; } = string.Empty;
+    private string[] _presentConjugations = EmptyConjugations();
+    public string[] PresentConjugations { get => _presentConjugations; set => _presentConjugations = value ?? EmptyConjugations(); }
+    private string[] _preteriteConjugations = EmptyConjugations();
+    public string[] PreteriteConjugations { get => _preteriteConjugations; set => _preteriteConjugations = value ?? EmptyConjugations(); }
+    private string _nonPersonalGerund = string.Empty;
+    public string NonPersonalGerund { get => _nonPersonalGerund; set => _nonPersonalGerund = value ?? string.Empty; }
 
     public override WordKind Kind => WordKind.Verb;
     public override IReadOnlyList<ScenarioType> SupportedScenarios => Scenarios;

@@ -169,6 +169,43 @@ public class WordEditorViewModelTests
     }
 
     [Test]
+    public async Task Save_EditToOtherExistingWord_ShowsErrorAndKeepsWord()
+    {
+        var ciudad = _library.Nouns[0];
+        var editor = new NounEditorViewModel(_context, ciudad, _callbacks);
+        editor.Spanish = "perro";
+
+        await editor.SaveCommand.ExecuteAsync(null);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(editor.SpanishError, Is.EqualTo("\"perro\" is already in your library."));
+            Assert.That(ciudad.BaseValue, Is.EqualTo("ciudad"));
+            Assert.That(_store.SaveCount, Is.Zero);
+        });
+    }
+
+    [Test]
+    public void RefreshTopics_UntouchedChipsFollowWord_EditedChipsKeepUserChoice()
+    {
+        _library.Topics.Add("food");
+        var ciudad = _library.Nouns[0];
+        var editor = new NounEditorViewModel(_context, ciudad, _callbacks);
+        editor.Topics.Single(t => t.Value == "animals").IsSelected = true;
+
+        // Changed elsewhere (e.g. on the Topics tab): ciudad joins food and leaves city.
+        _library.SetTopicMembership("food", ciudad, true);
+        _library.SetTopicMembership("city", ciudad, false);
+        _library.AddTopic("home");
+        editor.RefreshTopics();
+
+        Assert.That(editor.Topics.Select(t => (t.Value, t.IsSelected)), Is.EqualTo(new[]
+        {
+            ("animals", true), ("city", false), ("food", true), ("home", false)
+        }));
+    }
+
+    [Test]
     public async Task Delete_AsksForConfirmationFirst()
     {
         var perro = _library.Nouns[1];
@@ -430,10 +467,12 @@ public class WordListViewModelTests
     {
         var list = new WordListViewModel(_context, WordKind.Noun);
         list.Selected = list.Items[1];
+        var editor = list.Editor;
 
         list.SearchText = "perro";
 
         Assert.That(list.Selected, Is.Null);
+        Assert.That(list.Editor, Is.SameAs(editor));
     }
 }
 
@@ -465,6 +504,33 @@ public class LibraryViewModelTests
             Assert.That(vm.IsAddVisible, Is.False);
             Assert.That(vm.AddLabel, Is.Empty);
         });
+    }
+
+    [Test]
+    public async Task LibraryChanged_RefreshesOtherTabsAndOpenEditors()
+    {
+        var library = TestData.Library();
+        var context = new LibraryContext(library, new InMemoryStore<LearnLibrary>(library));
+        var vm = new LibraryViewModel(context);
+        vm.Nouns.Selected = vm.Nouns.Items.Single(n => n.BaseValue == "perro");
+        var perroEditor = vm.Nouns.Editor!;
+        vm.Topics.SelectedTopic = "city";
+
+        // Topics tab: add perro to "city" while its editor is open on the Nouns tab.
+        var perroChip = vm.Topics.Words.Single(w => w.Value.BaseValue == "perro");
+        perroChip.IsSelected = true;
+        await vm.Topics.ToggleWordCommand.ExecuteAsync(perroChip);
+
+        Assert.That(vm.Nouns.Editor, Is.SameAs(perroEditor));
+        Assert.That(perroEditor.Topics.Single(t => t.Value == "city").IsSelected, Is.True);
+
+        // Nouns tab: a new word shows up on the Topics tab.
+        vm.Nouns.AddCommand.Execute(null);
+        vm.Nouns.Editor!.Spanish = "mesa";
+        vm.Nouns.Editor.English = "table";
+        await vm.Nouns.Editor.SaveCommand.ExecuteAsync(null);
+
+        Assert.That(vm.Topics.Words.Select(w => w.Value.BaseValue), Does.Contain("mesa"));
     }
 
     [Test]

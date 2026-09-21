@@ -32,7 +32,7 @@ public class ScenarioFactory(IRandomSource random)
 
     private static CardScenario CreateCard(LearnUnit unit, Direction direction)
     {
-        var english = string.Join(", ", unit.TranslationAlternatives);
+        var english = unit.TranslationDisplay;
         var spanish = SpanishDisplay(unit);
         var detail = unit is Noun { PluralValue.Length: > 0 } noun
             ? $"{noun.PluralArticle.ToText()} {noun.PluralValue}"
@@ -51,7 +51,7 @@ public class ScenarioFactory(IRandomSource random)
                 ? new[] { noun.BaseValue, SpanishDisplay(noun) }
                 : new[] { unit.BaseValue };
             return new TypedScenario(unit, ScenarioType.Fill, "Translate to Spanish",
-                string.Join(", ", unit.TranslationAlternatives), null, expected);
+                unit.TranslationDisplay, null, expected);
         }
 
         var english = unit.TranslationAlternatives.ToList();
@@ -73,7 +73,7 @@ public class ScenarioFactory(IRandomSource random)
     }
 
     private static TypedScenario CreatePlural(Noun noun) =>
-        new(noun, ScenarioType.Plural, "Type the plural", noun.BaseValue, noun.Translation,
+        new(noun, ScenarioType.Plural, "Type the plural", noun.BaseValue, noun.TranslationDisplay,
             [noun.PluralValue, $"{noun.PluralArticle.ToText()} {noun.PluralValue}"]);
 
     private TypedScenario CreateConjugation(Verb verb, ScenarioType type, string instruction, string[] forms)
@@ -85,7 +85,7 @@ public class ScenarioFactory(IRandomSource random)
     }
 
     private static TypedScenario CreateGerund(Verb verb) =>
-        new(verb, ScenarioType.Gerund, "Type the gerund", verb.BaseValue, verb.Translation, [verb.NonPersonalGerund]);
+        new(verb, ScenarioType.Gerund, "Type the gerund", verb.BaseValue, verb.TranslationDisplay, [verb.NonPersonalGerund]);
 
     private static string SpanishDisplay(LearnUnit unit) =>
         unit is Noun noun ? $"{noun.SingularArticle.ToText()} {noun.BaseValue}" : unit.BaseValue;

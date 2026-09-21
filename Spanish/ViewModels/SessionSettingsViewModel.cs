@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -75,7 +76,8 @@ public partial class SessionSettingsViewModel : ObservableObject
         UpdateMatchCount();
     }
 
-    private void Load(SessionSettings settings)
+    /// <summary>Shows <paramref name="settings"/>, discarding unapplied edits.</summary>
+    public void Load(SessionSettings settings)
     {
         IncludeNouns = settings.IncludeNouns;
         IncludeVerbs = settings.IncludeVerbs;
@@ -102,7 +104,7 @@ public partial class SessionSettingsViewModel : ObservableObject
         Topics.Clear();
         foreach (var topic in _library.Topics.Order())
         {
-            Topics.Add(Watch(new ToggleOption<string>(topic, topic, selected.Contains(topic))));
+            Topics.Add(Watch(new ToggleOption<string>(topic, topic, selected.Contains(topic, StringComparer.OrdinalIgnoreCase))));
         }
     }
 

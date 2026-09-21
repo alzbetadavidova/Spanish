@@ -108,6 +108,24 @@ public class JsonFileStoreTests
     }
 
     [Test]
+    public async Task Load_CorruptFileWithSeed_BacksUpAndLoadsSeed()
+    {
+        var seed = Path.Combine(_directory, "seed.json");
+        await Store("seed.json").SaveAsync(TestData.Library());
+        var store = Store(seed: seed);
+        await File.WriteAllTextAsync(store.Path, "{ not json");
+
+        var result = await store.LoadAsync();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.CorruptFileBackupPath, Is.Not.Null);
+            Assert.That(File.Exists(result.CorruptFileBackupPath), Is.True);
+            Assert.That(result.Value.Units.Count(), Is.EqualTo(3));
+        });
+    }
+
+    [Test]
     public async Task Load_NullJson_TreatedAsCorrupt()
     {
         var store = Store();
@@ -115,13 +133,40 @@ public class JsonFileStoreTests
 
         var result = await store.LoadAsync();
 
-        Assert.That(result.CorruptFileBackupPath, Is.Not.Null);
+        var expectedBackup = store.Path + ".bak-20260921-143005";
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.CorruptFileBackupPath, Is.EqualTo(expectedBackup));
+            Assert.That(File.Exists(expectedBackup), Is.True);
+            Assert.That(File.Exists(store.Path), Is.False);
+            Assert.That(result.Value.Topics, Is.EqualTo(new[] { "empty" }));
+        });
+    }
+
+    [Test]
+    public async Task Load_NullValues_BecomeEmpty()
+    {
+        var store = Store();
+        await File.WriteAllTextAsync(store.Path,
+            """{ "Nouns": [ { "BaseValue": "mesa", "Translation": null, "Topics": null, "Progress": null } ], "Verbs": null, "Topics": null }""");
+
+        var library = (await store.LoadAsync()).Value;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(library.Verbs, Is.Empty);
+            Assert.That(library.Topics, Is.Empty);
+            Assert.That(library.Nouns[0].TranslationAlternatives, Is.Empty);
+            Assert.That(library.Nouns[0].Topics, Is.Empty);
+            Assert.That(LearnStats.Build(library), Has.Count.EqualTo(1));
+        });
     }
 
     [Test]
     public async Task Load_LegacyFile_IgnoresOldFieldsAndReadsGender()
     {
-        var store = new JsonFileStore<LearnLibrary>("test.json", null, () => new LearnLibrary(), _clock);
+        var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "test.json");
+        var store = new JsonFileStore<LearnLibrary>(path, null, () => new LearnLibrary(), _clock);
 
         var noun = (await store.LoadAsync()).Value.Nouns.Single();
 

@@ -56,8 +56,9 @@ public class LearnViewModelTests
     {
         var learn = Create();
         var first = (GenderScenarioViewModel)learn.CurrentScenario!;
+        Assert.That(first.Word, Is.EqualTo("ciudad"));
 
-        first.ChooseCommand.Execute(first.Word == "ciudad" ? Article.La : Article.El);
+        first.ChooseCommand.Execute(Article.La);
         await first.SubmitCommand.ExecuteAsync(null);
 
         Assert.Multiple(() =>
@@ -129,6 +130,29 @@ public class LearnViewModelTests
     }
 
     [Test]
+    public async Task StartSession_ThenOldScenarioCompleted_DoesNotRecordNewScenario()
+    {
+        var learn = Create();
+        var old = (GenderScenarioViewModel)learn.CurrentScenario!;
+        learn.Settings.IncludeNouns = false;
+        learn.Settings.IncludeVerbs = true;
+        await learn.StartSessionCommand.ExecuteAsync(null);
+        var current = learn.CurrentScenario;
+        var saves = _libraryStore.SaveCount;
+
+        old.ChooseCommand.Execute(Article.El);
+        await old.SubmitCommand.ExecuteAsync(null);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(learn.CurrentScenario, Is.SameAs(current));
+            Assert.That(_library.Verbs[0].Progress, Is.Empty);
+            Assert.That(learn.ProgressText, Is.EqualTo("0 answered · 0 correct"));
+            Assert.That(_libraryStore.SaveCount, Is.EqualTo(saves));
+        });
+    }
+
+    [Test]
     public async Task LibraryChanged_WhileEmpty_ShowsNewExercise()
     {
         _library.Nouns.Clear();
@@ -138,7 +162,149 @@ public class LearnViewModelTests
         _library.Nouns.Add(TestData.Perro());
         await _context.SaveAsync();
 
+        var gender = (GenderScenarioViewModel)learn.CurrentScenario!;
+        Assert.That(gender.Scenario.Unit.BaseValue, Is.EqualTo("perro"));
+    }
+
+    [Test]
+    public async Task LibraryChanged_WhileAnswering_KeepsCurrentScenario()
+    {
+        var learn = Create();
+        var current = learn.CurrentScenario;
+
+        await _context.SaveAsync();
+
+        Assert.That(learn.CurrentScenario, Is.SameAs(current));
+    }
+
+    [Test]
+    public async Task LibraryChanged_CurrentWordDeleted_ShowsNext()
+    {
+        var learn = Create();
+        var current = learn.CurrentScenario!;
+
+        _library.Remove(current.Scenario.Unit);
+        await _context.SaveAsync();
+
+        Assert.That(learn.CurrentScenario!.Scenario.Unit, Is.Not.SameAs(current.Scenario.Unit));
+    }
+
+    [Test]
+    public async Task TopicDeleted_CleansSessionAndSavesSettingsAtNextAnswer()
+    {
+        var learn = Create(GenderOnly with { Topics = ["animals"] });
+        Assert.That(learn.CurrentScenario!.Scenario.Unit.BaseValue, Is.EqualTo("perro"));
+
+        _library.RemoveTopic("animals");
+        await _context.SaveAsync();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(learn.SummaryChips[1], Is.EqualTo("All topics"));
+            Assert.That(learn.CurrentScenario, Is.Not.Null);
+            Assert.That(_settingsStore.SaveCount, Is.Zero);
+        });
+
+        var scenario = (GenderScenarioViewModel)learn.CurrentScenario!;
+        scenario.ChooseCommand.Execute(Article.El);
+        await scenario.SubmitCommand.ExecuteAsync(null);
+
+        Assert.That(_settingsStore.SaveCount, Is.EqualTo(1));
+        Assert.That(_settingsStore.Value.Topics, Is.Empty);
+    }
+
+    [Test]
+    public async Task TopicRenamed_SessionFollowsRename()
+    {
+        var learn = Create(GenderOnly with { Topics = ["animals"] });
+        var current = learn.CurrentScenario;
+
+        _context.RenameTopic("animals", "pets");
+        await _context.SaveAsync();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(learn.SummaryChips[1], Is.EqualTo("Topics: pets"));
+            Assert.That(learn.CurrentScenario, Is.SameAs(current));
+        });
+        learn.OpenSettingsCommand.Execute(null);
+        Assert.That(learn.Settings.Topics.Single(t => t.IsSelected).Value, Is.EqualTo("pets"));
+    }
+
+    [Test]
+    public async Task SavedSettingsWithDeletedTopic_AreCleanedAndSavedLater()
+    {
+        var learn = Create(GenderOnly with { Topics = ["gone"] });
+
+        Assert.That(learn.SummaryChips[1], Is.EqualTo("All topics"));
         Assert.That(learn.CurrentScenario, Is.Not.Null);
+
+        var scenario = (GenderScenarioViewModel)learn.CurrentScenario!;
+        scenario.ChooseCommand.Execute(Article.La);
+        await scenario.SubmitCommand.ExecuteAsync(null);
+        Assert.That(_settingsStore.SaveCount, Is.EqualTo(1));
+
+        var next = (GenderScenarioViewModel)learn.CurrentScenario!;
+        next.ChooseCommand.Execute(Article.El);
+        await next.SubmitCommand.ExecuteAsync(null);
+        Assert.That(_settingsStore.SaveCount, Is.EqualTo(1));
+    }
+
+    [Test]
+    public async Task SettingsSaveFailure_IsRetriedAtNextAnswer()
+    {
+        var learn = Create();
+        _settingsStore.SaveException = new IOException("locked");
+        await learn.StartSessionCommand.ExecuteAsync(null);
+        _settingsStore.SaveException = null;
+
+        var scenario = (GenderScenarioViewModel)learn.CurrentScenario!;
+        scenario.ChooseCommand.Execute(Article.La);
+        await scenario.SubmitCommand.ExecuteAsync(null);
+
+        Assert.That(_settingsStore.SaveCount, Is.EqualTo(1));
+        Assert.That(_context.SaveError, Is.Null);
+    }
+
+    [Test]
+    public void OpenSettings_DiscardsUnappliedEdits()
+    {
+        var learn = Create();
+        learn.OpenSettingsCommand.Execute(null);
+        learn.Settings.IncludeVerbs = true;
+        learn.CloseSettingsCommand.Execute(null);
+
+        learn.OpenSettingsCommand.Execute(null);
+
+        Assert.That(learn.Settings.IncludeVerbs, Is.False);
+    }
+
+    [Test]
+    public void StartSession_NoMatches_CannotExecute()
+    {
+        var learn = Create();
+        var raised = 0;
+        learn.StartSessionCommand.CanExecuteChanged += (_, _) => raised++;
+
+        learn.Settings.IncludeNouns = false;
+
+        Assert.That(learn.StartSessionCommand.CanExecute(null), Is.False);
+        Assert.That(raised, Is.GreaterThan(0));
+
+        learn.Settings.IncludeVerbs = true;
+        Assert.That(learn.StartSessionCommand.CanExecute(null), Is.True);
+    }
+
+    [Test]
+    public void SettingsChangeOtherThanMatchCount_DoesNotRaiseCanExecute()
+    {
+        var learn = Create();
+        var raised = 0;
+        learn.StartSessionCommand.CanExecuteChanged += (_, _) => raised++;
+
+        learn.Settings.SelectedOrder = SessionSettingsViewModel.Orders[2];
+
+        Assert.That(raised, Is.Zero);
     }
 
     [Test]
@@ -285,6 +451,39 @@ public class LibraryContextTests
         store.SaveException = null;
         await context.SaveAsync();
         Assert.That(context.SaveError, Is.Null);
+    }
+
+    [Test]
+    public async Task RunSaveAsync_ReportsSuccess()
+    {
+        var context = new LibraryContext(new LearnLibrary(), new InMemoryStore<LearnLibrary>(new LearnLibrary()));
+
+        Assert.That(await context.RunSaveAsync(_ => Task.CompletedTask), Is.True);
+        Assert.That(await context.RunSaveAsync(_ => Task.FromException(new IOException())), Is.False);
+    }
+
+    [Test]
+    public void RenameTopic_RenamesAndRaisesEvent()
+    {
+        var context = new LibraryContext(TestData.Library(), new InMemoryStore<LearnLibrary>(new LearnLibrary()));
+        TopicRenamedEventArgs? args = null;
+        context.TopicRenamed += (_, e) => args = e;
+
+        context.RenameTopic("city", " town ");
+
+        Assert.That(context.Library.Topics, Does.Contain("town"));
+        Assert.That((args!.OldName, args.NewName), Is.EqualTo(("city", "town")));
+    }
+
+    [Test]
+    public void RenameTopic_Invalid_ThrowsWithoutEvent()
+    {
+        var context = new LibraryContext(TestData.Library(), new InMemoryStore<LearnLibrary>(new LearnLibrary()));
+        var raised = false;
+        context.TopicRenamed += (_, _) => raised = true;
+
+        Assert.That(() => context.RenameTopic("city", "animals"), Throws.TypeOf<LibraryValidationException>());
+        Assert.That(raised, Is.False);
     }
 
     [Test]

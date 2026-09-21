@@ -9,11 +9,20 @@ using Spanish.Core;
 
 namespace Spanish.ViewModels;
 
-public partial class LibraryViewModel(LibraryContext context) : ObservableObject, IPage
+public partial class LibraryViewModel : ObservableObject, IPage
 {
-    public WordListViewModel Nouns { get; } = new(context, WordKind.Noun);
-    public WordListViewModel Verbs { get; } = new(context, WordKind.Verb);
-    public TopicsViewModel Topics { get; } = new(context);
+    public LibraryViewModel(LibraryContext context)
+    {
+        Nouns = new WordListViewModel(context, WordKind.Noun);
+        Verbs = new WordListViewModel(context, WordKind.Verb);
+        Topics = new TopicsViewModel(context);
+        // Tabs edit the same library; keep every tab (and open editors) in sync.
+        context.Changed += (_, _) => OnActivated();
+    }
+
+    public WordListViewModel Nouns { get; }
+    public WordListViewModel Verbs { get; }
+    public TopicsViewModel Topics { get; }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CurrentList), nameof(AddLabel), nameof(IsAddVisible))]
@@ -119,6 +128,7 @@ public partial class WordListViewModel : ObservableObject
         _restoringSelection = true;
         Selected = selected is not null && Items.Contains(selected) ? selected : null;
         _restoringSelection = false;
+        Editor?.RefreshTopics();
     }
 
     private WordEditorViewModel CreateEditor(LearnUnit? unit) => Kind == WordKind.Noun
@@ -213,7 +223,7 @@ public partial class TopicsViewModel : ObservableObject
         ? Task.CompletedTask
         : Modify(() =>
         {
-            _context.Library.RenameTopic(SelectedTopic, RenameText);
+            _context.RenameTopic(SelectedTopic, RenameText);
             return RenameText.Trim();
         });
 

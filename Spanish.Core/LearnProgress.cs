@@ -8,7 +8,9 @@ public class LearnProgress
 {
     public const int WindowSize = 10;
 
-    public List<AnswerRecord> Recent { get; set; } = [];
+    // The setter replaces null (possible in hand-edited JSON) with an empty list.
+    private List<AnswerRecord> _recent = [];
+    public List<AnswerRecord> Recent { get => _recent; set => _recent = value ?? []; }
 
     public int Attempts { get; set; }
 

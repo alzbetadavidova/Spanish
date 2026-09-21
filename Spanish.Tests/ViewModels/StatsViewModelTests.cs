@@ -153,6 +153,23 @@ public class StatsViewModelTests
         Assert.That(row.OverallText, Is.EqualTo("50%"));
     }
 
+    [TestCase(4, "low")]
+    [TestCase(5, "medium")]
+    [TestCase(7, "medium")]
+    [TestCase(8, "high")]
+    public void Row_IndexLevelBoundaries(int correctOutOfTen, string level)
+    {
+        var noun = TestData.Ciudad();
+        for (var i = 0; i < 10; i++)
+        {
+            noun.RecordAnswer(ScenarioType.Card, i < correctOutOfTen, _clock.Now);
+        }
+
+        var row = new StatsRowViewModel(LearnStats.BuildRow(noun), _clock.Now);
+
+        Assert.That((row.IsLow, row.IsMedium, row.IsHigh), Is.EqualTo((level == "low", level == "medium", level == "high")));
+    }
+
     [TestCase(0, "today")]
     [TestCase(-2, "today")]
     [TestCase(1, "yesterday")]
@@ -213,12 +230,21 @@ public class MainWindowViewModelTests
         Assert.That(vm.CurrentPage, Is.TypeOf<StatsViewModel>());
     }
 
-    [TestCase(typeof(IOException))]
-    [TestCase(typeof(UnauthorizedAccessException))]
-    [TestCase(typeof(System.Text.Json.JsonException))]
-    public async Task Initialize_LoadFails_ShowsError(Type exceptionType)
+    [TestCase(typeof(IOException), false)]
+    [TestCase(typeof(UnauthorizedAccessException), false)]
+    [TestCase(typeof(System.Text.Json.JsonException), false)]
+    [TestCase(typeof(InvalidOperationException), true)]
+    public async Task Initialize_LoadFails_ShowsError(Type exceptionType, bool failLibrary)
     {
-        _settingsStore.LoadException = (Exception)Activator.CreateInstance(exceptionType, "boom")!;
+        var exception = (Exception)Activator.CreateInstance(exceptionType, "boom")!;
+        if (failLibrary)
+        {
+            _libraryStore.LoadException = exception;
+        }
+        else
+        {
+            _settingsStore.LoadException = exception;
+        }
         var vm = Create();
 
         await vm.InitializeAsync();
@@ -242,6 +268,18 @@ public class MainWindowViewModelTests
 
         vm.DismissNoticeCommand.Execute(null);
         Assert.That(vm.Notice, Is.Null);
+    }
+
+    [Test]
+    public async Task Initialize_BothCorrupt_ShowsLibraryNotice()
+    {
+        _libraryStore = new InMemoryStore<LearnLibrary>(new LearnLibrary(), "library.json.bak-1");
+        _settingsStore = new InMemoryStore<SessionSettings>(new SessionSettings(), "settings.json.bak-1");
+        var vm = Create();
+
+        await vm.InitializeAsync();
+
+        Assert.That(vm.Notice, Does.StartWith("Your library file was damaged"));
     }
 
     [Test]

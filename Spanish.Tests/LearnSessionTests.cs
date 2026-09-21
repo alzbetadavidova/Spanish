@@ -161,6 +161,72 @@ public class LearnSessionTests
         Assert.That(second.Unit, Is.Not.SameAs(first.Unit));
     }
 
+    private static LearnLibrary GenderLibrary(int count) => new()
+    {
+        Nouns = Enumerable.Range(0, count).Select(i => new Noun { BaseValue = $"n{i}", Translation = "x" }).ToList()
+    };
+
+    private static readonly SessionSettings RandomGender = new()
+    {
+        NounScenarioTypes = [ScenarioType.Gender],
+        Order = SessionOrder.Random
+    };
+
+    [Test]
+    public void Next_ThreeExercises_AvoidsBothRecentOnes()
+    {
+        var session = CreateSession(GenderLibrary(3), RandomGender);
+        session.Record(session.Next()!, true); // n0
+        session.Record(session.Next()!, true); // n1
+
+        Assert.That(session.Next()!.Unit.BaseValue, Is.EqualTo("n2"));
+    }
+
+    [Test]
+    public void Next_ManyExercises_AvoidsLastFiveThenAllowsOldestAgain()
+    {
+        var session = CreateSession(GenderLibrary(7), RandomGender);
+        var answered = new List<string>();
+        for (var i = 0; i < LearnSession.RecentCapacity; i++)
+        {
+            var scenario = session.Next()!;
+            answered.Add(scenario.Unit.BaseValue);
+            session.Record(scenario, true);
+        }
+        Assert.That(answered, Is.EqualTo(new[] { "n0", "n1", "n2", "n3", "n4" }));
+
+        var sixth = session.Next()!;
+        Assert.That(sixth.Unit.BaseValue, Is.EqualTo("n5"));
+
+        session.Record(sixth, true);
+        Assert.That(session.Next()!.Unit.BaseValue, Is.EqualTo("n0"));
+    }
+
+    [Test]
+    public void Next_DuplicateWordsFromFile_DoesNotCrash()
+    {
+        var library = new LearnLibrary { Nouns = [TestData.Ciudad(), TestData.Ciudad()] };
+        var session = CreateSession(library, new SessionSettings { NounScenarioTypes = [ScenarioType.Gender] });
+
+        session.Record(session.Next()!, true);
+
+        Assert.That(session.Next(), Is.Not.Null);
+    }
+
+    [Test]
+    public void Settings_ReplacedMidSession_KeepsCounters()
+    {
+        var library = new LearnLibrary { Nouns = [TestData.Ciudad()], Verbs = [TestData.Hablar()] };
+        var session = CreateSession(library, new SessionSettings { IncludeVerbs = false, NounScenarioTypes = [ScenarioType.Gender] });
+        session.Record(session.Next()!, true);
+
+        session.Settings = new SessionSettings { IncludeNouns = false, VerbScenarioTypes = [ScenarioType.Gerund] };
+
+        Assert.That(session.Next()!.Unit.BaseValue, Is.EqualTo("hablar"));
+        Assert.That(session.Answered, Is.EqualTo(1));
+        Assert.That(() => session.Settings = null!, Throws.ArgumentNullException);
+    }
+
     [Test]
     public void Next_SingleExercise_RepeatsIt()
     {

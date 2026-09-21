@@ -12,9 +12,13 @@ public class LibraryValidationException(IReadOnlyList<ValidationError> errors)
 
 public class LearnLibrary
 {
-    public List<Noun> Nouns { get; set; } = [];
-    public List<Verb> Verbs { get; set; } = [];
-    public List<string> Topics { get; set; } = [];
+    // Setters replace null (possible in hand-edited JSON) with an empty value.
+    private List<Noun> _nouns = [];
+    public List<Noun> Nouns { get => _nouns; set => _nouns = value ?? []; }
+    private List<Verb> _verbs = [];
+    public List<Verb> Verbs { get => _verbs; set => _verbs = value ?? []; }
+    private List<string> _topics = [];
+    public List<string> Topics { get => _topics; set => _topics = value ?? []; }
 
     [JsonIgnore]
     public IEnumerable<LearnUnit> Units => Nouns.Cast<LearnUnit>().Concat(Verbs);

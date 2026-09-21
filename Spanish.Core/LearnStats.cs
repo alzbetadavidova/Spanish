@@ -11,7 +11,7 @@ public record StatsRow(
 {
     public string Word => Unit.BaseValue;
     public WordKind Kind => Unit.Kind;
-    public string Translation => string.Join(", ", Unit.TranslationAlternatives);
+    public string Translation => Unit.TranslationDisplay;
 }
 
 public static class LearnStats

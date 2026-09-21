@@ -8,7 +8,9 @@
     <UserControl.KeyBindings>
         <KeyBinding Gesture="Space" Command="{Binding FlipCommand}" />
         <KeyBinding Gesture="D1" Command="{Binding DidNotKnowCommand}" />
+        <KeyBinding Gesture="NumPad1" Command="{Binding DidNotKnowCommand}" />
         <KeyBinding Gesture="D2" Command="{Binding KnewItCommand}" />
+        <KeyBinding Gesture="NumPad2" Command="{Binding KnewItCommand}" />
     </UserControl.KeyBindings>
 
     <StackPanel Spacing="16" Width="360">
