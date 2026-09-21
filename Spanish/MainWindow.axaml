@@ -2,32 +2,53 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:spanish="clr-namespace:Spanish"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:vm="using:Spanish.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="680"
         x:Class="Spanish.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
         Title="Spanish"
-        x:DataType="spanish:MainWindowViewModel">
-        
-        <Design.DataContext>
-                <spanish:MainWindowViewModel/>
-        </Design.DataContext>
-        
-        <Grid>
-        <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-        </Grid.RowDefinitions>
-        
-        <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        
-        <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding CurrentUnit.BaseValue }"></TextBlock>
-        <Button Grid.Row="3" Grid.Column="0" Command="{Binding KnowUnitCommand}">Know</Button>
-        <Button Grid.Row="3" Grid.Column="2" Command="{Binding NotKnowUnitCommand}">Not Know</Button>
-</Grid>
+        Width="1000" Height="680" MinWidth="760" MinHeight="520">
+
+    <Grid ColumnDefinitions="180,*">
+        <Border Grid.Column="0" Background="{DynamicResource SubtleSurface}"
+                BorderBrush="{DynamicResource Divider}" BorderThickness="0,0,1,0">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Text="Spanish" FontSize="18" FontWeight="SemiBold" Margin="20,18,20,14" />
+                <ListBox ItemsSource="{Binding NavItems}" SelectedItem="{Binding SelectedNav}"
+                         Background="Transparent" Margin="8,0">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="vm:NavItem">
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <PathIcon Data="{Binding Icon, Converter={StaticResource Geometry}}" Width="16" Height="16" />
+                                <TextBlock Text="{Binding Label}" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </Border>
+
+        <DockPanel Grid.Column="1">
+            <Border DockPanel.Dock="Top" Classes="banner warning"
+                    IsVisible="{Binding Notice, Converter={x:Static ObjectConverters.IsNotNull}}">
+                <Grid ColumnDefinitions="*,Auto">
+                    <TextBlock Text="{Binding Notice}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                    <Button Grid.Column="1" Content="Dismiss" Command="{Binding DismissNoticeCommand}" Margin="12,0,0,0" />
+                </Grid>
+            </Border>
+            <Border DockPanel.Dock="Top" Classes="banner danger"
+                    IsVisible="{Binding Context.SaveError, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False}">
+                <TextBlock Text="{Binding Context.SaveError}" TextWrapping="Wrap" />
+            </Border>
+
+            <Grid>
+                <TextBlock Text="Loading your library…" Classes="label"
+                           HorizontalAlignment="Center" IsVisible="{Binding IsLoading}" />
+                <TextBlock Text="{Binding LoadError}" Classes="error" MaxWidth="480"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                           IsVisible="{Binding LoadError, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                <ContentControl Content="{Binding CurrentPage}" />
+            </Grid>
+        </DockPanel>
+    </Grid>
 </Window>

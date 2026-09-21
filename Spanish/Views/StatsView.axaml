@@ -1,0 +1,62 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Spanish.ViewModels"
+             x:Class="Spanish.Views.StatsView"
+             x:DataType="vm:StatsViewModel">
+
+
+    <DockPanel Margin="24,20">
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="8" Margin="0,0,0,16">
+            <ComboBox ItemsSource="{x:Static vm:StatsViewModel.KindFilters}" SelectedItem="{Binding SelectedKind}" MinWidth="160" />
+            <ComboBox ItemsSource="{Binding TopicFilters}" SelectedItem="{Binding SelectedTopic}" MinWidth="160" />
+        </StackPanel>
+
+        <Border DockPanel.Dock="Top" BorderBrush="{DynamicResource Divider}" BorderThickness="0,0,0,1">
+            <Grid ColumnDefinitions="150,150,170,*,80,110">
+                <Button Grid.Column="0" Classes="columnHeader" Content="{Binding WordHeader}"
+                        Command="{Binding SortByCommand}" CommandParameter="{x:Static vm:StatsColumn.Word}" />
+                <Button Grid.Column="1" Classes="columnHeader" Content="{Binding TranslationHeader}"
+                        Command="{Binding SortByCommand}" CommandParameter="{x:Static vm:StatsColumn.Translation}" />
+                <Button Grid.Column="2" Classes="columnHeader" Content="{Binding OverallHeader}"
+                        Command="{Binding SortByCommand}" CommandParameter="{x:Static vm:StatsColumn.Overall}" />
+                <TextBlock Grid.Column="3" Text="Breakdown" Classes="muted" VerticalAlignment="Center" Margin="4,0" />
+                <Button Grid.Column="4" Classes="columnHeader" Content="{Binding AttemptsHeader}"
+                        Command="{Binding SortByCommand}" CommandParameter="{x:Static vm:StatsColumn.Attempts}" />
+                <Button Grid.Column="5" Classes="columnHeader" Content="{Binding LastPracticedHeader}"
+                        Command="{Binding SortByCommand}" CommandParameter="{x:Static vm:StatsColumn.LastPracticed}" />
+            </Grid>
+        </Border>
+
+        <Panel>
+            <TextBlock Text="No words match these filters." Classes="label" HorizontalAlignment="Center"
+                       Margin="0,24,0,0" VerticalAlignment="Top" IsVisible="{Binding IsEmpty}" />
+            <ScrollViewer>
+                <ItemsControl ItemsSource="{Binding Rows}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:StatsRowViewModel">
+                            <Border BorderBrush="{DynamicResource Divider}" BorderThickness="0,0,0,1" Padding="0,8">
+                                <Grid ColumnDefinitions="150,150,170,*,80,110">
+                                    <StackPanel Grid.Column="0" Margin="4,0">
+                                        <TextBlock Text="{Binding Word}" TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Text="{Binding Kind}" Classes="muted" />
+                                    </StackPanel>
+                                    <TextBlock Grid.Column="1" Text="{Binding Translation}" Margin="4,0"
+                                               VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                                    <StackPanel Grid.Column="2" Margin="4,0,16,0" Spacing="4" VerticalAlignment="Center">
+                                        <ProgressBar Classes="index" Classes.low="{Binding IsLow}" Classes.medium="{Binding IsMedium}"
+                                                     Classes.high="{Binding IsHigh}" Value="{Binding OverallPercent}" />
+                                        <TextBlock Text="{Binding OverallText}" Classes="muted" />
+                                    </StackPanel>
+                                    <TextBlock Grid.Column="3" Text="{Binding Breakdown}" Classes="label" Margin="4,0"
+                                               TextWrapping="Wrap" />
+                                    <TextBlock Grid.Column="4" Text="{Binding Attempts}" Margin="4,0" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="5" Text="{Binding LastPracticedText}" Margin="4,0" VerticalAlignment="Center" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Panel>
+    </DockPanel>
+</UserControl>

@@ -1,0 +1,49 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Spanish.ViewModels"
+             x:Class="Spanish.Views.CardScenarioView"
+             x:DataType="vm:CardScenarioViewModel"
+             Focusable="True">
+
+    <UserControl.KeyBindings>
+        <KeyBinding Gesture="Space" Command="{Binding FlipCommand}" />
+        <KeyBinding Gesture="D1" Command="{Binding DidNotKnowCommand}" />
+        <KeyBinding Gesture="NumPad1" Command="{Binding DidNotKnowCommand}" />
+        <KeyBinding Gesture="D2" Command="{Binding KnewItCommand}" />
+        <KeyBinding Gesture="NumPad2" Command="{Binding KnewItCommand}" />
+    </UserControl.KeyBindings>
+
+    <StackPanel Spacing="16" Width="360">
+        <TextBlock Text="{Binding Heading}" Classes="muted" HorizontalAlignment="Center" />
+
+        <Button Classes="card" Command="{Binding FlipCommand}" HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch" Focusable="False">
+            <Border MinHeight="160" Padding="20">
+                <StackPanel VerticalAlignment="Center" Spacing="4">
+                    <TextBlock Text="{Binding Front}" FontSize="26" FontWeight="SemiBold" HorizontalAlignment="Center"
+                               TextWrapping="Wrap" TextAlignment="Center" IsVisible="{Binding !IsFlipped}" />
+                    <TextBlock Text="Click or press Space to flip" Classes="muted" HorizontalAlignment="Center"
+                               IsVisible="{Binding !IsFlipped}" />
+
+                    <TextBlock Text="{Binding Front}" Classes="muted" HorizontalAlignment="Center"
+                               IsVisible="{Binding IsFlipped}" />
+                    <TextBlock Text="{Binding Back}" FontSize="26" FontWeight="SemiBold" HorizontalAlignment="Center"
+                               TextWrapping="Wrap" TextAlignment="Center" IsVisible="{Binding IsFlipped}" />
+                    <TextBlock Text="{Binding BackDetail}" Classes="label" HorizontalAlignment="Center"
+                               IsVisible="{Binding IsFlipped}" />
+                </StackPanel>
+            </Border>
+        </Button>
+
+        <UniformGrid Columns="2" IsVisible="{Binding IsFlipped}">
+            <Button Classes="danger" Command="{Binding DidNotKnowCommand}" HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center" Margin="0,0,6,0">
+                <TextBlock Text="Didn't know · 1" />
+            </Button>
+            <Button Classes="success" Command="{Binding KnewItCommand}" HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center" Margin="6,0,0,0">
+                <TextBlock Text="Knew it · 2" />
+            </Button>
+        </UniformGrid>
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Spanish.ViewModels"
+             x:Class="Spanish.Views.EditorFooter"
+             x:DataType="vm:WordEditorViewModel">
+
+    <Border BorderBrush="{DynamicResource Divider}" BorderThickness="0,1,0,0" Padding="0,14,0,0" Margin="0,20,0,0">
+        <Grid ColumnDefinitions="Auto,*,Auto">
+            <Button Classes="dangerText" Content="{Binding DeleteLabel}" Command="{Binding DeleteCommand}"
+                    IsVisible="{Binding !IsNew}" />
+            <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8">
+                <Button Content="Cancel" Command="{Binding CancelCommand}" />
+                <Button Content="Save" Classes="accent" Command="{Binding SaveCommand}" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

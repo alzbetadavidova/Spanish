@@ -1,0 +1,23 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Spanish.ViewModels"
+             x:Class="Spanish.Views.TopicChips"
+             x:DataType="vm:WordEditorViewModel">
+
+    <StackPanel Spacing="4">
+        <ItemsControl ItemsSource="{Binding Topics}" IsVisible="{Binding HasTopics}" VerticalAlignment="Top">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate><UniformGrid Columns="4" /></ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:ToggleOption">
+                    <ToggleButton Classes="chip" Content="{Binding Label}" IsChecked="{Binding IsSelected}" Margin="0,0,8,8" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <TextBlock Text="No topics yet. Add them on the Topics tab." Classes="muted" Margin="0,7,0,0"
+                   IsVisible="{Binding !HasTopics}" />
+        <TextBlock Text="{Binding TopicsError}" Classes="error"
+                   IsVisible="{Binding TopicsError, Converter={x:Static ObjectConverters.IsNotNull}}" />
+    </StackPanel>
+</UserControl>

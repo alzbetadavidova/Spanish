@@ -1,0 +1,46 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Spanish.ViewModels"
+             xmlns:views="using:Spanish.Views"
+             x:Class="Spanish.Views.NounEditorView"
+             x:DataType="vm:NounEditorViewModel">
+
+    <DockPanel>
+        <TextBlock DockPanel.Dock="Top" Text="{Binding Title}" Classes="heading" Margin="0,0,0,16" />
+        <views:EditorFooter DockPanel.Dock="Bottom" />
+
+        <ScrollViewer>
+            <Grid ColumnDefinitions="96,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="12" ColumnSpacing="16">
+                <TextBlock Grid.Row="0" Text="Spanish" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
+                <StackPanel Grid.Row="0" Grid.Column="1" Spacing="4">
+                    <TextBox Text="{Binding Spanish}" PlaceholderText="ciudad" />
+                    <TextBlock Text="{Binding SpanishError}" Classes="error"
+                               IsVisible="{Binding SpanishError, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                </StackPanel>
+
+                <TextBlock Grid.Row="1" Text="English" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
+                <StackPanel Grid.Row="1" Grid.Column="1" Spacing="4">
+                    <TextBox Text="{Binding English}" PlaceholderText="city; town" />
+                    <TextBlock Text="Separate alternatives with a semicolon." Classes="muted" />
+                    <TextBlock Text="{Binding EnglishError}" Classes="error"
+                               IsVisible="{Binding EnglishError, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                </StackPanel>
+
+                <TextBlock Grid.Row="2" Text="Gender" Classes="label" />
+                <UniformGrid Grid.Row="2" Grid.Column="1" Columns="2">
+                    <ToggleButton Classes="chip" Content="Masculine · el" IsChecked="{Binding IsMasculine}" Margin="0,0,4,0" />
+                    <ToggleButton Classes="chip" Content="Feminine · la" IsChecked="{Binding IsFeminine}" Margin="4,0,0,0" />
+                </UniformGrid>
+
+                <TextBlock Grid.Row="3" Text="Plural" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
+                <StackPanel Grid.Row="3" Grid.Column="1" Spacing="4">
+                    <TextBox Text="{Binding Plural}" PlaceholderText="ciudades" />
+                    <TextBlock Text="Suggested from the Spanish word; fix it for irregular nouns." Classes="muted" />
+                </StackPanel>
+
+                <TextBlock Grid.Row="4" Text="Topics" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
+                <views:TopicChips Grid.Row="4" Grid.Column="1" />
+            </Grid>
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>

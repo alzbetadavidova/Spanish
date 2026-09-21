@@ -1,19 +1,34 @@
 namespace Spanish.Core;
 
-public class LearnCache
+/// <summary>Remembers the most recently practiced exercises so they are not repeated immediately.</summary>
+public class LearnCache(int capacity)
 {
-    private static int Capacity = 20;
+    private readonly List<string> _history = [];
 
-    private readonly List<LearnUnit> _history = new List<LearnUnit>();
-    
-    public bool Has(LearnUnit learnUnit) => _history.Any(l => l.BaseValue.Equals(learnUnit.BaseValue, StringComparison.OrdinalIgnoreCase));
+    public int Capacity { get; } = capacity > 0
+        ? capacity
+        : throw new ArgumentOutOfRangeException(nameof(capacity), "Capacity must be positive.");
 
-    public void Add(LearnUnit learnUnit)
+    /// <summary>Whether <paramref name="key"/> is among the <paramref name="depth"/> most recent entries.</summary>
+    public bool Has(string key, int depth)
+    {
+        var start = Math.Max(0, _history.Count - depth);
+        for (var i = start; i < _history.Count; i++)
+        {
+            if (_history[i] == key)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void Add(string key)
     {
         if (_history.Count >= Capacity)
         {
             _history.RemoveAt(0);
         }
-        _history.Add(learnUnit);
-    } 
+        _history.Add(key);
+    }
 }
