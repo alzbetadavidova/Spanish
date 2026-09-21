@@ -71,9 +71,8 @@ public abstract partial class WordEditorViewModel : ObservableObject
     /// <summary>
     /// Rebuilds the topic chips from the library. Chips the user changed keep their state; the others
     /// follow the word's current topics (which may have changed on the Topics tab).
-    /// Editors with other library-based choices refresh those too.
     /// </summary>
-    public virtual void RefreshTopics()
+    public void RefreshTopics()
     {
         var edited = Topics
             .Where(t => t.IsSelected != _topicBaseline.GetValueOrDefault(t.Value))
@@ -89,6 +88,9 @@ public abstract partial class WordEditorViewModel : ObservableObject
         }
         OnPropertyChanged(nameof(HasTopics));
     }
+
+    /// <summary>Brings every library-based choice (topics, and e.g. linked nouns) up to date.</summary>
+    public virtual void RefreshChoices() => RefreshTopics();
 
     [RelayCommand]
     private async Task Save()
@@ -280,9 +282,7 @@ public partial class VerbEditorViewModel : WordEditorViewModel
 
 public partial class AdjectiveEditorViewModel : WordEditorViewModel
 {
-    private readonly HashSet<string> _editedForms = [];
     private readonly HashSet<string> _nounBaseline = new(StringComparer.OrdinalIgnoreCase);
-    private bool _suggesting;
 
     public AdjectiveEditorViewModel(LibraryContext context, Adjective? existing, EditorCallbacks callbacks)
         : base(context, existing, callbacks)
@@ -290,10 +290,7 @@ public partial class AdjectiveEditorViewModel : WordEditorViewModel
         _feminine = existing?.FeminineValue ?? string.Empty;
         _masculinePlural = existing?.MasculinePluralValue ?? string.Empty;
         _femininePlural = existing?.FemininePluralValue ?? string.Empty;
-        MarkEdited(nameof(Feminine), _feminine);
-        MarkEdited(nameof(MasculinePlural), _masculinePlural);
-        MarkEdited(nameof(FemininePlural), _femininePlural);
-        SuggestForms();
+        RefreshNouns();
     }
 
     public override string Title => IsNew ? "New adjective" : "Edit adjective";
@@ -302,7 +299,9 @@ public partial class AdjectiveEditorViewModel : WordEditorViewModel
     public ObservableCollection<ToggleOption<string>> Nouns { get; } = [];
     public bool HasNouns => Nouns.Count > 0;
 
+    // The form boxes hold only manual fixes; an empty box uses the suggestion shown as its placeholder.
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(Suggested))]
     private string _feminine;
 
     [ObservableProperty]
@@ -314,47 +313,29 @@ public partial class AdjectiveEditorViewModel : WordEditorViewModel
     [ObservableProperty]
     private string? _nounsError;
 
-    public override void RefreshTopics()
+    /// <summary>The regular forms of the Spanish word, used where no form is typed.</summary>
+    public AdjectiveForms Suggested => AdjectiveFormSuggester.Suggest(Spanish, Feminine);
+
+    public override void RefreshChoices()
     {
-        base.RefreshTopics();
+        base.RefreshChoices();
         RefreshNouns();
     }
 
-    protected override void OnSpanishEdited(string value) => SuggestForms();
+    protected override void OnSpanishEdited(string value) => OnPropertyChanged(nameof(Suggested));
 
-    partial void OnFeminineChanged(string value)
+    protected override LearnUnit BuildCandidate()
     {
-        if (_suggesting)
+        var suggested = Suggested;
+        return new Adjective
         {
-            return;
-        }
-        MarkEdited(nameof(Feminine), value);
-        SuggestForms(); // the feminine plural follows the feminine
+            // A typed form that matches the suggestion is not a fix; keep following the word.
+            FeminineValue = Override(Feminine, suggested.Feminine),
+            MasculinePluralValue = Override(MasculinePlural, suggested.MasculinePlural),
+            FemininePluralValue = Override(FemininePlural, suggested.FemininePlural),
+            LinkedNouns = Nouns.Where(n => n.IsSelected).Select(n => n.Value).ToList()
+        };
     }
-
-    partial void OnMasculinePluralChanged(string value)
-    {
-        if (!_suggesting)
-        {
-            MarkEdited(nameof(MasculinePlural), value);
-        }
-    }
-
-    partial void OnFemininePluralChanged(string value)
-    {
-        if (!_suggesting)
-        {
-            MarkEdited(nameof(FemininePlural), value);
-        }
-    }
-
-    protected override LearnUnit BuildCandidate() => new Adjective
-    {
-        FeminineValue = Feminine.Trim(),
-        MasculinePluralValue = MasculinePlural.Trim(),
-        FemininePluralValue = FemininePlural.Trim(),
-        LinkedNouns = Nouns.Where(n => n.IsSelected).Select(n => n.Value).ToList()
-    };
 
     protected override void ShowErrors(IReadOnlyList<ValidationError> errors)
     {
@@ -362,36 +343,10 @@ public partial class AdjectiveEditorViewModel : WordEditorViewModel
         NounsError = Message(errors, nameof(Adjective.LinkedNouns));
     }
 
-    /// <summary>Fills the forms the user has not typed with the regular forms of the Spanish word.</summary>
-    private void SuggestForms()
+    private static string Override(string typed, string suggested)
     {
-        _suggesting = true;
-        if (!_editedForms.Contains(nameof(Feminine)))
-        {
-            Feminine = AdjectiveFormSuggester.Feminine(Spanish);
-        }
-        if (!_editedForms.Contains(nameof(MasculinePlural)))
-        {
-            MasculinePlural = AdjectiveFormSuggester.MasculinePlural(Spanish);
-        }
-        if (!_editedForms.Contains(nameof(FemininePlural)))
-        {
-            FemininePlural = AdjectiveFormSuggester.FemininePlural(Feminine);
-        }
-        _suggesting = false;
-    }
-
-    /// <summary>A typed form stops following the suggestion; clearing it lets the suggestion back in.</summary>
-    private void MarkEdited(string form, string value)
-    {
-        if (value.Trim().Length > 0)
-        {
-            _editedForms.Add(form);
-        }
-        else
-        {
-            _editedForms.Remove(form);
-        }
+        var form = typed.Trim();
+        return form == suggested ? string.Empty : form;
     }
 
     /// <summary>
@@ -405,6 +360,10 @@ public partial class AdjectiveEditorViewModel : WordEditorViewModel
             .ToDictionary(n => n.Value, n => n.IsSelected, StringComparer.OrdinalIgnoreCase);
         var linked = (Existing as Adjective)?.LinkedNouns ?? [];
 
+        foreach (var chip in Nouns)
+        {
+            chip.PropertyChanged -= OnNounToggled;
+        }
         Nouns.Clear();
         _nounBaseline.Clear();
         foreach (var noun in Context.Library.Nouns
@@ -417,8 +376,12 @@ public partial class AdjectiveEditorViewModel : WordEditorViewModel
             {
                 _nounBaseline.Add(noun);
             }
-            Nouns.Add(new ToggleOption<string>(noun, noun, edited.GetValueOrDefault(noun, current)));
+            var chip = new ToggleOption<string>(noun, noun, edited.GetValueOrDefault(noun, current));
+            chip.PropertyChanged += OnNounToggled;
+            Nouns.Add(chip);
         }
         OnPropertyChanged(nameof(HasNouns));
     }
+
+    private void OnNounToggled(object? sender, System.ComponentModel.PropertyChangedEventArgs e) => NounsError = null;
 }

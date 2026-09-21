@@ -97,7 +97,9 @@ public class LearnLibrary : IJsonOnDeserialized
 
         if (candidate is Adjective adjective)
         {
-            var unknownNouns = adjective.LinkedNouns.Where(n => FindNoun(n) is null).ToList();
+            var unknownNouns = adjective.LinkedNouns
+                .Where(n => !string.IsNullOrWhiteSpace(n) && FindNoun(n) is null)
+                .ToList();
             if (unknownNouns.Count > 0)
             {
                 errors.Add(new(nameof(Adjective.LinkedNouns), $"Unknown noun: {string.Join(", ", unknownNouns)}."));
@@ -117,6 +119,11 @@ public class LearnLibrary : IJsonOnDeserialized
             throw new LibraryValidationException(errors);
         }
 
+        if (candidate is Adjective linking)
+        {
+            NormalizeLinks(linking);
+        }
+
         if (existing is not null)
         {
             if (existing.Kind != candidate.Kind)
@@ -126,9 +133,9 @@ public class LearnLibrary : IJsonOnDeserialized
             var oldBaseValue = existing.BaseValue;
             existing.CopyContentFrom(candidate);
             existing.BaseValue = existing.BaseValue.Trim();
-            if (existing is Noun)
+            if (existing is Noun noun)
             {
-                RenameNounLinks(oldBaseValue, existing.BaseValue);
+                RenameNounLinks(noun, oldBaseValue);
             }
             return;
         }
@@ -175,10 +182,15 @@ public class LearnLibrary : IJsonOnDeserialized
         return true;
     }
 
-    /// <summary>Keeps adjective links pointing at a noun whose Spanish word was edited.</summary>
-    private void RenameNounLinks(string oldName, string newName)
+    /// <summary>
+    /// Keeps adjective links pointing at a noun whose Spanish word was edited. Like removing, it leaves the
+    /// links alone while another noun still has the old name (duplicates in a hand-edited file).
+    /// </summary>
+    private void RenameNounLinks(Noun renamed, string oldName)
     {
-        if (string.Equals(oldName, newName, StringComparison.Ordinal))
+        var newName = renamed.BaseValue;
+        if (string.Equals(oldName, newName, StringComparison.Ordinal)
+            || Nouns.Any(n => !ReferenceEquals(n, renamed) && SameWord(n.BaseValue, oldName)))
         {
             return;
         }
@@ -186,6 +198,28 @@ public class LearnLibrary : IJsonOnDeserialized
         {
             adjective.LinkedNouns = adjective.LinkedNouns.Select(n => SameWord(n, oldName) ? newName : n).ToList();
         }
+    }
+
+    /// <summary>Drops blank and repeated links and uses the nouns' own spelling.</summary>
+    private void NormalizeLinks(Adjective adjective) =>
+        adjective.LinkedNouns = adjective.LinkedNouns
+            .Where(n => !string.IsNullOrWhiteSpace(n))
+            .Select(n => FindNoun(n)?.BaseValue ?? n.Trim())
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+    /// <summary>
+    /// Whether <paramref name="unit"/> can be practiced as <paramref name="type"/> with this library's words,
+    /// e.g. a pair needs a linked noun that is in the library.
+    /// </summary>
+    public bool CanPractice(LearnUnit unit, ScenarioType type)
+    {
+        ArgumentNullException.ThrowIfNull(unit);
+        return unit.CanPractice(type) && (unit, type) switch
+        {
+            (Adjective adjective, ScenarioType.PairWithNoun) => LinkedNounsOf(adjective).Count > 0,
+            _ => true
+        };
     }
 
     private Noun? FindNoun(string name) => Nouns.FirstOrDefault(n => SameWord(n.BaseValue, name));

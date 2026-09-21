@@ -46,6 +46,9 @@ public class AdjectiveEditorViewModelTests
 
     private AdjectiveEditorViewModel Create(Adjective? existing = null) => new(_context, existing, _callbacks);
 
+    private static AdjectiveForms Typed(AdjectiveEditorViewModel editor) =>
+        new(editor.Feminine, editor.MasculinePlural, editor.FemininePlural);
+
     [Test]
     public void NewAdjective_StartsEmptyWithNounChips()
     {
@@ -55,9 +58,8 @@ public class AdjectiveEditorViewModelTests
         {
             Assert.That(editor.IsNew, Is.True);
             Assert.That(editor.Title, Is.EqualTo("New adjective"));
-            Assert.That(editor.Feminine, Is.Empty);
-            Assert.That(editor.MasculinePlural, Is.Empty);
-            Assert.That(editor.FemininePlural, Is.Empty);
+            Assert.That(Typed(editor), Is.EqualTo(new AdjectiveForms("", "", "")));
+            Assert.That(editor.Suggested, Is.EqualTo(new AdjectiveForms("", "", "")));
             Assert.That(editor.HasNouns, Is.True);
             Assert.That(editor.Nouns.Select(n => n.Label), Is.EqualTo(new[] { "ciudad", "mujer", "perro" }));
             Assert.That(editor.Nouns.Any(n => n.IsSelected), Is.False);
@@ -65,7 +67,7 @@ public class AdjectiveEditorViewModelTests
     }
 
     [Test]
-    public void ExistingAdjective_LoadsLinksAndSuggestsMissingForms()
+    public void ExistingAdjective_LoadsStoredFormsAndLinks()
     {
         var bajo = _library.Adjectives[0];
         bajo.MasculinePluralValue = "bajitos";
@@ -76,73 +78,45 @@ public class AdjectiveEditorViewModelTests
         {
             Assert.That(editor.Title, Is.EqualTo("Edit adjective"));
             Assert.That(editor.Spanish, Is.EqualTo("bajo"));
-            Assert.That(editor.Feminine, Is.EqualTo("baja"));
-            Assert.That(editor.MasculinePlural, Is.EqualTo("bajitos"));
-            Assert.That(editor.FemininePlural, Is.EqualTo("bajas"));
+            Assert.That(Typed(editor), Is.EqualTo(new AdjectiveForms("", "bajitos", "")));
+            Assert.That(editor.Suggested, Is.EqualTo(new AdjectiveForms("baja", "bajos", "bajas")));
             Assert.That(editor.Nouns.Where(n => n.IsSelected).Select(n => n.Value), Is.EqualTo(new[] { "mujer", "perro" }));
         });
     }
 
     [Test]
-    public void Forms_FollowSpanishUntilTyped()
+    public void Suggested_FollowsSpanishAndTypedFeminine()
     {
         var editor = Create();
+        var changed = new List<string?>();
+        editor.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
 
-        editor.Spanish = "alemán";
-        Assert.That(new[] { editor.Feminine, editor.MasculinePlural, editor.FemininePlural },
-            Is.EqualTo(new[] { "alemana", "alemanes", "alemanas" }));
-
-        editor.MasculinePlural = "alemanotes";
-        editor.Spanish = "bajo";
-        Assert.That(new[] { editor.Feminine, editor.MasculinePlural, editor.FemininePlural },
-            Is.EqualTo(new[] { "baja", "alemanotes", "bajas" }));
-
-        editor.MasculinePlural = " ";
-        editor.Spanish = "alto";
-        Assert.That(editor.MasculinePlural, Is.EqualTo("altos"));
-    }
-
-    [Test]
-    public void TypedFeminine_IsKeptAndDrivesFemininePlural()
-    {
-        var editor = Create();
         editor.Spanish = "español";
+        Assert.That(editor.Suggested, Is.EqualTo(new AdjectiveForms("español", "españoles", "españoles")));
 
         editor.Feminine = "española";
-        editor.Spanish = "españolito";
-
         Assert.Multiple(() =>
         {
-            Assert.That(editor.Feminine, Is.EqualTo("española"));
-            Assert.That(editor.FemininePlural, Is.EqualTo("españolas"));
-            Assert.That(editor.MasculinePlural, Is.EqualTo("españolitos"));
+            Assert.That(editor.Suggested.FemininePlural, Is.EqualTo("españolas"));
+            Assert.That(changed.Count(c => c == nameof(AdjectiveEditorViewModel.Suggested)), Is.EqualTo(2));
         });
 
+        // Clearing a box keeps it empty; the suggestion is only shown as its placeholder.
         editor.Feminine = string.Empty;
-        Assert.That(editor.Feminine, Is.EqualTo("españolita"));
+        Assert.Multiple(() =>
+        {
+            Assert.That(editor.Feminine, Is.Empty);
+            Assert.That(editor.Suggested.FemininePlural, Is.EqualTo("españoles"));
+        });
     }
 
     [Test]
-    public void TypedFemininePlural_IsKeptUntilCleared()
-    {
-        var editor = Create();
-        editor.Spanish = "joven";
-
-        editor.FemininePlural = "jóvenes";
-        editor.Feminine = "jovencita";
-        Assert.That(editor.FemininePlural, Is.EqualTo("jóvenes"));
-
-        editor.FemininePlural = string.Empty;
-        editor.Spanish = "joven ";
-        Assert.That(editor.FemininePlural, Is.EqualTo("jovencitas"));
-    }
-
-    [Test]
-    public async Task Save_NewAdjective_BuildsTrimmedFormsAndLinks()
+    public async Task Save_TypedFormsAreFixes_EmptyOrSuggestedFormsAreNotStored()
     {
         var editor = Create();
         editor.Spanish = " joven ";
         editor.English = " young ";
+        editor.Feminine = " joven "; // same as the suggestion
         editor.MasculinePlural = " jóvenes ";
         editor.FemininePlural = "jóvenes";
         editor.Nouns.Single(n => n.Value == "mujer").IsSelected = true;
@@ -154,7 +128,7 @@ public class AdjectiveEditorViewModelTests
         Assert.Multiple(() =>
         {
             Assert.That(saved.Translation, Is.EqualTo("young"));
-            Assert.That(saved.FeminineValue, Is.EqualTo("joven"));
+            Assert.That(saved.FeminineValue, Is.Empty);
             Assert.That(saved.MasculinePluralValue, Is.EqualTo("jóvenes"));
             Assert.That(saved.FemininePluralValue, Is.EqualTo("jóvenes"));
             Assert.That(saved.LinkedNouns, Is.EqualTo(new[] { "mujer" }));
@@ -166,7 +140,28 @@ public class AdjectiveEditorViewModelTests
     }
 
     [Test]
-    public async Task Save_NounDeletedMeanwhile_ShowsNounError()
+    public async Task SavedAdjective_Reopened_FormsStillFollowSpanish()
+    {
+        var editor = Create();
+        editor.Spanish = "bjo";
+        editor.English = "short";
+        await editor.SaveCommand.ExecuteAsync(null);
+        var saved = _library.Adjectives.Single(a => a.BaseValue == "bjo");
+
+        var reopened = Create(saved);
+        reopened.Spanish = "alto";
+        await reopened.SaveCommand.ExecuteAsync(null);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(Typed(reopened), Is.EqualTo(new AdjectiveForms("", "", "")));
+            Assert.That(reopened.Suggested, Is.EqualTo(new AdjectiveForms("alta", "altos", "altas")));
+            Assert.That(saved.GetForm(Gender.Feminine, true), Is.EqualTo("altas"));
+        });
+    }
+
+    [Test]
+    public async Task Save_NounDeletedMeanwhile_ShowsNounErrorUntilChipToggled()
     {
         var editor = Create();
         editor.Spanish = "alto";
@@ -182,10 +177,13 @@ public class AdjectiveEditorViewModelTests
             Assert.That(_store.SaveCount, Is.Zero);
             Assert.That(_events, Is.Empty);
         });
+
+        editor.Nouns.Single(n => n.Value == "ciudad").IsSelected = false;
+        Assert.That(editor.NounsError, Is.Null);
     }
 
     [Test]
-    public void RefreshTopics_UntouchedNounChipsFollowLinks_EditedChipsKeepUserChoice()
+    public void RefreshChoices_UntouchedNounChipsFollowLinks_EditedChipsKeepUserChoice()
     {
         var bajo = _library.Adjectives[0];
         var editor = Create(bajo);
@@ -193,13 +191,26 @@ public class AdjectiveEditorViewModelTests
 
         bajo.LinkedNouns.Remove("perro");
         _library.Nouns.Add(new Noun { BaseValue = "árbol", Translation = "tree" });
-        editor.RefreshTopics();
+        editor.RefreshChoices();
 
         Assert.Multiple(() =>
         {
             Assert.That(editor.Nouns.Select(n => n.Label), Is.EqualTo(new[] { "árbol", "ciudad", "mujer", "perro" }));
             Assert.That(editor.Nouns.Where(n => n.IsSelected).Select(n => n.Value), Is.EqualTo(new[] { "ciudad", "mujer" }));
         });
+    }
+
+    [Test]
+    public void RefreshChoices_ReplacedChipsNoLongerClearTheError()
+    {
+        var editor = Create();
+        var oldChip = editor.Nouns[0];
+        editor.RefreshChoices();
+        editor.NounsError = "Unknown noun: ciudad.";
+
+        oldChip.IsSelected = true;
+
+        Assert.That(editor.NounsError, Is.EqualTo("Unknown noun: ciudad."));
     }
 
     [Test]
@@ -252,6 +263,26 @@ public class AdjectiveLibraryPagesTests
         _library.Adjectives.Add(new Adjective { BaseValue = "alto", Translation = "tall" });
         list.Refresh();
         Assert.That(list.CountText, Is.EqualTo("2 adjectives"));
+    }
+
+    [Test]
+    public async Task NounDeletedOnNounsTab_OpenAdjectiveEditorDropsItsChip()
+    {
+        var page = new LibraryViewModel(_context);
+        page.OnActivated();
+        page.Adjectives.Selected = page.Adjectives.Items.Single();
+        var adjectiveEditor = (AdjectiveEditorViewModel)page.Adjectives.Editor!;
+
+        page.Nouns.Selected = page.Nouns.Items.Single(u => u.BaseValue == "mujer");
+        await page.Nouns.Editor!.DeleteCommand.ExecuteAsync(null);
+        await page.Nouns.Editor!.DeleteCommand.ExecuteAsync(null);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(page.Adjectives.Editor, Is.SameAs(adjectiveEditor));
+            Assert.That(adjectiveEditor.Nouns.Select(n => n.Value), Is.EqualTo(new[] { "ciudad", "perro" }));
+            Assert.That(adjectiveEditor.Nouns.Where(n => n.IsSelected).Select(n => n.Value), Is.EqualTo(new[] { "perro" }));
+        });
     }
 
     [Test]

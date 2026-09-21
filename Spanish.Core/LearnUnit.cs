@@ -194,13 +194,13 @@ public class Adjective : LearnUnit
     /// <summary>The form agreeing with a noun of <paramref name="gender"/>; <see cref="LearnUnit.BaseValue"/> is the masculine singular.</summary>
     public string GetForm(Gender gender, bool plural)
     {
-        var feminine = OrSuggested(FeminineValue, () => AdjectiveFormSuggester.Feminine(BaseValue));
+        var suggested = AdjectiveFormSuggester.Suggest(BaseValue, FeminineValue);
         return (gender, plural) switch
         {
             (Gender.Masculine, false) => BaseValue,
-            (Gender.Feminine, false) => feminine,
-            (Gender.Masculine, true) => OrSuggested(MasculinePluralValue, () => AdjectiveFormSuggester.MasculinePlural(BaseValue)),
-            _ => OrSuggested(FemininePluralValue, () => AdjectiveFormSuggester.FemininePlural(feminine))
+            (Gender.Feminine, false) => OrSuggested(FeminineValue, suggested.Feminine),
+            (Gender.Masculine, true) => OrSuggested(MasculinePluralValue, suggested.MasculinePlural),
+            _ => OrSuggested(FemininePluralValue, suggested.FemininePlural)
         };
     }
 
@@ -220,8 +220,8 @@ public class Adjective : LearnUnit
         LinkedNouns = [..adjective.LinkedNouns];
     }
 
-    private static string OrSuggested(string value, Func<string> suggest) =>
-        string.IsNullOrWhiteSpace(value) ? suggest() : value;
+    private static string OrSuggested(string value, string suggested) =>
+        string.IsNullOrWhiteSpace(value) ? suggested : value;
 }
 
 [JsonConverter(typeof(JsonStringEnumConverter<Gender>))]

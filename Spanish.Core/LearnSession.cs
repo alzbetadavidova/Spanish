@@ -52,7 +52,9 @@ public class LearnSession
         ArgumentNullException.ThrowIfNull(settings);
         return library.Units
             .Where(settings.Includes)
-            .SelectMany(u => settings.ScenarioTypesFor(u.Kind).Where(u.CanPractice).Select(t => new Exercise(u, t)))
+            .SelectMany(u => settings.ScenarioTypesFor(u.Kind)
+                .Where(t => library.CanPractice(u, t))
+                .Select(t => new Exercise(u, t)))
             .ToList();
     }
 
@@ -65,7 +67,9 @@ public class LearnSession
             return null;
         }
 
-        // Avoid repeating recent exercises, but always leave at least one to choose from.
+        // Candidates, from most to least preferred: neither a recent exercise nor a recent word, then not a
+        // recent exercise, then anything. Never repeating an exercise straight away wins over word variety.
+        // The depths always leave at least one exercise and one word to choose from.
         var depth = Math.Min(RecentCapacity, exercises.Count - 1);
         var fresh = exercises.Where(e => !_recent.Has(e.Key, depth)).ToList();
         if (fresh.Count == 0)
@@ -95,7 +99,11 @@ public class LearnSession
         scenario.Unit.RecordAnswer(scenario.Type, correct, _clock.Now);
         var exercise = new Exercise(scenario.Unit, scenario.Type);
         _recent.Add(exercise.Key);
-        _recentWords.Add(exercise.WordKey);
+        // A word repeated by the fallback takes one slot, so the history keeps distinct recent words.
+        if (!_recentWords.Has(exercise.WordKey, 1))
+        {
+            _recentWords.Add(exercise.WordKey);
+        }
         Answered++;
         if (correct)
         {

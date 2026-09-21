@@ -30,19 +30,19 @@
                 <TextBlock Grid.Row="2" Text="Forms" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
                 <StackPanel Grid.Row="2" Grid.Column="1" Spacing="4">
                     <UniformGrid Columns="3">
-                        <TextBox Text="{Binding Feminine}" PlaceholderText="baja" Margin="0,0,4,0"
-                                 ToolTip.Tip="Feminine singular" />
-                        <TextBox Text="{Binding MasculinePlural}" PlaceholderText="bajos" Margin="4,0"
-                                 ToolTip.Tip="Masculine plural" />
-                        <TextBox Text="{Binding FemininePlural}" PlaceholderText="bajas" Margin="4,0,0,0"
-                                 ToolTip.Tip="Feminine plural" />
+                        <TextBox Text="{Binding Feminine}" PlaceholderText="{Binding Suggested.Feminine}" Margin="0,0,4,0"
+                                 AutomationProperties.Name="Feminine singular" ToolTip.Tip="Feminine singular" />
+                        <TextBox Text="{Binding MasculinePlural}" PlaceholderText="{Binding Suggested.MasculinePlural}" Margin="4,0"
+                                 AutomationProperties.Name="Masculine plural" ToolTip.Tip="Masculine plural" />
+                        <TextBox Text="{Binding FemininePlural}" PlaceholderText="{Binding Suggested.FemininePlural}" Margin="4,0,0,0"
+                                 AutomationProperties.Name="Feminine plural" ToolTip.Tip="Feminine plural" />
                     </UniformGrid>
                     <UniformGrid Columns="3">
                         <TextBlock Text="feminine" Classes="muted" />
                         <TextBlock Text="masculine plural" Classes="muted" Margin="4,0,0,0" />
                         <TextBlock Text="feminine plural" Classes="muted" Margin="4,0,0,0" />
                     </UniformGrid>
-                    <TextBlock Text="Suggested from the Spanish word; fix them for irregular adjectives." Classes="muted" />
+                    <TextBlock Text="Empty boxes use the regular form shown; type a form only for irregular adjectives." Classes="muted" />
                 </StackPanel>
 
                 <TextBlock Grid.Row="3" Text="Nouns" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />

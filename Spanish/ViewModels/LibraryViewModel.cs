@@ -149,7 +149,7 @@ public partial class WordListViewModel : ObservableObject
         _restoringSelection = true;
         Selected = selected is not null && Items.Contains(selected) ? selected : null;
         _restoringSelection = false;
-        Editor?.RefreshTopics();
+        Editor?.RefreshChoices();
     }
 
     private WordEditorViewModel CreateEditor(LearnUnit? unit) => Kind switch

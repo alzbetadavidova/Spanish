@@ -17,6 +17,8 @@ public class AdjectiveFormSuggesterTests
     [TestCase("dormilón", "dormilona")]
     [TestCase("chiquitín", "chiquitina")]
     [TestCase("común", "común")]
+    [TestCase("cortés", "cortés")]
+    [TestCase("Descortés", "Descortés")]
     [TestCase("xál", "xál")] // accented vowel before a consonant other than n or s
     [TestCase("grande", "grande")]
     [TestCase("azul", "azul")]
@@ -34,19 +36,28 @@ public class AdjectiveFormSuggesterTests
         Assert.That(AdjectiveFormSuggester.Feminine(null!), Is.Empty);
     }
 
-    [TestCase("bajo", "bajos")]
-    [TestCase("feliz", "felices")]
-    [TestCase("alemán", "alemanes")]
-    public void MasculinePlural_UsesPluralRules(string masculine, string expected)
+    [TestCase("bajo", "baja", "bajos", "bajas")]
+    [TestCase("feliz", "feliz", "felices", "felices")]
+    [TestCase("alemán", "alemana", "alemanes", "alemanas")]
+    [TestCase("", "", "", "")]
+    public void Suggest_DerivesAllForms(string masculine, string feminine, string masculinePlural, string femininePlural)
     {
-        Assert.That(AdjectiveFormSuggester.MasculinePlural(masculine), Is.EqualTo(expected));
+        Assert.That(AdjectiveFormSuggester.Suggest(masculine),
+            Is.EqualTo(new AdjectiveForms(feminine, masculinePlural, femininePlural)));
     }
 
-    [TestCase("baja", "bajas")]
-    [TestCase("azul", "azules")]
-    public void FemininePlural_UsesPluralRules(string feminine, string expected)
+    [TestCase("española", "españolas")]
+    [TestCase(" ", "españoles")] // a blank feminine is not a fix
+    [TestCase(null, "españoles")]
+    public void Suggest_GivenFeminine_DrivesFemininePlural(string? feminine, string femininePlural)
     {
-        Assert.That(AdjectiveFormSuggester.FemininePlural(feminine), Is.EqualTo(expected));
+        var forms = AdjectiveFormSuggester.Suggest("español", feminine);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(forms.Feminine, Is.EqualTo("español"));
+            Assert.That(forms.FemininePlural, Is.EqualTo(femininePlural));
+        });
     }
 }
 
@@ -146,7 +157,7 @@ public class AdjectiveTests
     public void CopyContentFrom_CopiesFormsAndLinksButNotProgress()
     {
         var target = new Adjective { BaseValue = "alto" };
-        target.RecordAnswer(ScenarioType.Card, true, DateTime.Now);
+        target.RecordAnswer(ScenarioType.Card, true, new FakeClock().Now);
         var source = new Adjective
         {
             BaseValue = "joven",
