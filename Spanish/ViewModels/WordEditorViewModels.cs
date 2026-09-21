@@ -25,6 +25,7 @@ public abstract partial class WordEditorViewModel : ObservableObject
         Existing = existing;
         _spanish = existing?.BaseValue ?? string.Empty;
         _english = existing?.Translation ?? string.Empty;
+        ExceptionNotes = existing is null ? [] : Irregularities.Of(existing).Select(i => i.Reason).ToList();
         RefreshTopics();
     }
 
@@ -34,6 +35,10 @@ public abstract partial class WordEditorViewModel : ObservableObject
     public abstract string Title { get; }
     public ObservableCollection<ToggleOption<string>> Topics { get; } = [];
     public bool HasTopics => Topics.Count > 0;
+
+    /// <summary>Why the saved word breaks the usual rules.</summary>
+    public IReadOnlyList<string> ExceptionNotes { get; }
+    public bool HasExceptionNotes => ExceptionNotes.Count > 0;
 
     [ObservableProperty]
     private string _spanish;
@@ -151,6 +156,7 @@ public abstract partial class WordEditorViewModel : ObservableObject
 public partial class NounEditorViewModel : WordEditorViewModel
 {
     private bool _pluralEditedByUser;
+    private bool _takesElEditedByUser;
     private bool _suggesting;
 
     public NounEditorViewModel(LibraryContext context, Noun? existing, EditorCallbacks callbacks)
@@ -159,6 +165,8 @@ public partial class NounEditorViewModel : WordEditorViewModel
         _gender = existing?.Gender ?? Gender.Masculine;
         _plural = existing?.PluralValue ?? string.Empty;
         _pluralEditedByUser = _plural.Length > 0;
+        _takesElInSingular = existing?.TakesElInSingular ?? false;
+        _takesElEditedByUser = _takesElInSingular;
     }
 
     public override string Title => IsNew ? "New noun" : "Edit noun";
@@ -183,15 +191,34 @@ public partial class NounEditorViewModel : WordEditorViewModel
     [ObservableProperty]
     private string _plural;
 
+    /// <summary>Only offered for feminine nouns: el agua.</summary>
+    [ObservableProperty]
+    private bool _takesElInSingular;
+
     protected override void OnSpanishEdited(string value)
     {
-        if (_pluralEditedByUser)
-        {
-            return;
-        }
         _suggesting = true;
-        Plural = PluralSuggester.Suggest(value);
+        if (!_pluralEditedByUser)
+        {
+            Plural = PluralSuggester.Suggest(value);
+        }
+        SuggestTakesEl();
         _suggesting = false;
+    }
+
+    partial void OnGenderChanged(Gender value)
+    {
+        _suggesting = true;
+        SuggestTakesEl();
+        _suggesting = false;
+    }
+
+    partial void OnTakesElInSingularChanged(bool value)
+    {
+        if (!_suggesting)
+        {
+            _takesElEditedByUser = true;
+        }
     }
 
     partial void OnPluralChanged(string value)
@@ -205,8 +232,18 @@ public partial class NounEditorViewModel : WordEditorViewModel
     protected override LearnUnit BuildCandidate() => new Noun
     {
         Gender = Gender,
-        PluralValue = Plural.Trim()
+        PluralValue = Plural.Trim(),
+        TakesElInSingular = Gender == Gender.Feminine && TakesElInSingular
     };
+
+    /// <summary>Follows the Spanish word and gender until the user sets the checkbox.</summary>
+    private void SuggestTakesEl()
+    {
+        if (!_takesElEditedByUser)
+        {
+            TakesElInSingular = Gender == Gender.Feminine && StressedASuggester.StartsWithStressedA(Spanish);
+        }
+    }
 
     private void SetGender(Gender gender, bool selected)
     {

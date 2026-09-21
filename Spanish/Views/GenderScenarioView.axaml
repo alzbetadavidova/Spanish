@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:Spanish.ViewModels"
              xmlns:core="using:Spanish.Core"
+             xmlns:views="using:Spanish.Views"
              x:Class="Spanish.Views.GenderScenarioView"
              x:DataType="vm:GenderScenarioViewModel"
              Focusable="True">
@@ -40,6 +41,9 @@
                 IsVisible="{Binding IsChecked}">
             <TextBlock Text="{Binding Feedback}" HorizontalAlignment="Center" />
         </Border>
+        <Panel IsVisible="{Binding IsChecked}">
+            <views:ExceptionNotes Notes="{Binding Notes}" IsVisible="{Binding HasNotes}" />
+        </Panel>
 
         <Button Content="Next · Enter" Command="{Binding SubmitCommand}" Classes="accent"
                 HorizontalAlignment="Center" IsVisible="{Binding IsChecked}" />

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -12,6 +13,10 @@ public abstract partial class ScenarioViewModel(Scenario scenario, Func<Scenario
     public Scenario Scenario { get; } = scenario;
 
     public abstract string Heading { get; }
+
+    /// <summary>Why the word breaks the usual rules; shown once the user answered.</summary>
+    public IReadOnlyList<string> Notes { get; } = scenario.Notes.Select(n => n.Reason).ToList();
+    public bool HasNotes => Notes.Count > 0;
 
     /// <summary>True once the answer was handed over; further input is ignored.</summary>
     public bool IsCompleted { get; private set; }

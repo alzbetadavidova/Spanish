@@ -1,0 +1,20 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:views="using:Spanish.Views"
+             x:Class="Spanish.Views.ExceptionNotes"
+             x:DataType="views:ExceptionNotes">
+
+    <!-- Why a word breaks the usual rules; the host decides when it is shown. -->
+    <Border Classes="banner warning" CornerRadius="6" Padding="12,8">
+        <StackPanel Spacing="4">
+            <TextBlock Text="Exception" FontWeight="SemiBold" />
+            <ItemsControl ItemsSource="{Binding $parent[views:ExceptionNotes].Notes}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="x:String">
+                        <TextBlock Text="{Binding}" TextWrapping="Wrap" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </Border>
+</UserControl>
