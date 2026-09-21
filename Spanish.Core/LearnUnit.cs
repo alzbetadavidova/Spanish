@@ -170,6 +170,60 @@ public class Verb : LearnUnit
     }
 }
 
+public class Adjective : LearnUnit
+{
+    private static readonly ScenarioType[] Scenarios =
+        [ScenarioType.Card, ScenarioType.Fill, ScenarioType.PairWithNoun];
+
+    // Setters replace null (possible in hand-edited JSON) with an empty value.
+    // An empty form means the regular form suggested by AdjectiveFormSuggester.
+    private string _feminineValue = string.Empty;
+    public string FeminineValue { get => _feminineValue; set => _feminineValue = value ?? string.Empty; }
+    private string _masculinePluralValue = string.Empty;
+    public string MasculinePluralValue { get => _masculinePluralValue; set => _masculinePluralValue = value ?? string.Empty; }
+    private string _femininePluralValue = string.Empty;
+    public string FemininePluralValue { get => _femininePluralValue; set => _femininePluralValue = value ?? string.Empty; }
+
+    private List<string> _linkedNouns = [];
+    /// <summary>Base values of the nouns this adjective is practiced with.</summary>
+    public List<string> LinkedNouns { get => _linkedNouns; set => _linkedNouns = value ?? []; }
+
+    public override WordKind Kind => WordKind.Adjective;
+    public override IReadOnlyList<ScenarioType> SupportedScenarios => Scenarios;
+
+    /// <summary>The form agreeing with a noun of <paramref name="gender"/>; <see cref="LearnUnit.BaseValue"/> is the masculine singular.</summary>
+    public string GetForm(Gender gender, bool plural)
+    {
+        var feminine = OrSuggested(FeminineValue, () => AdjectiveFormSuggester.Feminine(BaseValue));
+        return (gender, plural) switch
+        {
+            (Gender.Masculine, false) => BaseValue,
+            (Gender.Feminine, false) => feminine,
+            (Gender.Masculine, true) => OrSuggested(MasculinePluralValue, () => AdjectiveFormSuggester.MasculinePlural(BaseValue)),
+            _ => OrSuggested(FemininePluralValue, () => AdjectiveFormSuggester.FemininePlural(feminine))
+        };
+    }
+
+    protected override bool HasDataFor(ScenarioType type) => type switch
+    {
+        ScenarioType.PairWithNoun => LinkedNouns.Count > 0,
+        _ => base.HasDataFor(type)
+    };
+
+    public override void CopyContentFrom(LearnUnit other)
+    {
+        base.CopyContentFrom(other);
+        var adjective = (Adjective)other;
+        FeminineValue = adjective.FeminineValue;
+        MasculinePluralValue = adjective.MasculinePluralValue;
+        FemininePluralValue = adjective.FemininePluralValue;
+        LinkedNouns = [..adjective.LinkedNouns];
+    }
+
+    private static string OrSuggested(string value, Func<string> suggest) =>
+        string.IsNullOrWhiteSpace(value) ? suggest() : value;
+}
+
 [JsonConverter(typeof(JsonStringEnumConverter<Gender>))]
 public enum Gender
 {

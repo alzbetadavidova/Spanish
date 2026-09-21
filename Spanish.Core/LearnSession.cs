@@ -2,19 +2,24 @@ namespace Spanish.Core;
 
 public record Exercise(LearnUnit Unit, ScenarioType Type)
 {
-    public string Key => $"{Unit.Kind}:{Unit.BaseValue.ToLowerInvariant()}:{Type}";
+    public string Key => $"{WordKey}:{Type}";
+
+    /// <summary>Identifies the word regardless of the scenario.</summary>
+    public string WordKey => $"{Unit.Kind}:{Unit.BaseValue.ToLowerInvariant()}";
 }
 
 /// <summary>Picks exercises one by one according to <see cref="SessionSettings"/> and records the answers.</summary>
 public class LearnSession
 {
     public const int RecentCapacity = 5;
+    public const int RecentWordCapacity = 3;
 
     private readonly LearnLibrary _library;
     private readonly ScenarioFactory _factory;
     private readonly IRandomSource _random;
     private readonly IClock _clock;
     private readonly LearnCache _recent = new(RecentCapacity);
+    private readonly LearnCache _recentWords = new(RecentWordCapacity);
 
     public LearnSession(LearnLibrary library, SessionSettings settings, ScenarioFactory factory, IRandomSource random, IClock clock)
     {
@@ -69,6 +74,15 @@ public class LearnSession
             fresh = exercises.ToList();
         }
 
+        // Prefer another word too, so a word doesn't come back straight away in a different scenario.
+        var wordCount = exercises.Select(e => e.WordKey).Distinct().Count();
+        var wordDepth = Math.Min(RecentWordCapacity, wordCount - 1);
+        var freshWords = fresh.Where(e => !_recentWords.Has(e.WordKey, wordDepth)).ToList();
+        if (freshWords.Count > 0)
+        {
+            fresh = freshWords;
+        }
+
         var best = fresh.Min(SortKey);
         var candidates = fresh.Where(e => SortKey(e) == best).ToList();
         var exercise = candidates[_random.Next(candidates.Count)];
@@ -79,7 +93,9 @@ public class LearnSession
     {
         ArgumentNullException.ThrowIfNull(scenario);
         scenario.Unit.RecordAnswer(scenario.Type, correct, _clock.Now);
-        _recent.Add(new Exercise(scenario.Unit, scenario.Type).Key);
+        var exercise = new Exercise(scenario.Unit, scenario.Type);
+        _recent.Add(exercise.Key);
+        _recentWords.Add(exercise.WordKey);
         Answered++;
         if (correct)
         {

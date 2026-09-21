@@ -9,7 +9,7 @@ public class LearnSessionTests
     private LearnSession CreateSession(LearnLibrary library, SessionSettings settings, FakeRandom? random = null)
     {
         random ??= new FakeRandom();
-        return new LearnSession(library, settings, new ScenarioFactory(random), random, _clock);
+        return new LearnSession(library, settings, new ScenarioFactory(random, library), random, _clock);
     }
 
     [Test]
@@ -17,7 +17,7 @@ public class LearnSessionTests
     {
         var library = new LearnLibrary();
         var settings = new SessionSettings();
-        var factory = new ScenarioFactory(new FakeRandom());
+        var factory = new ScenarioFactory(new FakeRandom(), library);
         var random = new FakeRandom();
 
         Assert.Multiple(() =>
