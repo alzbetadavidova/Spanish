@@ -28,7 +28,7 @@ public partial class LearnViewModel : ObservableObject, IPage
         _settingsStore = settingsStore;
         _random = random;
         _clock = clock;
-        _factory = new ScenarioFactory(random);
+        _factory = new ScenarioFactory(random, context.Library);
 
         // Saved settings may name topics that were deleted since.
         var valid = settings.WithTopicsFrom(context.Library.Topics);
@@ -168,13 +168,17 @@ public partial class LearnViewModel : ObservableObject, IPage
 
     private static List<string> BuildSummary(SessionSettings settings)
     {
-        var kinds = (settings.IncludeNouns, settings.IncludeVerbs) switch
-        {
-            (true, true) => "Nouns, verbs",
-            (true, false) => "Nouns",
-            (false, true) => "Verbs",
-            _ => "No word types"
-        };
+        var included = new[]
+            {
+                (settings.IncludeNouns, WordKind.Noun),
+                (settings.IncludeVerbs, WordKind.Verb),
+                (settings.IncludeAdjectives, WordKind.Adjective)
+            }
+            .Where(k => k.Item1)
+            .Select(k => DisplayNames.Plural(k.Item2))
+            .ToList();
+        var text = string.Join(", ", included);
+        var kinds = text.Length == 0 ? "No word types" : char.ToUpperInvariant(text[0]) + text[1..];
         var topics = settings.Topics.Count == 0 ? "All topics" : $"Topics: {string.Join(", ", settings.Topics)}";
         var order = SessionSettingsViewModel.Orders.First(o => o.Value == settings.Order).Label;
         return [kinds, topics, order];

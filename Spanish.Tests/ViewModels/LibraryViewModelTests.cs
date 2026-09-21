@@ -513,6 +513,15 @@ public class LibraryViewModelTests
         vm.AddCommand.Execute(null);
         Assert.Multiple(() =>
         {
+            Assert.That(vm.CurrentList, Is.SameAs(vm.Adjectives));
+            Assert.That(vm.AddLabel, Is.EqualTo("Add adjective"));
+            Assert.That(vm.Adjectives.Editor, Is.TypeOf<AdjectiveEditorViewModel>());
+        });
+
+        vm.SelectedTabIndex = 3;
+        vm.AddCommand.Execute(null);
+        Assert.Multiple(() =>
+        {
             Assert.That(vm.CurrentList, Is.Null);
             Assert.That(vm.IsAddVisible, Is.False);
             Assert.That(vm.AddLabel, Is.Empty);

@@ -22,6 +22,7 @@ public class LearnViewModelTests
     private static readonly SessionSettings GenderOnly = new()
     {
         IncludeVerbs = false,
+        IncludeAdjectives = false,
         NounScenarioTypes = [ScenarioType.Gender]
     };
 
@@ -45,7 +46,7 @@ public class LearnViewModelTests
     [Test]
     public void Constructor_NothingMatches_IsEmpty()
     {
-        var learn = Create(new SessionSettings { IncludeNouns = false, IncludeVerbs = false });
+        var learn = Create(new SessionSettings { IncludeNouns = false, IncludeVerbs = false, IncludeAdjectives = false });
 
         Assert.That(learn.IsEmpty, Is.True);
         Assert.That(learn.SummaryChips[0], Is.EqualTo("No word types"));
@@ -89,6 +90,7 @@ public class LearnViewModelTests
         learn.OpenSettingsCommand.Execute(null);
         learn.Settings.IncludeNouns = false;
         learn.Settings.IncludeVerbs = true;
+        learn.Settings.IncludeAdjectives = false;
         learn.Settings.Topics.Single(t => t.Value == "city").IsSelected = true;
 
         await learn.StartSessionCommand.ExecuteAsync(null);
@@ -365,8 +367,10 @@ public class LearnViewModelTests
     {
         Assert.Multiple(() =>
         {
-            Assert.That(Create(new SessionSettings()).SummaryChips[0], Is.EqualTo("Nouns, verbs"));
-            Assert.That(Create(new SessionSettings { IncludeNouns = false }).SummaryChips[0], Is.EqualTo("Verbs"));
+            Assert.That(Create(new SessionSettings()).SummaryChips[0], Is.EqualTo("Nouns, verbs, adjectives"));
+            Assert.That(Create(new SessionSettings { IncludeNouns = false }).SummaryChips[0], Is.EqualTo("Verbs, adjectives"));
+            Assert.That(Create(new SessionSettings { IncludeNouns = false, IncludeVerbs = false }).SummaryChips[0], Is.EqualTo("Adjectives"));
+            Assert.That(Create(new SessionSettings { IncludeVerbs = false, IncludeAdjectives = false }).SummaryChips[0], Is.EqualTo("Nouns"));
         });
     }
 }

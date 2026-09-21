@@ -57,6 +57,7 @@
                         <UniformGrid Grid.Column="1" Columns="4">
                             <ToggleButton Classes="chip" Content="Nouns" IsChecked="{Binding IncludeNouns}" Margin="0,0,8,0" />
                             <ToggleButton Classes="chip" Content="Verbs" IsChecked="{Binding IncludeVerbs}" Margin="0,0,8,0" />
+                            <ToggleButton Classes="chip" Content="Adjectives" IsChecked="{Binding IncludeAdjectives}" Margin="0,0,8,0" />
                         </UniformGrid>
                     </Grid>
                 </Border>
@@ -71,6 +72,10 @@
                                           ItemsPanel="{StaticResource FourColumns}" />
                             <TextBlock Text="Verbs" Classes="muted" Margin="0,6,0,6" />
                             <ItemsControl ItemsSource="{Binding VerbScenarios}" IsEnabled="{Binding IncludeVerbs}"
+                                          ItemTemplate="{StaticResource ChipTemplate}"
+                                          ItemsPanel="{StaticResource FourColumns}" />
+                            <TextBlock Text="Adjectives" Classes="muted" Margin="0,6,0,6" />
+                            <ItemsControl ItemsSource="{Binding AdjectiveScenarios}" IsEnabled="{Binding IncludeAdjectives}"
                                           ItemTemplate="{StaticResource ChipTemplate}"
                                           ItemsPanel="{StaticResource FourColumns}" />
                         </StackPanel>
