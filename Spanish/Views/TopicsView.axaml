@@ -43,7 +43,7 @@
                     <Grid ColumnDefinitions="96,*" ColumnSpacing="16">
                         <TextBlock Text="Words" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
                         <ScrollViewer Grid.Column="1">
-                            <ItemsControl ItemsSource="{Binding Words}">
+                            <ItemsControl ItemsSource="{Binding Words}" VerticalAlignment="Top">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate><UniformGrid Columns="3" /></ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>

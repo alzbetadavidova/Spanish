@@ -115,12 +115,10 @@ public partial class WordListViewModel : ObservableObject
         }
         OnPropertyChanged(nameof(CountText));
         // Clearing the list resets the selection; restore it without recreating the editor.
-        if (selected is not null && Items.Contains(selected))
-        {
-            _restoringSelection = true;
-            Selected = selected;
-            _restoringSelection = false;
-        }
+        // A selection hidden by the search is cleared, but its editor stays open.
+        _restoringSelection = true;
+        Selected = selected is not null && Items.Contains(selected) ? selected : null;
+        _restoringSelection = false;
     }
 
     private WordEditorViewModel CreateEditor(LearnUnit? unit) => Kind == WordKind.Noun

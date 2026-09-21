@@ -5,7 +5,7 @@
              x:DataType="vm:WordEditorViewModel">
 
     <StackPanel Spacing="4">
-        <ItemsControl ItemsSource="{Binding Topics}" IsVisible="{Binding HasTopics}">
+        <ItemsControl ItemsSource="{Binding Topics}" IsVisible="{Binding HasTopics}" VerticalAlignment="Top">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate><UniformGrid Columns="4" /></ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>

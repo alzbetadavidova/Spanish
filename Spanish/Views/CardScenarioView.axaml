@@ -14,8 +14,8 @@
     <StackPanel Spacing="16" Width="360">
         <TextBlock Text="{Binding Heading}" Classes="muted" HorizontalAlignment="Center" />
 
-        <Button Command="{Binding FlipCommand}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
-                Padding="0" CornerRadius="12" Focusable="False">
+        <Button Classes="card" Command="{Binding FlipCommand}" HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch" Focusable="False">
             <Border MinHeight="160" Padding="20">
                 <StackPanel VerticalAlignment="Center" Spacing="4">
                     <TextBlock Text="{Binding Front}" FontSize="26" FontWeight="SemiBold" HorizontalAlignment="Center"

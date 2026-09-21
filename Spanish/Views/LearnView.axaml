@@ -6,7 +6,7 @@
              x:DataType="vm:LearnViewModel">
 
     <SplitView IsPaneOpen="{Binding IsSettingsOpen, Mode=TwoWay}" DisplayMode="Overlay"
-               PanePlacement="Right" OpenPaneLength="480">
+               PanePlacement="Right" OpenPaneLength="600">
         <SplitView.Pane>
             <views:SessionSettingsView />
         </SplitView.Pane>

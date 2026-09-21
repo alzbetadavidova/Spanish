@@ -94,6 +94,21 @@
             <Setter Property="Foreground" Value="{DynamicResource DangerForeground}" />
         </Style>
 
+        <Style Selector="Button.card">
+            <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundAltHighBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource Divider}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Padding" Value="0" />
+        </Style>
+        <Style Selector="Button.card:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource SubtleSurface}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource Divider}" />
+        </Style>
+        <Style Selector="Button.card:pressed /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource SubtleSurface}" />
+        </Style>
+
         <Style Selector="Border.feedback">
             <Setter Property="CornerRadius" Value="6" />
             <Setter Property="Padding" Value="12,8" />
@@ -128,6 +143,7 @@
         <Style Selector="ProgressBar.index">
             <Setter Property="Height" Value="6" />
             <Setter Property="MinHeight" Value="6" />
+            <Setter Property="MinWidth" Value="0" />
             <Setter Property="Minimum" Value="0" />
             <Setter Property="Maximum" Value="100" />
         </Style>
