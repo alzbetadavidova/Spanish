@@ -1,0 +1,19 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+_UpgradeReport_Files/
+[Pp]ackages/
+TestResults/
+
+# User-specific files
+*.suo
+*.user
+*.DotSettings.user
+.vs/
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store

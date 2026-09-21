@@ -1,0 +1,33 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:spanish="clr-namespace:Spanish"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Spanish.MainWindow"
+        Title="Spanish"
+        x:DataType="spanish:MainWindowViewModel">
+        
+        <Design.DataContext>
+                <spanish:MainWindowViewModel/>
+        </Design.DataContext>
+        
+        <Grid>
+        <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        
+        <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding CurrentUnit.BaseValue }"></TextBlock>
+        <Button Grid.Row="3" Grid.Column="0" Command="{Binding KnowUnitCommand}">Know</Button>
+        <Button Grid.Row="3" Grid.Column="2" Command="{Binding NotKnowUnitCommand}">Not Know</Button>
+</Grid>
+</Window>

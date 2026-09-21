@@ -1,0 +1,16 @@
+{
+  "Nouns": [
+    {
+      "BaseValue": "ciudad",
+      "PluralValue": "ciudades",
+      "Gender": "Feminine",
+      "LearnCoefficient": 0
+    },
+    {
+      "BaseValue": "leche",
+      "PluralValue": "leches",
+      "Gender": "Feminine",
+      "LearnCoefficient": 0
+    }
+  ]
+}

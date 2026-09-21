@@ -1,0 +1,10 @@
+{
+  "Nouns": [
+    {
+      "BaseValue": "ciudad",
+      "PluralValue": "ciudades",
+      "Gender": "Feminine",
+      "LearnCoefficient": 0
+    }
+  ]
+}
