@@ -172,7 +172,8 @@ public partial class LearnViewModel : ObservableObject, IPage
             {
                 (settings.IncludeNouns, WordKind.Noun),
                 (settings.IncludeVerbs, WordKind.Verb),
-                (settings.IncludeAdjectives, WordKind.Adjective)
+                (settings.IncludeAdjectives, WordKind.Adjective),
+                (settings.IncludeNumerals, WordKind.Numeral)
             }
             .Where(k => k.Item1)
             .Select(k => DisplayNames.Plural(k.Item2))

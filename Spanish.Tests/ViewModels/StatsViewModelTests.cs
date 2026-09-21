@@ -20,7 +20,10 @@ public class StatsViewModelTests
         _vm = new StatsViewModel(new LibraryContext(_library, new InMemoryStore<LearnLibrary>(_library)), _clock);
     }
 
-    private IEnumerable<string> Words => _vm.Rows.Select(r => r.Word);
+    /// <summary>The words shown, leaving out the numerals every library has.</summary>
+    private IEnumerable<string> Words => _vm.Rows.Where(r => r.Row.Kind != WordKind.Numeral).Select(r => r.Word);
+
+    private IEnumerable<string> AllRows => _vm.Rows.Select(r => r.Word);
 
     [Test]
     public void Initially_SortedByLeastLearned()
@@ -86,19 +89,29 @@ public class StatsViewModelTests
     [Test]
     public void Filters_ByKindAndTopic()
     {
+        // All rows, so a word filter that let numerals through would fail.
         _vm.SelectedKind = StatsViewModel.KindFilters[2];
-        Assert.That(Words, Is.EqualTo(new[] { "hablar" }));
+        Assert.That(AllRows, Is.EqualTo(new[] { "hablar" }));
 
         _vm.SelectedKind = StatsViewModel.KindFilters[1];
         _vm.SelectedTopic = _vm.TopicFilters.Single(t => t.Value == "city");
-        Assert.That(Words, Is.EqualTo(new[] { "ciudad" }));
+        Assert.That(AllRows, Is.EqualTo(new[] { "ciudad" }));
 
         _vm.SelectedTopic = null;
-        Assert.That(Words.Count(), Is.EqualTo(2));
+        Assert.That(AllRows.Count(), Is.EqualTo(2));
 
         _vm.SelectedKind = StatsViewModel.KindFilters[2];
         _vm.SelectedTopic = _vm.TopicFilters.Single(t => t.Value == "animals");
         Assert.That(_vm.IsEmpty, Is.True);
+    }
+
+    [Test]
+    public void Filters_TopicWithAllKinds_HidesNumerals()
+    {
+        _vm.SelectedTopic = _vm.TopicFilters.Single(t => t.Value == "city");
+
+        // Numerals have no topics, so a topic shows only its words.
+        Assert.That(_vm.Rows.Select(r => r.Word), Is.EquivalentTo(new[] { "ciudad", "hablar" }));
     }
 
     [Test]
@@ -237,7 +250,7 @@ public class MainWindowViewModelTests
 
         vm.SelectedNav = vm.NavItems[2];
         Assert.That(vm.CurrentPage, Is.TypeOf<StatsViewModel>());
-        Assert.That(((StatsViewModel)vm.CurrentPage!).Rows, Has.Count.EqualTo(1));
+        Assert.That(((StatsViewModel)vm.CurrentPage!).Rows, Has.Count.EqualTo(1 + vm.Context.Library.Numerals.Count));
 
         vm.SelectedNav = null;
         Assert.That(vm.CurrentPage, Is.TypeOf<StatsViewModel>());

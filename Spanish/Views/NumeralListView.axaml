@@ -1,0 +1,70 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Spanish.ViewModels"
+             xmlns:core="using:Spanish.Core"
+             x:Class="Spanish.Views.NumeralListView"
+             x:DataType="vm:NumeralListViewModel">
+
+    <Grid ColumnDefinitions="220,*">
+        <Border Grid.Column="0" BorderBrush="{DynamicResource Divider}" BorderThickness="0,1,1,0" Padding="12,16">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Bottom" Text="{Binding CountText}" Classes="muted" Margin="10,10,0,0" />
+                <ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding Selected}" Background="Transparent">
+                    <ListBox.ItemTemplate>
+                        <!-- Two lines: the names are too long to share a row, and the ranges tell them apart. -->
+                        <DataTemplate x:DataType="core:Numeral">
+                            <StackPanel>
+                                <TextBlock Text="{Binding BaseValue}" TextTrimming="CharacterEllipsis" />
+                                <TextBlock Text="{Binding Translation}" Classes="muted" TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </Border>
+
+        <Border Grid.Column="1" BorderBrush="{DynamicResource Divider}" BorderThickness="0,1,0,0">
+            <Panel>
+                <TextBlock Text="Select a numeral to see what it practices." Classes="label"
+                           HorizontalAlignment="Center" IsVisible="{Binding !HasSelection}" />
+
+                <ContentControl Content="{Binding Details}" Margin="20,16">
+                    <ContentControl.ContentTemplate>
+                        <DataTemplate x:DataType="vm:NumeralDetailsViewModel">
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Top" Text="{Binding Title}" Classes="heading" Margin="0,0,0,16" />
+                                <Border DockPanel.Dock="Bottom" BorderBrush="{DynamicResource Divider}"
+                                        BorderThickness="0,1,0,0" Padding="0,14,0,0" Margin="0,20,0,0">
+                                    <TextBlock Text="{x:Static core:Numeral.BuiltInMessage}" Classes="muted" />
+                                </Border>
+
+                                <ScrollViewer>
+                                    <Grid ColumnDefinitions="96,*" RowDefinitions="Auto,Auto,Auto,Auto"
+                                          RowSpacing="12" ColumnSpacing="16">
+                                        <TextBlock Grid.Row="0" Text="English" Classes="label" />
+                                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding English}" />
+
+                                        <TextBlock Grid.Row="1" Text="Type" Classes="label" />
+                                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Subtype}" />
+
+                                        <TextBlock Grid.Row="2" Text="Scenarios" Classes="label" />
+                                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Scenarios}" />
+
+                                        <TextBlock Grid.Row="3" Text="Examples" Classes="label" VerticalAlignment="Top" />
+                                        <ItemsControl Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Examples}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate x:DataType="x:String">
+                                                    <TextBlock Text="{Binding}" TextWrapping="Wrap" Margin="0,0,0,6" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Grid>
+                                </ScrollViewer>
+                            </DockPanel>
+                        </DataTemplate>
+                    </ContentControl.ContentTemplate>
+                </ContentControl>
+            </Panel>
+        </Border>
+    </Grid>
+</UserControl>

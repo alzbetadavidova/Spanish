@@ -73,7 +73,10 @@ public partial class StatsViewModel : ObservableObject, IPage
     }
 
     public static IReadOnlyList<Option<WordKind?>> KindFilters { get; } =
-        [new(null, "All word types"), new(WordKind.Noun, "Nouns"), new(WordKind.Verb, "Verbs"), new(WordKind.Adjective, "Adjectives")];
+    [
+        new(null, "All word types"), new(WordKind.Noun, "Nouns"), new(WordKind.Verb, "Verbs"),
+        new(WordKind.Adjective, "Adjectives"), new(WordKind.Numeral, "Numerals")
+    ];
 
     public ObservableCollection<Option<string?>> TopicFilters { get; } = [];
     public ObservableCollection<StatsRowViewModel> Rows { get; } = [];

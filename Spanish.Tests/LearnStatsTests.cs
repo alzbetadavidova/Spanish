@@ -5,11 +5,14 @@ namespace Spanish.Tests;
 public class LearnStatsTests
 {
     [Test]
-    public void Build_OneRowPerWord()
+    public void Build_OneRowPerWordThenPerNumeral()
     {
-        var rows = LearnStats.Build(TestData.Library());
+        var library = TestData.Library();
 
-        Assert.That(rows.Select(r => r.Word), Is.EqualTo(new[] { "ciudad", "perro", "hablar" }));
+        var rows = LearnStats.Build(library);
+
+        Assert.That(rows.Select(r => r.Word),
+            Is.EqualTo(new[] { "ciudad", "perro", "hablar" }.Concat(library.Numerals.Select(n => n.BaseValue))));
         Assert.That(() => LearnStats.Build(null!), Throws.ArgumentNullException);
     }
 

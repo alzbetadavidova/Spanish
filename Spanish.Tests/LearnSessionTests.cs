@@ -39,8 +39,47 @@ public class LearnSessionTests
         {
             "ciudad:Card", "ciudad:Fill", "ciudad:Gender",
             "perro:Card", "perro:Fill", "perro:Gender",
-            "hablar:Card", "hablar:Fill", "hablar:Present", "hablar:Preterite"
+            "hablar:Card", "hablar:Fill", "hablar:Present", "hablar:Preterite",
+            "números 0–20:NumberToText", "números 0–20:TextToNumber",
+            "números 21–100:NumberToText", "números 21–100:TextToNumber",
+            "números 101–999:NumberToText", "números 101–999:TextToNumber",
+            "miles:NumberToText", "miles:TextToNumber",
+            "millones:NumberToText", "millones:TextToNumber",
+            "fechas:NumberToText", "fechas:TextToNumber",
+            "horas:NumberToText", "horas:TextToNumber",
+            "fechas y horas:NumberToText", "fechas y horas:TextToNumber"
         }));
+    }
+
+    [Test]
+    public void GetExercises_NumeralsIgnoreTopicsAndFollowTheirScenarios()
+    {
+        var settings = new SessionSettings
+        {
+            IncludeNouns = false,
+            IncludeVerbs = false,
+            Topics = ["animals"],
+            NumeralScenarioTypes = [ScenarioType.TextToNumber]
+        };
+
+        var exercises = LearnSession.GetExercises(TestData.Library(), settings);
+
+        Assert.That(exercises.Select(e => $"{e.Unit.Kind}:{e.Type}"),
+            Is.EqualTo(Enumerable.Repeat("Numeral:TextToNumber", Numeral.CreateBuiltIn().Count)));
+    }
+
+    [Test]
+    public void Next_EmptyLibrary_OffersNumerals()
+    {
+        var scenario = (TypedScenario)CreateSession(new LearnLibrary(), new SessionSettings()).Next()!;
+
+        // Nothing practiced yet, so the first exercise wins the tie: 0 to words.
+        Assert.Multiple(() =>
+        {
+            Assert.That(((Numeral)scenario.Unit).Category, Is.EqualTo(NumeralCategory.Numbers0To20));
+            Assert.That(scenario.Type, Is.EqualTo(ScenarioType.NumberToText));
+            Assert.That(scenario.Prompt, Is.EqualTo("0"));
+        });
     }
 
     [Test]
@@ -48,6 +87,7 @@ public class LearnSessionTests
     {
         var settings = new SessionSettings
         {
+            IncludeNumerals = false,
             IncludeVerbs = false,
             NounScenarioTypes = [ScenarioType.Plural],
             Topics = ["animals"]
@@ -72,7 +112,7 @@ public class LearnSessionTests
     [Test]
     public void Next_NoMatchingExercises_ReturnsNull()
     {
-        var session = CreateSession(new LearnLibrary(), new SessionSettings());
+        var session = CreateSession(new LearnLibrary(), new SessionSettings { IncludeNumerals = false });
 
         Assert.That(session.Next(), Is.Null);
     }
@@ -81,7 +121,7 @@ public class LearnSessionTests
     public void Next_LeastLearned_PrefersNeverPracticedThenLowestIndex()
     {
         var library = new LearnLibrary { Nouns = [TestData.Ciudad(), TestData.Perro()] };
-        var settings = new SessionSettings { NounScenarioTypes = [ScenarioType.Gender] };
+        var settings = new SessionSettings { IncludeNumerals = false, NounScenarioTypes = [ScenarioType.Gender] };
         library.Nouns[0].RecordAnswer(ScenarioType.Gender, false, _clock.Now);
         var session = CreateSession(library, settings);
 
@@ -97,6 +137,7 @@ public class LearnSessionTests
         var library = new LearnLibrary { Nouns = [TestData.Ciudad(), TestData.Perro()] };
         var settings = new SessionSettings
         {
+            IncludeNumerals = false,
             NounScenarioTypes = [ScenarioType.Gender],
             Order = SessionOrder.LeastRecentlyPracticed
         };
@@ -114,6 +155,7 @@ public class LearnSessionTests
         var library = new LearnLibrary { Nouns = [TestData.Ciudad(), TestData.Perro(), new Noun { BaseValue = "mesa" }] };
         var settings = new SessionSettings
         {
+            IncludeNumerals = false,
             NounScenarioTypes = [ScenarioType.Gender],
             Order = SessionOrder.LeastRecentlyPracticed
         };
@@ -134,6 +176,7 @@ public class LearnSessionTests
         var library = new LearnLibrary { Nouns = [TestData.Ciudad(), TestData.Perro()] };
         var settings = new SessionSettings
         {
+            IncludeNumerals = false,
             NounScenarioTypes = [ScenarioType.Gender],
             Order = SessionOrder.Random
         };
@@ -151,7 +194,7 @@ public class LearnSessionTests
     public void Next_AvoidsRecentlyAnsweredExercises()
     {
         var library = new LearnLibrary { Nouns = [TestData.Ciudad(), TestData.Perro()] };
-        var settings = new SessionSettings { NounScenarioTypes = [ScenarioType.Gender], Order = SessionOrder.Random };
+        var settings = new SessionSettings { IncludeNumerals = false, NounScenarioTypes = [ScenarioType.Gender], Order = SessionOrder.Random };
         var session = CreateSession(library, settings);
 
         var first = session.Next()!;
@@ -168,6 +211,7 @@ public class LearnSessionTests
 
     private static readonly SessionSettings RandomGender = new()
     {
+        IncludeNumerals = false,
         NounScenarioTypes = [ScenarioType.Gender],
         Order = SessionOrder.Random
     };
@@ -206,7 +250,7 @@ public class LearnSessionTests
     public void Next_DuplicateWordsFromFile_DoesNotCrash()
     {
         var library = new LearnLibrary { Nouns = [TestData.Ciudad(), TestData.Ciudad()] };
-        var session = CreateSession(library, new SessionSettings { NounScenarioTypes = [ScenarioType.Gender] });
+        var session = CreateSession(library, new SessionSettings { IncludeNumerals = false, NounScenarioTypes = [ScenarioType.Gender] });
 
         session.Record(session.Next()!, true);
 
@@ -217,10 +261,10 @@ public class LearnSessionTests
     public void Settings_ReplacedMidSession_KeepsCounters()
     {
         var library = new LearnLibrary { Nouns = [TestData.Ciudad()], Verbs = [TestData.Hablar()] };
-        var session = CreateSession(library, new SessionSettings { IncludeVerbs = false, NounScenarioTypes = [ScenarioType.Gender] });
+        var session = CreateSession(library, new SessionSettings { IncludeNumerals = false, IncludeVerbs = false, NounScenarioTypes = [ScenarioType.Gender] });
         session.Record(session.Next()!, true);
 
-        session.Settings = new SessionSettings { IncludeNouns = false, VerbScenarioTypes = [ScenarioType.Gerund] };
+        session.Settings = new SessionSettings { IncludeNumerals = false, IncludeNouns = false, VerbScenarioTypes = [ScenarioType.Gerund] };
 
         Assert.That(session.Next()!.Unit.BaseValue, Is.EqualTo("hablar"));
         Assert.That(session.Answered, Is.EqualTo(1));
@@ -231,7 +275,7 @@ public class LearnSessionTests
     public void Next_SingleExercise_RepeatsIt()
     {
         var library = new LearnLibrary { Nouns = [TestData.Ciudad()] };
-        var settings = new SessionSettings { NounScenarioTypes = [ScenarioType.Gender] };
+        var settings = new SessionSettings { IncludeNumerals = false, NounScenarioTypes = [ScenarioType.Gender] };
         var session = CreateSession(library, settings);
 
         session.Record(session.Next()!, true);
@@ -243,7 +287,7 @@ public class LearnSessionTests
     public void Next_UsesSettingsDirection()
     {
         var library = new LearnLibrary { Nouns = [TestData.Ciudad()] };
-        var settings = new SessionSettings { NounScenarioTypes = [ScenarioType.Card], Direction = Direction.SpanishToEnglish };
+        var settings = new SessionSettings { IncludeNumerals = false, NounScenarioTypes = [ScenarioType.Card], Direction = Direction.SpanishToEnglish };
 
         var card = (CardScenario)CreateSession(library, settings).Next()!;
 
@@ -254,7 +298,7 @@ public class LearnSessionTests
     public void Record_UpdatesProgressAndCounters()
     {
         var library = new LearnLibrary { Nouns = [TestData.Ciudad()] };
-        var session = CreateSession(library, new SessionSettings { NounScenarioTypes = [ScenarioType.Gender] });
+        var session = CreateSession(library, new SessionSettings { IncludeNumerals = false, NounScenarioTypes = [ScenarioType.Gender] });
         var scenario = session.Next()!;
 
         session.Record(scenario, true);

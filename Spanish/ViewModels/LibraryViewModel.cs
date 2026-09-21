@@ -16,6 +16,7 @@ public partial class LibraryViewModel : ObservableObject, IPage
         Nouns = new WordListViewModel(context, WordKind.Noun);
         Verbs = new WordListViewModel(context, WordKind.Verb);
         Adjectives = new WordListViewModel(context, WordKind.Adjective);
+        Numerals = new NumeralListViewModel(context.Library);
         Topics = new TopicsViewModel(context);
         // Tabs edit the same library; keep every tab (and open editors) in sync. While the page is
         // hidden (e.g. answers saved on the Learn page) the refresh waits until it is shown again.
@@ -34,13 +35,14 @@ public partial class LibraryViewModel : ObservableObject, IPage
     public WordListViewModel Nouns { get; }
     public WordListViewModel Verbs { get; }
     public WordListViewModel Adjectives { get; }
+    public NumeralListViewModel Numerals { get; }
     public TopicsViewModel Topics { get; }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CurrentList), nameof(AddLabel), nameof(IsAddVisible))]
     private int _selectedTabIndex;
 
-    /// <summary>The word list of the selected tab; null on the topics tab.</summary>
+    /// <summary>The word list of the selected tab; null on the numerals and topics tabs.</summary>
     public WordListViewModel? CurrentList => SelectedTabIndex switch
     {
         0 => Nouns,
@@ -132,7 +134,7 @@ public partial class WordListViewModel : ObservableObject
     public void Refresh()
     {
         var selected = Selected;
-        var units = _context.Library.Units.Where(u => u.Kind == Kind);
+        var units = _context.Library.Words.Where(u => u.Kind == Kind);
         var search = SearchText.Trim();
         Items.Clear();
         foreach (var unit in units
@@ -315,7 +317,7 @@ public partial class TopicsViewModel : ObservableObject
             return;
         }
 
-        var units = _context.Library.Units.OrderBy(u => u.BaseValue, StringComparer.CurrentCultureIgnoreCase).ToList();
+        var units = _context.Library.Words.OrderBy(u => u.BaseValue, StringComparer.CurrentCultureIgnoreCase).ToList();
         var sameWords = Words.Select(w => (w.Value, w.Label)).SequenceEqual(units.Select(u => (u, Label(u))));
         if (sameWords)
         {

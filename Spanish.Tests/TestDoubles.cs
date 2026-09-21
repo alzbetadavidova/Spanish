@@ -124,6 +124,10 @@ public static class TestData
         Topics = ["city", "animals"]
     };
 
+    /// <summary>The built-in numeral of <paramref name="category"/>, from <paramref name="library"/> or a fresh set.</summary>
+    public static Numeral NumeralOf(NumeralCategory category, LearnLibrary? library = null) =>
+        (library?.Numerals ?? Numeral.CreateBuiltIn()).Single(n => n.Category == category);
+
     public static LearnLibrary Library() => new()
     {
         Nouns = [Ciudad(), Perro()],

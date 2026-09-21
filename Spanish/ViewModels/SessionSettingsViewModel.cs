@@ -36,6 +36,7 @@ public partial class SessionSettingsViewModel : ObservableObject
     public ObservableCollection<ToggleOption<ScenarioType>> NounScenarios { get; } = [];
     public ObservableCollection<ToggleOption<ScenarioType>> VerbScenarios { get; } = [];
     public ObservableCollection<ToggleOption<ScenarioType>> AdjectiveScenarios { get; } = [];
+    public ObservableCollection<ToggleOption<ScenarioType>> NumeralScenarios { get; } = [];
     public ObservableCollection<ToggleOption<string>> Topics { get; } = [];
 
     [ObservableProperty]
@@ -46,6 +47,9 @@ public partial class SessionSettingsViewModel : ObservableObject
 
     [ObservableProperty]
     private bool _includeAdjectives;
+
+    [ObservableProperty]
+    private bool _includeNumerals;
 
     [ObservableProperty]
     private Option<SessionOrder> _selectedOrder = Orders[0];
@@ -63,9 +67,11 @@ public partial class SessionSettingsViewModel : ObservableObject
         IncludeNouns = IncludeNouns,
         IncludeVerbs = IncludeVerbs,
         IncludeAdjectives = IncludeAdjectives,
+        IncludeNumerals = IncludeNumerals,
         NounScenarioTypes = Selected(NounScenarios),
         VerbScenarioTypes = Selected(VerbScenarios),
         AdjectiveScenarioTypes = Selected(AdjectiveScenarios),
+        NumeralScenarioTypes = Selected(NumeralScenarios),
         Topics = Selected(Topics),
         Order = SelectedOrder.Value,
         Direction = SelectedDirection.Value
@@ -98,11 +104,13 @@ public partial class SessionSettingsViewModel : ObservableObject
         IncludeNouns = settings.IncludeNouns;
         IncludeVerbs = settings.IncludeVerbs;
         IncludeAdjectives = settings.IncludeAdjectives;
+        IncludeNumerals = settings.IncludeNumerals;
         SelectedOrder = Orders.First(o => o.Value == settings.Order);
         SelectedDirection = Directions.First(d => d.Value == settings.Direction);
         Fill(NounScenarios, new Noun().SupportedScenarios, settings.NounScenarioTypes);
         Fill(VerbScenarios, new Verb().SupportedScenarios, settings.VerbScenarioTypes);
         Fill(AdjectiveScenarios, new Adjective().SupportedScenarios, settings.AdjectiveScenarioTypes);
+        Fill(NumeralScenarios, Numeral.ScenarioTypes, settings.NumeralScenarioTypes);
         FillTopics(settings.Topics);
         UpdateMatchCount();
     }
@@ -137,6 +145,7 @@ public partial class SessionSettingsViewModel : ObservableObject
     partial void OnIncludeNounsChanged(bool value) => UpdateMatchCount();
     partial void OnIncludeVerbsChanged(bool value) => UpdateMatchCount();
     partial void OnIncludeAdjectivesChanged(bool value) => UpdateMatchCount();
+    partial void OnIncludeNumeralsChanged(bool value) => UpdateMatchCount();
     partial void OnMatchCountChanged(int value) => OnPropertyChanged(nameof(MatchText));
 
     private void UpdateMatchCount() => MatchCount = LearnSession.GetExercises(_library, ToSettings()).Count;
