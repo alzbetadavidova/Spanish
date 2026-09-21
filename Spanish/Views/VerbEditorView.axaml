@@ -7,6 +7,8 @@
 
     <DockPanel>
         <TextBlock DockPanel.Dock="Top" Text="{Binding Title}" Classes="heading" Margin="0,0,0,16" />
+        <views:ExceptionNotes DockPanel.Dock="Top" Notes="{Binding ExceptionNotes}"
+                              IsVisible="{Binding HasExceptionNotes}" Margin="0,0,0,16" />
         <views:EditorFooter DockPanel.Dock="Bottom" />
 
         <ScrollViewer>

@@ -7,6 +7,8 @@
 
     <DockPanel>
         <TextBlock DockPanel.Dock="Top" Text="{Binding Title}" Classes="heading" Margin="0,0,0,16" />
+        <views:ExceptionNotes DockPanel.Dock="Top" Notes="{Binding ExceptionNotes}"
+                              IsVisible="{Binding HasExceptionNotes}" Margin="0,0,0,16" />
         <views:EditorFooter DockPanel.Dock="Bottom" />
 
         <ScrollViewer>
@@ -27,10 +29,14 @@
                 </StackPanel>
 
                 <TextBlock Grid.Row="2" Text="Gender" Classes="label" />
-                <UniformGrid Grid.Row="2" Grid.Column="1" Columns="2">
-                    <ToggleButton Classes="chip" Content="Masculine · el" IsChecked="{Binding IsMasculine}" Margin="0,0,4,0" />
-                    <ToggleButton Classes="chip" Content="Feminine · la" IsChecked="{Binding IsFeminine}" Margin="4,0,0,0" />
-                </UniformGrid>
+                <StackPanel Grid.Row="2" Grid.Column="1" Spacing="8">
+                    <UniformGrid Columns="2">
+                        <ToggleButton Classes="chip" Content="Masculine · el" IsChecked="{Binding IsMasculine}" Margin="0,0,4,0" />
+                        <ToggleButton Classes="chip" Content="Feminine · la" IsChecked="{Binding IsFeminine}" Margin="4,0,0,0" />
+                    </UniformGrid>
+                    <CheckBox IsChecked="{Binding TakesElInSingular}" IsVisible="{Binding IsFeminine}"
+                              Content="Takes el in the singular (el agua, las aguas)" />
+                </StackPanel>
 
                 <TextBlock Grid.Row="3" Text="Plural" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
                 <StackPanel Grid.Row="3" Grid.Column="1" Spacing="4">

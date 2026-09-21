@@ -171,6 +171,32 @@ public class LearnUnitTests
     }
 
     [Test]
+    public void Noun_TakesElInSingular_OnlyChangesTheSingularArticle()
+    {
+        var agua = new Noun { BaseValue = "agua", Gender = Gender.Feminine, TakesElInSingular = true };
+        var masculine = TestData.Perro();
+        masculine.TakesElInSingular = true;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(agua.SingularArticle, Is.EqualTo(Article.El));
+            Assert.That(agua.PluralArticle, Is.EqualTo(Article.Las));
+            Assert.That(masculine.SingularArticle, Is.EqualTo(Article.El));
+            Assert.That(masculine.PluralArticle, Is.EqualTo(Article.Los));
+        });
+    }
+
+    [Test]
+    public void Noun_CopyContentFrom_CopiesTakesElInSingular()
+    {
+        var target = TestData.Ciudad();
+
+        target.CopyContentFrom(new Noun { BaseValue = "agua", Gender = Gender.Feminine, TakesElInSingular = true });
+
+        Assert.That(target.TakesElInSingular, Is.True);
+    }
+
+    [Test]
     public void Noun_CopyContentFrom_CopiesContentButNotProgress()
     {
         var target = TestData.Perro();

@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:Spanish.ViewModels"
+             xmlns:views="using:Spanish.Views"
              x:Class="Spanish.Views.TypedScenarioView"
              x:DataType="vm:TypedScenarioViewModel">
 
@@ -26,6 +27,7 @@
                 IsVisible="{Binding IsChecked}">
             <TextBlock Text="{Binding Feedback}" HorizontalAlignment="Center" TextWrapping="Wrap" />
         </Border>
+        <views:ExceptionNotes Notes="{Binding Notes}" IsVisible="{Binding ShowNotes}" />
 
         <Button Command="{Binding SubmitCommand}" HorizontalAlignment="Center" Classes="accent">
             <Panel>

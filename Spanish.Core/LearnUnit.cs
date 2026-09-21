@@ -87,11 +87,17 @@ public class Noun : LearnUnit
     private string _pluralValue = string.Empty;
     public string PluralValue { get => _pluralValue; set => _pluralValue = value ?? string.Empty; }
 
+    /// <summary>
+    /// A feminine noun starting with a stressed a takes el in the singular (el agua, las aguas).
+    /// Adjectives still agree in the feminine: el agua fría. Ignored for masculine nouns.
+    /// </summary>
+    public bool TakesElInSingular { get; set; }
+
     public override WordKind Kind => WordKind.Noun;
     public override IReadOnlyList<ScenarioType> SupportedScenarios => Scenarios;
 
     [JsonIgnore]
-    public Article SingularArticle => Gender == Gender.Masculine ? Article.El : Article.La;
+    public Article SingularArticle => Gender == Gender.Masculine || TakesElInSingular ? Article.El : Article.La;
 
     [JsonIgnore]
     public Article PluralArticle => Gender == Gender.Masculine ? Article.Los : Article.Las;
@@ -108,6 +114,7 @@ public class Noun : LearnUnit
         var noun = (Noun)other;
         Gender = noun.Gender;
         PluralValue = noun.PluralValue;
+        TakesElInSingular = noun.TakesElInSingular;
     }
 }
 

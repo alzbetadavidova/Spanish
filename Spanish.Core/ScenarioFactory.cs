@@ -15,7 +15,7 @@ public class ScenarioFactory(IRandomSource random, LearnLibrary library)
             throw new ArgumentException($"\"{unit.BaseValue}\" cannot be practiced as {type}.", nameof(type));
         }
 
-        return (unit, type) switch
+        Scenario scenario = (unit, type) switch
         {
             (_, ScenarioType.Card) => CreateCard(unit, Resolve(direction)),
             (_, ScenarioType.Fill) => CreateFill(unit, Resolve(direction)),
@@ -27,6 +27,8 @@ public class ScenarioFactory(IRandomSource random, LearnLibrary library)
             (Adjective adjective, ScenarioType.PairWithNoun) => CreatePair(adjective),
             _ => throw new ArgumentException($"Unsupported scenario {type}.", nameof(type))
         };
+        // A pair also explains its noun, so it adds its own notes.
+        return type == ScenarioType.PairWithNoun ? scenario : WithNotes(scenario, Irregularities.For(unit, type));
     }
 
     private Direction Resolve(Direction direction) => direction == Direction.Mixed
@@ -97,7 +99,7 @@ public class ScenarioFactory(IRandomSource random, LearnLibrary library)
         new(verb, ScenarioType.Gerund, "Type the gerund", verb.BaseValue, verb.TranslationDisplay, [verb.NonPersonalGerund]);
 
     /// <summary>bajo + mujeres: the user types "mujeres bajas" (the article is optional).</summary>
-    private TypedScenario CreatePair(Adjective adjective)
+    private Scenario CreatePair(Adjective adjective)
     {
         var nouns = library.LinkedNounsOf(adjective);
         if (nouns.Count == 0)
@@ -116,9 +118,14 @@ public class ScenarioFactory(IRandomSource random, LearnLibrary library)
             ? null
             : $"{adjective.TranslationAlternatives[0]} + {noun.TranslationAlternatives[0]}{(plural ? " (plural)" : string.Empty)}";
 
-        return new TypedScenario(adjective, ScenarioType.PairWithNoun, PairInstruction,
+        var pair = new TypedScenario(adjective, ScenarioType.PairWithNoun, PairInstruction,
             $"{adjective.BaseValue} + {nounForm}", detail, [phrase, $"{article.ToText()} {phrase}"]);
+        return WithNotes(pair, [..Irregularities.For(adjective, ScenarioType.PairWithNoun), ..Irregularities.OfPairedNoun(noun)]);
     }
+
+    /// <summary>Scenarios without notes keep the shared empty list, so they compare equal.</summary>
+    private static Scenario WithNotes(Scenario scenario, IReadOnlyList<Irregularity> notes) =>
+        notes.Count == 0 ? scenario : scenario with { Notes = notes };
 
     private static string SpanishDisplay(LearnUnit unit) =>
         unit is Noun noun ? $"{noun.SingularArticle.ToText()} {noun.BaseValue}" : unit.BaseValue;

@@ -1,6 +1,10 @@
 namespace Spanish.Core;
 
-public abstract record Scenario(LearnUnit Unit, ScenarioType Type);
+public abstract record Scenario(LearnUnit Unit, ScenarioType Type)
+{
+    /// <summary>How the practiced word breaks the rules, shown once the user answered.</summary>
+    public IReadOnlyList<Irregularity> Notes { get; init; } = Array.Empty<Irregularity>();
+}
 
 /// <summary>Flip card; the user assesses themselves.</summary>
 public sealed record CardScenario(LearnUnit Unit, Direction Direction, string Front, string Back, string? BackDetail)

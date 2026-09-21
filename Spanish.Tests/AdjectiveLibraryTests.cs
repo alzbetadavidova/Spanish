@@ -311,8 +311,7 @@ public class AdjectiveLibraryTests
     [Test]
     public void SeedLibrary_AdjectivesAreValidAndPracticable()
     {
-        var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "library.json");
-        var library = JsonSerializer.Deserialize<LearnLibrary>(File.ReadAllText(path), JsonFileStore<LearnLibrary>.Options)!;
+        var library = LoadSeedLibrary();
 
         Assert.That(library.Adjectives, Is.Not.Empty);
         Assert.Multiple(() =>
@@ -323,5 +322,48 @@ public class AdjectiveLibraryTests
                 Assert.That(library.CanPractice(adjective, ScenarioType.PairWithNoun), Is.True, adjective.BaseValue);
             }
         });
+    }
+
+    [Test]
+    public void SeedLibrary_NounsAndVerbsAreValidAndPracticable()
+    {
+        var library = LoadSeedLibrary();
+
+        Assert.Multiple(() =>
+        {
+            foreach (var unit in library.Nouns.Cast<LearnUnit>().Concat(library.Verbs))
+            {
+                Assert.That(library.Validate(unit, unit), Is.Empty, unit.BaseValue);
+                // Nouns without a common plural (e.g. salud) leave it empty and skip the plural scenario.
+                var scenarios = unit.SupportedScenarios.Where(t => t != ScenarioType.Plural || unit is Noun { PluralValue.Length: > 0 });
+                Assert.That(scenarios.All(t => library.CanPractice(unit, t)), Is.True, unit.BaseValue);
+            }
+        });
+    }
+
+    /// <summary>Seed nouns the stressed-a guess gets wrong, e.g. la hache.</summary>
+    private static readonly string[] StressedAExceptions = [];
+
+    [Test]
+    public void SeedLibrary_FeminineNounsWithStressedA_TakeEl()
+    {
+        var nouns = LoadSeedLibrary().Nouns;
+        var feminine = nouns.Where(n => n.Gender == Gender.Feminine && !StressedAExceptions.Contains(n.BaseValue)).ToList();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(nouns.Where(n => n.TakesElInSingular), Has.All.Matches<Noun>(n => n.Gender == Gender.Feminine));
+            Assert.That(feminine, Has.Some.Matches<Noun>(n => n.BaseValue == "agua" && n.TakesElInSingular));
+            foreach (var noun in feminine)
+            {
+                Assert.That(noun.TakesElInSingular, Is.EqualTo(StressedASuggester.StartsWithStressedA(noun.BaseValue)), noun.BaseValue);
+            }
+        });
+    }
+
+    private static LearnLibrary LoadSeedLibrary()
+    {
+        var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "library.json");
+        return JsonSerializer.Deserialize<LearnLibrary>(File.ReadAllText(path), JsonFileStore<LearnLibrary>.Options)!;
     }
 }

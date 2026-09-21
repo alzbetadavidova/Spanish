@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:Spanish.ViewModels"
+             xmlns:views="using:Spanish.Views"
              x:Class="Spanish.Views.CardScenarioView"
              x:DataType="vm:CardScenarioViewModel"
              Focusable="True">
@@ -34,6 +35,8 @@
                 </StackPanel>
             </Border>
         </Button>
+
+        <views:ExceptionNotes Notes="{Binding Notes}" IsVisible="{Binding ShowNotes}" />
 
         <UniformGrid Columns="2" IsVisible="{Binding IsFlipped}">
             <Button Classes="danger" Command="{Binding DidNotKnowCommand}" HorizontalAlignment="Stretch"
