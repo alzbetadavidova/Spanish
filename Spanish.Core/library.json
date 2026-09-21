@@ -2,15 +2,27 @@
   "Nouns": [
     {
       "BaseValue": "ciudad",
+      "Translation": "city; town",
       "PluralValue": "ciudades",
       "Gender": "Feminine",
-      "LearnCoefficient": 0
+      "Topics": ["city"]
     },
     {
       "BaseValue": "leche",
+      "Translation": "milk",
       "PluralValue": "leches",
       "Gender": "Feminine",
-      "LearnCoefficient": 0
+      "Topics": ["food"]
     }
-  ]
+  ],
+  "Verbs": [
+    {
+      "BaseValue": "hablar",
+      "Translation": "to speak; to talk",
+      "PresentConjugations": ["hablo", "hablas", "habla", "hablamos", "hablan"],
+      "PreteriteConjugations": ["hablé", "hablaste", "habló", "hablamos", "hablaron"],
+      "NonPersonalGerund": "hablando"
+    }
+  ],
+  "Topics": ["city", "food"]
 }
