@@ -36,9 +36,7 @@
             </Border>
         </Button>
 
-        <Panel IsVisible="{Binding IsFlipped}">
-            <views:ExceptionNotes Notes="{Binding Notes}" IsVisible="{Binding HasNotes}" />
-        </Panel>
+        <views:ExceptionNotes Notes="{Binding Notes}" IsVisible="{Binding ShowNotes}" />
 
         <UniformGrid Columns="2" IsVisible="{Binding IsFlipped}">
             <Button Classes="danger" Command="{Binding DidNotKnowCommand}" HorizontalAlignment="Stretch"

@@ -18,7 +18,8 @@ public sealed record Irregularity(IrregularityKind Kind, string Reason);
 /// <summary>Finds where a word breaks the rules that the suggesters (and learners) apply.</summary>
 public static class Irregularities
 {
-    private static readonly string[] Subjects = ["yo", "tú", "él", "nosotros", "ellos"];
+    // "él / ella / usted" -> "él"
+    private static readonly string[] Subjects = Verb.PersonLabels.Select(l => l.Split(" / ")[0]).ToArray();
 
     private static readonly IrregularityKind[] GenderKinds =
         [IrregularityKind.ElBeforeStressedA, IrregularityKind.MasculineEndingInA, IrregularityKind.FeminineEndingInO];

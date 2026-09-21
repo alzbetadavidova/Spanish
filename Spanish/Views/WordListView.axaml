@@ -15,12 +15,13 @@
                 <ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding Selected}" Background="Transparent">
                     <ListBox.ItemTemplate>
                         <DataTemplate x:DataType="core:LearnUnit">
-                            <Grid ColumnDefinitions="Auto,*,Auto">
+                            <Grid ColumnDefinitions="*,Auto,Auto">
                                 <TextBlock Text="{Binding BaseValue}" TextTrimming="CharacterEllipsis" />
                                 <Border Grid.Column="1" Classes="banner warning" CornerRadius="8" Padding="5,0"
-                                        Margin="6,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                        Margin="6,0,0,0" VerticalAlignment="Center"
                                         IsVisible="{Binding Converter={x:Static views:IrregularWordConverter.Instance}}"
-                                        ToolTip.Tip="Breaks a rule; select it to see why">
+                                        ToolTip.Tip="Breaks a rule; select it to see why"
+                                        AutomationProperties.Name="Breaks a rule">
                                     <TextBlock Text="!" FontWeight="Bold" FontSize="11" />
                                 </Border>
                                 <TextBlock Grid.Column="2" Text="{Binding Translation}" Classes="muted"

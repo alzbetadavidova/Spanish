@@ -335,9 +335,21 @@ public class AdjectiveLibraryTests
             {
                 Assert.That(library.Validate(unit, unit), Is.Empty, unit.BaseValue);
                 // Nouns without a common plural (e.g. salud) leave it empty and skip the plural scenario.
-                var scenarios = unit.SupportedScenarios.Where(t => t != ScenarioType.Plural);
+                var scenarios = unit.SupportedScenarios.Where(t => t != ScenarioType.Plural || unit is Noun { PluralValue.Length: > 0 });
                 Assert.That(scenarios.All(t => library.CanPractice(unit, t)), Is.True, unit.BaseValue);
             }
+        });
+    }
+
+    [Test]
+    public void SeedLibrary_FeminineNounsWithStressedA_TakeEl()
+    {
+        var flagged = LoadSeedLibrary().Nouns.Where(n => n.TakesElInSingular).ToList();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(flagged.Select(n => n.BaseValue), Does.Contain("agua"));
+            Assert.That(flagged.All(n => n.Gender == Gender.Feminine && n.SingularArticle == Article.El), Is.True);
         });
     }
 

@@ -166,7 +166,8 @@ public partial class NounEditorViewModel : WordEditorViewModel
         _plural = existing?.PluralValue ?? string.Empty;
         _pluralEditedByUser = _plural.Length > 0;
         _takesElInSingular = existing?.TakesElInSingular ?? false;
-        _takesElEditedByUser = _takesElInSingular;
+        // Like the plural, a saved word keeps its choice: la hache stays la hache.
+        _takesElEditedByUser = existing is not null;
     }
 
     public override string Title => IsNew ? "New noun" : "Edit noun";

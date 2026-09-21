@@ -49,7 +49,7 @@ public class ExceptionScenarioFactoryTests
         {
             Assert.That(card.Back, Is.EqualTo("el agua"));
             Assert.That(card.BackDetail, Is.EqualTo("las aguas"));
-            Assert.That(card.Notes, Has.Count.EqualTo(1));
+            Assert.That(card.Notes.Select(n => n.Kind), Is.EqualTo(new[] { IrregularityKind.ElBeforeStressedA }));
         });
     }
 

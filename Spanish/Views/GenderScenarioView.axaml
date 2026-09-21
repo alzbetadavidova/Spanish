@@ -41,9 +41,7 @@
                 IsVisible="{Binding IsChecked}">
             <TextBlock Text="{Binding Feedback}" HorizontalAlignment="Center" />
         </Border>
-        <Panel IsVisible="{Binding IsChecked}">
-            <views:ExceptionNotes Notes="{Binding Notes}" IsVisible="{Binding HasNotes}" />
-        </Panel>
+        <views:ExceptionNotes Notes="{Binding Notes}" IsVisible="{Binding ShowNotes}" />
 
         <Button Content="Next · Enter" Command="{Binding SubmitCommand}" Classes="accent"
                 HorizontalAlignment="Center" IsVisible="{Binding IsChecked}" />

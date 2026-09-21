@@ -8,6 +8,7 @@ public static class StressedASuggester
 {
     private const string Vowels = "aeiouáéíóúü";
     private const string AccentedVowels = "áéíóú";
+    private const string StrongVowels = "aeoáéíóú";
 
     public static bool StartsWithStressedA(string? word)
     {
@@ -28,26 +29,28 @@ public static class StressedASuggester
 
         // Without a written accent, words ending in a vowel, n or s are stressed on the second to last
         // syllable (a-gua), the others on the last one (a-zul).
-        var syllables = CountVowelGroups(sound);
+        var syllables = CountSyllables(sound);
         var stressedSyllable = EndsInVowelNOrS(sound) ? syllables - 1 : syllables;
         return stressedSyllable <= 1;
     }
 
     private static bool EndsInVowelNOrS(string word) => Vowels.Contains(word[^1]) || word[^1] is 'n' or 's';
 
-    private static int CountVowelGroups(string word)
+    /// <summary>Counts syllables by their vowels; two strong vowels belong to different syllables: a-or-ta.</summary>
+    private static int CountSyllables(string word)
     {
-        var groups = 0;
-        var inGroup = false;
+        var syllables = 0;
+        var previous = '\0';
         foreach (var c in word)
         {
             var isVowel = Vowels.Contains(c);
-            if (isVowel && !inGroup)
+            var startsSyllable = isVowel && (!Vowels.Contains(previous) || StrongVowels.Contains(c) && StrongVowels.Contains(previous));
+            if (startsSyllable)
             {
-                groups++;
+                syllables++;
             }
-            inGroup = isVowel;
+            previous = c;
         }
-        return groups;
+        return syllables;
     }
 }

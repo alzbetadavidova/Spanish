@@ -118,6 +118,13 @@ public class IrregularitiesTests
     }
 
     [Test]
+    public void Of_CompoundWithIrregularPlural_ShowsTheRegularCompound()
+    {
+        Assert.That(Reasons(Irregularities.Of(Noun("fin de semana", Gender.Masculine, "fin de semanas"))),
+            Is.EqualTo(new[] { "Irregular plural: fin de semanas (the regular rule gives fines de semana)." }));
+    }
+
+    [Test]
     public void Of_IrregularAdjectiveForms_ListsTheFormsThatDiffer()
     {
         Assert.Multiple(() =>
@@ -126,6 +133,33 @@ public class IrregularitiesTests
                 Is.EqualTo(new[] { "Irregular forms: española (feminine), españolas (feminine plural)." }));
             Assert.That(Irregularities.Of(Espanol()).Single().Kind, Is.EqualTo(IrregularityKind.IrregularAdjectiveForms));
         });
+    }
+
+    [Test]
+    public void Of_IrregularMasculinePlural_ListsIt()
+    {
+        var joven = new Adjective { BaseValue = "joven", Translation = "young", MasculinePluralValue = "jóvenes", FemininePluralValue = "jóvenes" };
+
+        Assert.That(Reasons(Irregularities.Of(joven)),
+            Is.EqualTo(new[] { "Irregular forms: jóvenes (masculine plural), jóvenes (feminine plural)." }));
+    }
+
+    // The spelling changes keep the sound regular, so they are not exceptions.
+    [TestCase("buscar", "busqué", "busc")]
+    [TestCase("llegar", "llegué", "lleg")]
+    [TestCase("cruzar", "crucé", "cruz")]
+    public void Of_PreteriteSpellingChange_IsRegular(string infinitive, string yo, string stem)
+    {
+        var verb = new Verb
+        {
+            BaseValue = infinitive,
+            Translation = "x",
+            PresentConjugations = [stem + "o", stem + "as", stem + "a", stem + "amos", stem + "an"],
+            PreteriteConjugations = [yo, stem + "aste", stem + "ó", stem + "amos", stem + "aron"],
+            NonPersonalGerund = stem + "ando"
+        };
+
+        Assert.That(Irregularities.Of(verb), Is.Empty);
     }
 
     [Test]
@@ -171,24 +205,18 @@ public class IrregularitiesTests
         Assert.That(Irregularities.Of(verb), Is.Empty);
     }
 
-    [TestCase(ScenarioType.Card, 3)]
-    [TestCase(ScenarioType.Fill, 3)]
-    [TestCase(ScenarioType.Present, 1)]
-    [TestCase(ScenarioType.Preterite, 1)]
-    [TestCase(ScenarioType.Gerund, 1)]
-    [TestCase(ScenarioType.Gender, 0)]
-    [TestCase(ScenarioType.Plural, 0)]
-    [TestCase(ScenarioType.PairWithNoun, 0)]
-    [TestCase((ScenarioType)99, 0)]
-    public void For_Verb_KeepsWhatTheScenarioPractices(ScenarioType type, int count)
+    [TestCase(ScenarioType.Card, new[] { IrregularityKind.IrregularPresent, IrregularityKind.IrregularPreterite, IrregularityKind.IrregularGerund })]
+    [TestCase(ScenarioType.Fill, new[] { IrregularityKind.IrregularPresent, IrregularityKind.IrregularPreterite, IrregularityKind.IrregularGerund })]
+    [TestCase(ScenarioType.Present, new[] { IrregularityKind.IrregularPresent })]
+    [TestCase(ScenarioType.Preterite, new[] { IrregularityKind.IrregularPreterite })]
+    [TestCase(ScenarioType.Gerund, new[] { IrregularityKind.IrregularGerund })]
+    [TestCase(ScenarioType.Gender, new IrregularityKind[0])]
+    [TestCase(ScenarioType.Plural, new IrregularityKind[0])]
+    [TestCase(ScenarioType.PairWithNoun, new IrregularityKind[0])]
+    [TestCase((ScenarioType)99, new IrregularityKind[0])]
+    public void For_Verb_KeepsWhatTheScenarioPractices(ScenarioType type, IrregularityKind[] expected)
     {
-        var result = Irregularities.For(Ir(), type);
-
-        Assert.That(result, Has.Count.EqualTo(count));
-        if (count == 1)
-        {
-            Assert.That(result[0].Kind.ToString(), Does.EndWith(type.ToString()));
-        }
+        Assert.That(Irregularities.For(Ir(), type).Select(i => i.Kind), Is.EqualTo(expected));
     }
 
     [TestCase(ScenarioType.Gender, new[] { IrregularityKind.FeminineEndingInO })]

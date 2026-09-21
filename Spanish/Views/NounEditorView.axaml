@@ -12,7 +12,7 @@
         <views:EditorFooter DockPanel.Dock="Bottom" />
 
         <ScrollViewer>
-            <Grid ColumnDefinitions="96,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="12" ColumnSpacing="16">
+            <Grid ColumnDefinitions="96,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="12" ColumnSpacing="16">
                 <TextBlock Grid.Row="0" Text="Spanish" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
                 <StackPanel Grid.Row="0" Grid.Column="1" Spacing="4">
                     <TextBox Text="{Binding Spanish}" PlaceholderText="ciudad" />
@@ -29,22 +29,23 @@
                 </StackPanel>
 
                 <TextBlock Grid.Row="2" Text="Gender" Classes="label" />
-                <UniformGrid Grid.Row="2" Grid.Column="1" Columns="2">
-                    <ToggleButton Classes="chip" Content="Masculine · el" IsChecked="{Binding IsMasculine}" Margin="0,0,4,0" />
-                    <ToggleButton Classes="chip" Content="Feminine · la" IsChecked="{Binding IsFeminine}" Margin="4,0,0,0" />
-                </UniformGrid>
+                <StackPanel Grid.Row="2" Grid.Column="1" Spacing="8">
+                    <UniformGrid Columns="2">
+                        <ToggleButton Classes="chip" Content="Masculine · el" IsChecked="{Binding IsMasculine}" Margin="0,0,4,0" />
+                        <ToggleButton Classes="chip" Content="Feminine · la" IsChecked="{Binding IsFeminine}" Margin="4,0,0,0" />
+                    </UniformGrid>
+                    <CheckBox IsChecked="{Binding TakesElInSingular}" IsVisible="{Binding IsFeminine}"
+                              Content="Takes el in the singular (el agua, las aguas)" />
+                </StackPanel>
 
-                <CheckBox Grid.Row="3" Grid.Column="1" IsChecked="{Binding TakesElInSingular}"
-                          IsVisible="{Binding IsFeminine}" Content="Takes el in the singular (el agua, las aguas)" />
-
-                <TextBlock Grid.Row="4" Text="Plural" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
-                <StackPanel Grid.Row="4" Grid.Column="1" Spacing="4">
+                <TextBlock Grid.Row="3" Text="Plural" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
+                <StackPanel Grid.Row="3" Grid.Column="1" Spacing="4">
                     <TextBox Text="{Binding Plural}" PlaceholderText="ciudades" />
                     <TextBlock Text="Suggested from the Spanish word; fix it for irregular nouns." Classes="muted" />
                 </StackPanel>
 
-                <TextBlock Grid.Row="5" Text="Topics" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
-                <views:TopicChips Grid.Row="5" Grid.Column="1" />
+                <TextBlock Grid.Row="4" Text="Topics" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
+                <views:TopicChips Grid.Row="4" Grid.Column="1" />
             </Grid>
         </ScrollViewer>
     </DockPanel>

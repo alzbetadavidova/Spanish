@@ -26,6 +26,68 @@ public class ExceptionNotesViewModelTests
         });
     }
 
+    private static readonly Irregularity[] Why = [new(IrregularityKind.FeminineEndingInO, "why")];
+
+    [TestCase(true)]
+    [TestCase(false)]
+    public void Gender_ShowsNotesOnceAnswered(bool hasNotes)
+    {
+        var scenario = new GenderScenario(TestData.Ciudad(), "ciudad", Article.La) { Notes = hasNotes ? Why : [] };
+        var vm = new GenderScenarioViewModel(scenario, OnCompleted);
+        var before = vm.ShowNotes;
+
+        vm.ChooseCommand.Execute(Article.La);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(before, Is.False);
+            Assert.That(vm.ShowNotes, Is.EqualTo(hasNotes));
+        });
+    }
+
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task Typed_ShowsNotesOnceChecked(bool hasNotes)
+    {
+        var scenario = new TypedScenario(TestData.Ciudad(), ScenarioType.Plural, "i", "p", null, ["ciudades"])
+        {
+            Notes = hasNotes ? Why : []
+        };
+        var vm = new TypedScenarioViewModel(scenario, OnCompleted) { Answer = "ciudades" };
+        var changed = new List<string?>();
+        vm.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
+        var before = vm.ShowNotes;
+
+        await vm.SubmitCommand.ExecuteAsync(null);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(before, Is.False);
+            Assert.That(vm.ShowNotes, Is.EqualTo(hasNotes));
+            Assert.That(changed, Does.Contain(nameof(TypedScenarioViewModel.ShowNotes)));
+        });
+    }
+
+    [TestCase(true)]
+    [TestCase(false)]
+    public void Card_ShowsNotesOnceFlipped(bool hasNotes)
+    {
+        var scenario = new CardScenario(TestData.Ciudad(), Direction.EnglishToSpanish, "a", "b", null) { Notes = hasNotes ? Why : [] };
+        var vm = new CardScenarioViewModel(scenario, OnCompleted);
+        var changed = new List<string?>();
+        vm.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
+        var before = vm.ShowNotes;
+
+        vm.FlipCommand.Execute(null);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(before, Is.False);
+            Assert.That(vm.ShowNotes, Is.EqualTo(hasNotes));
+            Assert.That(changed, Does.Contain(nameof(CardScenarioViewModel.ShowNotes)));
+        });
+    }
+
     [Test]
     public void Scenario_WithoutNotes_HasNone()
     {
@@ -115,6 +177,19 @@ public class NounEditorExceptionTests
     }
 
     [Test]
+    public void TakesEl_UntickedByTheUser_StaysUnticked()
+    {
+        var editor = Create();
+        editor.IsFeminine = true;
+        editor.Spanish = "agua";
+
+        editor.TakesElInSingular = false;
+        editor.Spanish = "alma";
+
+        Assert.That(editor.TakesElInSingular, Is.False);
+    }
+
+    [Test]
     public void TakesEl_ExistingWordWithTheFlag_KeepsIt()
     {
         var agua = new Noun { BaseValue = "agua", Translation = "water", Gender = Gender.Feminine, TakesElInSingular = true };
@@ -123,6 +198,19 @@ public class NounEditorExceptionTests
         editor.Spanish = "casa";
 
         Assert.That(editor.TakesElInSingular, Is.True);
+    }
+
+    [Test]
+    public void TakesEl_ExistingWordWithoutTheFlag_IsNotSuggested()
+    {
+        var hache = new Noun { BaseValue = "hache", Translation = "the letter h", Gender = Gender.Feminine };
+
+        var editor = Create(hache);
+        editor.Spanish = "hacha";
+        editor.IsMasculine = true;
+        editor.IsFeminine = true;
+
+        Assert.That(editor.TakesElInSingular, Is.False);
     }
 
     [Test]

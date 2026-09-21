@@ -53,7 +53,10 @@ public partial class CardScenarioViewModel(CardScenario scenario, Func<Scenario,
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(KnewItCommand), nameof(DidNotKnowCommand))]
+    [NotifyPropertyChangedFor(nameof(ShowNotes))]
     private bool _isFlipped;
+
+    public bool ShowNotes => IsFlipped && HasNotes;
 
     [RelayCommand]
     private void Flip() => IsFlipped = true;
@@ -79,10 +82,11 @@ public partial class TypedScenarioViewModel(TypedScenario scenario, Func<Scenari
     private string? _validationMessage;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsChecked), nameof(IsCorrect), nameof(IsIncorrect), nameof(Feedback))]
+    [NotifyPropertyChangedFor(nameof(IsChecked), nameof(IsCorrect), nameof(IsIncorrect), nameof(Feedback), nameof(ShowNotes))]
     private AnswerResult? _result;
 
     public bool IsChecked => Result is not null;
+    public bool ShowNotes => IsChecked && HasNotes;
     public bool IsCorrect => Result?.IsCorrect == true;
     public bool IsIncorrect => Result is { IsCorrect: false };
 
@@ -127,10 +131,11 @@ public partial class GenderScenarioViewModel(GenderScenario scenario, Func<Scena
     public string Translation => scenario.Noun.TranslationDisplay;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsChecked), nameof(IsCorrect), nameof(IsIncorrect), nameof(Feedback))]
+    [NotifyPropertyChangedFor(nameof(IsChecked), nameof(IsCorrect), nameof(IsIncorrect), nameof(Feedback), nameof(ShowNotes))]
     private Article? _chosen;
 
     public bool IsChecked => Chosen is not null;
+    public bool ShowNotes => IsChecked && HasNotes;
     public bool IsCorrect => Chosen == scenario.Expected;
     public bool IsIncorrect => IsChecked && !IsCorrect;
 
