@@ -273,5 +273,5 @@ public partial class VerbEditorViewModel : WordEditorViewModel
         ConjugationError = messages.Count == 0 ? null : string.Join(" ", messages);
     }
 
-    private static string At(string[] forms, int index) => index < forms.Length ? forms[index] : string.Empty;
+    private static string At(string[] forms, int index) => index < forms.Length ? forms[index] ?? string.Empty : string.Empty;
 }

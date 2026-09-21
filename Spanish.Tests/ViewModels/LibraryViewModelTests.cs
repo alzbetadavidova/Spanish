@@ -289,6 +289,19 @@ public class WordEditorViewModelTests
     }
 
     [Test]
+    public async Task SaveVerb_NullForm_ShowsConjugationError()
+    {
+        var verb = _library.Verbs[0];
+        verb.PresentConjugations = ["hablo", null!, "habla", "hablamos", "hablan"];
+        var editor = new VerbEditorViewModel(_context, verb, _callbacks);
+
+        await editor.SaveCommand.ExecuteAsync(null);
+
+        Assert.That(editor.Conjugations[1].Present, Is.Empty);
+        Assert.That(editor.ConjugationError, Is.EqualTo("Fill in all 5 present forms or leave them all empty."));
+    }
+
+    [Test]
     public async Task SaveVerb_PartialForms_ShowsConjugationError()
     {
         var editor = new VerbEditorViewModel(_context, null, _callbacks);
@@ -724,17 +737,35 @@ public class TopicsViewModelTests
         var chips = _vm.Words.ToList();
         var perro = chips.Single(w => w.Value.BaseValue == "perro");
         perro.IsSelected = true;
+        // Rebuilding the topic list would reset the ListBox selection (and the rename box) in the view.
+        var topicListEvents = 0;
+        _vm.Topics.CollectionChanged += (_, _) => topicListEvents++;
 
         await _vm.ToggleWordCommand.ExecuteAsync(perro);
         _vm.Refresh();
 
         Assert.Multiple(() =>
         {
+            Assert.That(topicListEvents, Is.Zero);
             Assert.That(_vm.Words, Is.EqualTo(chips));
             Assert.That(perro.IsSelected, Is.True);
             Assert.That(_vm.SelectedTopic, Is.EqualTo("city"));
             Assert.That(_vm.RenameText, Is.EqualTo("town (draft)"));
         });
+    }
+
+    [Test]
+    public void Refresh_TopicAdded_RebuildsListAndKeepsSelection()
+    {
+        _vm.SelectedTopic = "city";
+        var topicListEvents = 0;
+        _vm.Topics.CollectionChanged += (_, _) => topicListEvents++;
+
+        _library.AddTopic("food");
+        _vm.Refresh();
+
+        Assert.That(topicListEvents, Is.GreaterThan(0));
+        Assert.That(_vm.SelectedTopic, Is.EqualTo("city"));
     }
 
     [Test]

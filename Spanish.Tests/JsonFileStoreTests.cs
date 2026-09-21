@@ -170,7 +170,8 @@ public class JsonFileStoreTests
             {
               "Nouns": [ null, { "BaseValue": "mesa", "Topics": [ null, "home" ],
                                  "Progress": { "Card": null, "Fill": { "Recent": [ null ], "Attempts": 1 } } } ],
-              "Verbs": [ null ],
+              "Verbs": [ null, { "BaseValue": "comer", "PresentConjugations": [ "como", null, "come", "comemos", "comen" ],
+                                 "PreteriteConjugations": [ null ] } ],
               "Topics": [ null, "home" ]
             }
             """);
@@ -178,9 +179,11 @@ public class JsonFileStoreTests
         var library = (await store.LoadAsync()).Value;
 
         var mesa = library.Nouns.Single();
+        var comer = library.Verbs.Single();
         Assert.Multiple(() =>
         {
-            Assert.That(library.Verbs, Is.Empty);
+            Assert.That(comer.PresentConjugations, Is.EqualTo(new[] { "como", "", "come", "comemos", "comen" }));
+            Assert.That(comer.PreteriteConjugations, Is.EqualTo(new[] { "" }));
             Assert.That(library.Topics, Is.EqualTo(new[] { "home" }));
             Assert.That(mesa.Topics, Is.EqualTo(new[] { "home" }));
             Assert.That(mesa.Progress.Keys, Is.EqualTo(new[] { ScenarioType.Fill }));

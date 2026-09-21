@@ -41,6 +41,11 @@ public class LearnLibrary : IJsonOnDeserialized
                 progress.Recent.RemoveAll(r => r is null);
             }
         }
+        foreach (var verb in Verbs)
+        {
+            verb.PresentConjugations = verb.PresentConjugations.Select(f => f ?? string.Empty).ToArray();
+            verb.PreteriteConjugations = verb.PreteriteConjugations.Select(f => f ?? string.Empty).ToArray();
+        }
     }
 
     /// <summary>Validates a new unit (<paramref name="existing"/> null) or an edit of <paramref name="existing"/>.</summary>
