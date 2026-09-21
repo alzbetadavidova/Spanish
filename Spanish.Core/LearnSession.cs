@@ -99,11 +99,8 @@ public class LearnSession
         scenario.Unit.RecordAnswer(scenario.Type, correct, _clock.Now);
         var exercise = new Exercise(scenario.Unit, scenario.Type);
         _recent.Add(exercise.Key);
-        // A word repeated by the fallback takes one slot, so the history keeps distinct recent words.
-        if (!_recentWords.Has(exercise.WordKey, 1))
-        {
-            _recentWords.Add(exercise.WordKey);
-        }
+        // A word picked again by the fallback moves to the front, so the history keeps distinct words.
+        _recentWords.Touch(exercise.WordKey);
         Answered++;
         if (correct)
         {

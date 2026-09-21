@@ -30,17 +30,21 @@
                 <TextBlock Grid.Row="2" Text="Forms" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
                 <StackPanel Grid.Row="2" Grid.Column="1" Spacing="4">
                     <UniformGrid Columns="3">
-                        <TextBox Text="{Binding Feminine}" PlaceholderText="{Binding Suggested.Feminine}" Margin="0,0,4,0"
-                                 AutomationProperties.Name="Feminine singular" ToolTip.Tip="Feminine singular" />
-                        <TextBox Text="{Binding MasculinePlural}" PlaceholderText="{Binding Suggested.MasculinePlural}" Margin="4,0"
-                                 AutomationProperties.Name="Masculine plural" ToolTip.Tip="Masculine plural" />
-                        <TextBox Text="{Binding FemininePlural}" PlaceholderText="{Binding Suggested.FemininePlural}" Margin="4,0,0,0"
-                                 AutomationProperties.Name="Feminine plural" ToolTip.Tip="Feminine plural" />
-                    </UniformGrid>
-                    <UniformGrid Columns="3">
-                        <TextBlock Text="feminine" Classes="muted" />
-                        <TextBlock Text="masculine plural" Classes="muted" Margin="4,0,0,0" />
-                        <TextBlock Text="feminine plural" Classes="muted" Margin="4,0,0,0" />
+                        <StackPanel Spacing="4" Margin="0,0,4,0">
+                            <TextBox Text="{Binding Feminine}" PlaceholderText="{Binding Suggested.Feminine}"
+                                     AutomationProperties.Name="Feminine singular" />
+                            <TextBlock Text="feminine" Classes="muted" />
+                        </StackPanel>
+                        <StackPanel Spacing="4" Margin="4,0">
+                            <TextBox Text="{Binding MasculinePlural}" PlaceholderText="{Binding Suggested.MasculinePlural}"
+                                     AutomationProperties.Name="Masculine plural" />
+                            <TextBlock Text="masculine plural" Classes="muted" />
+                        </StackPanel>
+                        <StackPanel Spacing="4" Margin="4,0,0,0">
+                            <TextBox Text="{Binding FemininePlural}" PlaceholderText="{Binding Suggested.FemininePlural}"
+                                     AutomationProperties.Name="Feminine plural" />
+                            <TextBlock Text="feminine plural" Classes="muted" />
+                        </StackPanel>
                     </UniformGrid>
                     <TextBlock Text="Empty boxes use the regular form shown; type a form only for irregular adjectives." Classes="muted" />
                 </StackPanel>

@@ -52,7 +52,7 @@ public class LearnLibrary : IJsonOnDeserialized
         foreach (var adjective in Adjectives)
         {
             // Links to nouns that are not in the file cannot be practiced.
-            adjective.LinkedNouns.RemoveAll(n => n is null || FindNoun(n) is null);
+            NormalizeLinks(adjective);
         }
     }
 
@@ -200,11 +200,12 @@ public class LearnLibrary : IJsonOnDeserialized
         }
     }
 
-    /// <summary>Drops blank and repeated links and uses the nouns' own spelling.</summary>
+    /// <summary>Keeps only links to nouns in the library, once each and in the noun's own spelling.</summary>
     private void NormalizeLinks(Adjective adjective) =>
         adjective.LinkedNouns = adjective.LinkedNouns
-            .Where(n => !string.IsNullOrWhiteSpace(n))
-            .Select(n => FindNoun(n)?.BaseValue ?? n.Trim())
+            .Select(FindNoun)
+            .OfType<Noun>()
+            .Select(n => n.BaseValue)
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
 
@@ -217,12 +218,13 @@ public class LearnLibrary : IJsonOnDeserialized
         ArgumentNullException.ThrowIfNull(unit);
         return unit.CanPractice(type) && (unit, type) switch
         {
-            (Adjective adjective, ScenarioType.PairWithNoun) => LinkedNounsOf(adjective).Count > 0,
+            (Adjective adjective, ScenarioType.PairWithNoun) => adjective.LinkedNouns.Any(n => FindNoun(n) is not null),
             _ => true
         };
     }
 
-    private Noun? FindNoun(string name) => Nouns.FirstOrDefault(n => SameWord(n.BaseValue, name));
+    private Noun? FindNoun(string? name) =>
+        string.IsNullOrWhiteSpace(name) ? null : Nouns.FirstOrDefault(n => SameWord(n.BaseValue, name));
 
     /// <exception cref="LibraryValidationException">The name is empty or already used.</exception>
     public void AddTopic(string name)

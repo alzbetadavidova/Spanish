@@ -383,5 +383,6 @@ public partial class AdjectiveEditorViewModel : WordEditorViewModel
         OnPropertyChanged(nameof(HasNouns));
     }
 
+    // IsSelected is the only property of a chip that changes.
     private void OnNounToggled(object? sender, System.ComponentModel.PropertyChangedEventArgs e) => NounsError = null;
 }

@@ -31,6 +31,20 @@ public class AdjectiveLibraryTests
     }
 
     [Test]
+    public void LinkedNounsOf_NullOrBlankLink_IsSkipped()
+    {
+        var library = TestData.AdjectiveLibrary();
+        var adjective = new Adjective { LinkedNouns = [null!, " ", "mujer"] };
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(library.LinkedNounsOf(adjective).Select(n => n.BaseValue), Is.EqualTo(new[] { "mujer" }));
+            Assert.That(library.CanPractice(new Adjective { Translation = "x", LinkedNouns = [null!, " "] }, ScenarioType.PairWithNoun),
+                Is.False);
+        });
+    }
+
+    [Test]
     public void LinkedNounsOf_Null_Throws()
     {
         Assert.That(() => new LearnLibrary().LinkedNounsOf(null!), Throws.ArgumentNullException);
@@ -255,14 +269,14 @@ public class AdjectiveLibraryTests
     }
 
     [Test]
-    public void Deserialize_DropsNullAdjectivesAndDanglingLinks()
+    public void Deserialize_DropsNullAdjectivesAndNormalizesLinks()
     {
         const string json = """
             {
               "Nouns": [{ "BaseValue": "mujer", "Gender": "Feminine" }],
               "Adjectives": [
                 null,
-                { "BaseValue": "bajo", "LinkedNouns": ["Mujer", null, "gato"], "FeminineValue": null }
+                { "BaseValue": "bajo", "LinkedNouns": ["Mujer", null, "gato", " mujer "], "FeminineValue": null }
               ]
             }
             """;
@@ -272,7 +286,7 @@ public class AdjectiveLibraryTests
         Assert.Multiple(() =>
         {
             Assert.That(library.Adjectives, Has.Count.EqualTo(1));
-            Assert.That(library.Adjectives[0].LinkedNouns, Is.EqualTo(new[] { "Mujer" }));
+            Assert.That(library.Adjectives[0].LinkedNouns, Is.EqualTo(new[] { "mujer" }));
             Assert.That(library.Adjectives[0].FeminineValue, Is.Empty);
         });
     }
@@ -306,7 +320,7 @@ public class AdjectiveLibraryTests
             foreach (var adjective in library.Adjectives)
             {
                 Assert.That(library.Validate(adjective, adjective), Is.Empty, adjective.BaseValue);
-                Assert.That(adjective.CanPractice(ScenarioType.PairWithNoun), Is.True, adjective.BaseValue);
+                Assert.That(library.CanPractice(adjective, ScenarioType.PairWithNoun), Is.True, adjective.BaseValue);
             }
         });
     }

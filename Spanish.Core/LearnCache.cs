@@ -23,6 +23,13 @@ public class LearnCache(int capacity)
         return false;
     }
 
+    /// <summary>Makes <paramref name="key"/> the most recent entry, dropping an earlier occurrence of it.</summary>
+    public void Touch(string key)
+    {
+        _history.Remove(key);
+        Add(key);
+    }
+
     public void Add(string key)
     {
         if (_history.Count >= Capacity)

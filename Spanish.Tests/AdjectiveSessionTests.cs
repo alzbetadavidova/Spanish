@@ -188,27 +188,47 @@ public class LearnSessionWordHistoryTests
 
         Assert.That(picked, Is.EqualTo(new[] { "n0:Card", "n1:Card", "n2:Card", "n3:Card", "n0:Gender" }));
     }
-}
-
-public class LearnSessionWordHistoryEdgeTests
-{
-    private static LearnSession CreateSession(LearnLibrary library, SessionSettings settings)
-    {
-        var random = new FakeRandom();
-        return new LearnSession(library, settings, new ScenarioFactory(random, library), random, new FakeClock());
-    }
-
-    private static readonly SessionSettings RandomCardAndGender = new()
-    {
-        NounScenarioTypes = [ScenarioType.Card, ScenarioType.Gender],
-        IncludeVerbs = false,
-        IncludeAdjectives = false,
-        Order = SessionOrder.Random
-    };
 
     private static CardScenario Card(LearnUnit unit) => new(unit, Direction.EnglishToSpanish, "front", "back", null);
 
     private static GenderScenario Gender(Noun noun) => new(noun, noun.BaseValue, noun.SingularArticle);
+
+    [Test]
+    public void Record_SameWordAgainAfterAnother_KeepsThreeDistinctWords()
+    {
+        var nouns = "ABCD".Select(c => new Noun { BaseValue = c.ToString(), Translation = "x" }).ToList();
+        var session = CreateSession(new LearnLibrary { Nouns = nouns }, RandomCardAndGender);
+
+        session.Record(Card(nouns[2]), true);
+        session.Record(Card(nouns[0]), true);
+        session.Record(Card(nouns[1]), true);
+        session.Record(Gender(nouns[0]), true);
+        var next = session.Next()!;
+
+        // A, B and C are the last three words; keeping A twice would forget C and pick C:Gender.
+        Assert.That($"{next.Unit.BaseValue}:{next.Type}", Is.EqualTo("D:Card"));
+    }
+
+    [Test]
+    public void Touch_MovesExistingKeyToFrontAndAddsNewOnes()
+    {
+        var cache = new LearnCache(3);
+        cache.Add("a");
+        cache.Add("b");
+        cache.Add("c");
+
+        cache.Touch("a"); // b, c, a
+        cache.Touch("d"); // c, a, d
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(cache.Has("a", 2), Is.True);
+            Assert.That(cache.Has("d", 1), Is.True);
+            Assert.That(cache.Has("c", 3), Is.True);
+            Assert.That(cache.Has("c", 2), Is.False);
+            Assert.That(cache.Has("b", 3), Is.False);
+        });
+    }
 
     [Test]
     public void Next_TwoWordsBothRecent_AvoidsOnlyTheLastWord()
@@ -251,7 +271,7 @@ public class LearnSessionWordHistoryEdgeTests
         {
             Assert.That(LearnSession.GetExercises(library, settings).Select(e => e.Type),
                 Is.EqualTo(new[] { ScenarioType.Card, ScenarioType.Fill }));
-            Assert.That(session.Next()!.Type, Is.Not.EqualTo(ScenarioType.PairWithNoun));
+            Assert.That(session.Next()!.Type, Is.EqualTo(ScenarioType.Card));
         });
     }
 }

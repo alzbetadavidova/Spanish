@@ -140,10 +140,30 @@ public class AdjectiveEditorViewModelTests
     }
 
     [Test]
+    public async Task Save_FemininePluralDerivedFromTypedFeminine_IsNotStored()
+    {
+        var editor = Create();
+        editor.Spanish = "español";
+        editor.English = "Spanish";
+        editor.Feminine = "española";
+        editor.FemininePlural = "españolas";
+
+        await editor.SaveCommand.ExecuteAsync(null);
+
+        var saved = _library.Adjectives.Single(a => a.BaseValue == "español");
+        Assert.Multiple(() =>
+        {
+            Assert.That(saved.FeminineValue, Is.EqualTo("española"));
+            Assert.That(saved.FemininePluralValue, Is.Empty);
+            Assert.That(saved.GetForm(Gender.Feminine, true), Is.EqualTo("españolas"));
+        });
+    }
+
+    [Test]
     public async Task SavedAdjective_Reopened_FormsStillFollowSpanish()
     {
         var editor = Create();
-        editor.Spanish = "bjo";
+        editor.Spanish = "bjo"; // a typo, fixed after reopening
         editor.English = "short";
         await editor.SaveCommand.ExecuteAsync(null);
         var saved = _library.Adjectives.Single(a => a.BaseValue == "bjo");
@@ -274,7 +294,7 @@ public class AdjectiveLibraryPagesTests
         var adjectiveEditor = (AdjectiveEditorViewModel)page.Adjectives.Editor!;
 
         page.Nouns.Selected = page.Nouns.Items.Single(u => u.BaseValue == "mujer");
-        await page.Nouns.Editor!.DeleteCommand.ExecuteAsync(null);
+        await page.Nouns.Editor!.DeleteCommand.ExecuteAsync(null); // asks for confirmation
         await page.Nouns.Editor!.DeleteCommand.ExecuteAsync(null);
 
         Assert.Multiple(() =>
