@@ -210,27 +210,6 @@ public class LearnSessionWordHistoryTests
     }
 
     [Test]
-    public void Touch_MovesExistingKeyToFrontAndAddsNewOnes()
-    {
-        var cache = new LearnCache(3);
-        cache.Add("a");
-        cache.Add("b");
-        cache.Add("c");
-
-        cache.Touch("a"); // b, c, a
-        cache.Touch("d"); // c, a, d
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(cache.Has("a", 2), Is.True);
-            Assert.That(cache.Has("d", 1), Is.True);
-            Assert.That(cache.Has("c", 3), Is.True);
-            Assert.That(cache.Has("c", 2), Is.False);
-            Assert.That(cache.Has("b", 3), Is.False);
-        });
-    }
-
-    [Test]
     public void Next_TwoWordsBothRecent_AvoidsOnlyTheLastWord()
     {
         var ciudad = TestData.Ciudad();

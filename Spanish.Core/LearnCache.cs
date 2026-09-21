@@ -1,6 +1,6 @@
 namespace Spanish.Core;
 
-/// <summary>Remembers the most recently practiced exercises so they are not repeated immediately.</summary>
+/// <summary>Remembers the most recent keys (exercises or words) so they are not repeated immediately.</summary>
 public class LearnCache(int capacity)
 {
     private readonly List<string> _history = [];
@@ -30,6 +30,7 @@ public class LearnCache(int capacity)
         Add(key);
     }
 
+    /// <summary>Adds <paramref name="key"/> as the most recent entry; unlike <see cref="Touch"/> it keeps earlier occurrences.</summary>
     public void Add(string key)
     {
         if (_history.Count >= Capacity)
