@@ -88,9 +88,22 @@ public class SpanishNumeralsTests
             }));
             Assert.That(forms.Words, Is.EqualTo(new[]
             {
-                "veintiuno de marzo de dos mil veinticinco", "el veintiuno de marzo de dos mil veinticinco"
+                "veintiuno de marzo de dos mil veinticinco", "veintiuno de marzo del dos mil veinticinco",
+                "el veintiuno de marzo de dos mil veinticinco", "el veintiuno de marzo del dos mil veinticinco"
             }));
         });
+    }
+
+    [Test]
+    public void Date_September_AcceptsSetiembre()
+    {
+        var forms = SpanishNumerals.Date(new DateOnly(1999, 9, 11));
+
+        Assert.That(forms.Words, Is.EqualTo(new[]
+        {
+            "once de septiembre de mil novecientos noventa y nueve", "once de setiembre de mil novecientos noventa y nueve",
+            "el once de septiembre de mil novecientos noventa y nueve", "el once de setiembre de mil novecientos noventa y nueve"
+        }));
     }
 
     [Test]
@@ -120,6 +133,7 @@ public class SpanishNumeralsTests
 
         Assert.That(forms.Digits, Is.EqualTo(new[] { "10/12/2000", "10.12.2000", "10-12-2000" }));
         Assert.That(forms.Words[0], Is.EqualTo("diez de diciembre de dos mil"));
+        Assert.That(forms.Words, Does.Contain("diez de diciembre del dos mil"));
     }
 
     [Test]
@@ -190,9 +204,53 @@ public class SpanishNumeralsTests
     {
         Assert.That(SpanishNumerals.Time(new TimeOnly(7, 45)).Words, Is.EqualTo(new[]
         {
-            "las ocho menos cuarto de la mañana", "las siete y cuarenta y cinco de la mañana",
-            "las ocho menos cuarto", "las siete y cuarenta y cinco", "las siete cuarenta y cinco"
+            "las ocho menos cuarto de la mañana", "las ocho menos quince de la mañana",
+            "las siete y cuarenta y cinco de la mañana",
+            "las ocho menos cuarto", "las ocho menos quince", "las siete y cuarenta y cinco",
+            "las siete cuarenta y cinco"
         }));
+    }
+
+    [Test]
+    public void Time_MenosAcrossAPartOfTheDay_AcceptsBothParts()
+    {
+        var words = SpanishNumerals.Time(new TimeOnly(20, 40)).Words;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(words[0], Is.EqualTo("las nueve menos veinte de la noche"));
+            Assert.That(words, Does.Contain("las nueve menos veinte de la tarde"));
+            Assert.That(words, Does.Contain("las ocho y cuarenta de la tarde"));
+            Assert.That(words, Does.Not.Contain("las ocho y cuarenta de la noche"));
+        });
+    }
+
+    [Test]
+    public void Time_TwentyOne_AgreesWithHoras()
+    {
+        Assert.Multiple(() =>
+        {
+            Assert.That(SpanishNumerals.Time(new TimeOnly(21, 0)).Words, Is.EqualTo(new[]
+            {
+                "las nueve de la noche", "las nueve en punto de la noche", "las nueve", "las nueve en punto",
+                "las veintiuna horas", "las veintiún horas", "las veintiuna"
+            }));
+            Assert.That(SpanishNumerals.Time(new TimeOnly(21, 30)).Words,
+                Does.Contain("las veintiuna y treinta").And.Contain("las veintiuna treinta").And.Not.Contain("las veintiuno treinta"));
+        });
+    }
+
+    [Test]
+    public void Time_One_HasNoHoras()
+    {
+        Assert.Multiple(() =>
+        {
+            Assert.That(SpanishNumerals.Time(new TimeOnly(1, 0)).Words, Is.EqualTo(new[]
+            {
+                "la una de la madrugada", "la una en punto de la madrugada", "la una", "la una en punto"
+            }));
+            Assert.That(SpanishNumerals.Time(new TimeOnly(1, 30)).Words, Does.Contain("la una treinta"));
+        });
     }
 
     [Test]
@@ -210,6 +268,8 @@ public class SpanishNumeralsTests
     [TestCase(1, 15, "la una y cuarto de la madrugada")]
     [TestCase(5, 20, "las cinco y veinte de la madrugada")]
     [TestCase(6, 0, "las seis de la mañana")]
+    [TestCase(10, 40, "las once menos veinte de la mañana")]
+    [TestCase(11, 0, "las once de la mañana")]
     [TestCase(11, 50, "las doce menos diez del mediodía")]
     [TestCase(12, 0, "las doce del mediodía")]
     [TestCase(12, 45, "la una menos cuarto de la tarde")]
@@ -232,7 +292,7 @@ public class SpanishNumeralsTests
             Assert.That(forms.Digits, Has.Count.EqualTo(6 * 2 * 2));
             Assert.That(forms.Digits[0], Is.EqualTo("21/3/2025 14:30"));
             Assert.That(forms.Digits, Does.Contain("21.03.2025, 14.30"));
-            Assert.That(forms.Words, Has.Count.EqualTo(2 * 6));
+            Assert.That(forms.Words, Has.Count.EqualTo(4 * 6));
             Assert.That(forms.Words[0], Is.EqualTo("veintiuno de marzo de dos mil veinticinco a las dos y media de la tarde"));
             Assert.That(forms.Words, Does.Contain("el veintiuno de marzo de dos mil veinticinco a las catorce treinta"));
         });

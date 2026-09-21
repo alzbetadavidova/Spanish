@@ -94,8 +94,9 @@
                             <ItemsControl ItemsSource="{Binding Topics}"
                                           ItemTemplate="{StaticResource ChipTemplate}"
                                           ItemsPanel="{StaticResource FourColumns}" />
-                            <TextBlock Text="None selected means all topics. Numerals are included regardless of topics." Classes="muted"
-                                       TextWrapping="Wrap" />
+                            <TextBlock Text="None selected means all topics." Classes="muted" />
+                            <TextBlock Text="Numerals have no topics; they're practiced whatever topics you pick." Classes="muted"
+                                       TextWrapping="Wrap" IsVisible="{Binding IncludeNumerals}" />
                         </StackPanel>
                     </Grid>
                 </Border>

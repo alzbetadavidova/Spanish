@@ -525,9 +525,9 @@ public class LibraryViewModelTests
             vm.AddCommand.Execute(null);
             Assert.Multiple(() =>
             {
-                Assert.That(vm.CurrentList, Is.Null);
-                Assert.That(vm.IsAddVisible, Is.False);
-                Assert.That(vm.AddLabel, Is.Empty);
+                Assert.That(vm.CurrentList, Is.Null, $"tab {tab}");
+                Assert.That(vm.IsAddVisible, Is.False, $"tab {tab}");
+                Assert.That(vm.AddLabel, Is.Empty, $"tab {tab}");
             });
         }
     }

@@ -12,8 +12,8 @@ public class NumeralDisplayNamesTests
         Assert.That(DisplayNames.Plural(WordKind.Numeral), Is.EqualTo("numerals"));
     }
 
-    [TestCase(ScenarioType.NumberToText, "Number to text")]
-    [TestCase(ScenarioType.TextToNumber, "Text to number")]
+    [TestCase(ScenarioType.NumberToText, "To words")]
+    [TestCase(ScenarioType.TextToNumber, "To digits")]
     public void Scenario_Label(ScenarioType type, string expected)
     {
         Assert.That(DisplayNames.Scenario(type), Is.EqualTo(expected));
@@ -72,7 +72,7 @@ public class NumeralListViewModelTests
             Assert.That(details.Title, Is.EqualTo("miles"));
             Assert.That(details.English, Is.EqualTo("thousands"));
             Assert.That(details.Subtype, Is.EqualTo("Number"));
-            Assert.That(details.Scenarios, Is.EqualTo("Number to text · Text to number"));
+            Assert.That(details.Scenarios, Is.EqualTo("To words · To digits"));
             Assert.That(details.Examples, Is.EqualTo(new[] { "21.000 → veintiún mil", "3.500 → tres mil quinientos" }));
         });
     }
@@ -165,7 +165,7 @@ public class NumeralPagesTests
             Assert.That(typed.IsCorrect, Is.True);
             Assert.That(learn.CurrentScenario, Is.Not.SameAs(typed));
             Assert.That(store.SaveCount, Is.EqualTo(1));
-            Assert.That(_library.NumeralProgress[NumeralCategory.Numbers0To20][ScenarioType.NumberToText].Attempts, Is.EqualTo(1));
+            Assert.That(_library.Numerals[0].GetProgress(ScenarioType.NumberToText)!.Attempts, Is.EqualTo(1));
         });
     }
 
@@ -175,6 +175,7 @@ public class NumeralPagesTests
         var learn = new LearnViewModel(_context, new InMemoryStore<SessionSettings>(NumeralsOnly), NumeralsOnly,
             new FakeRandom(), new FakeClock());
         var current = learn.CurrentScenario;
+        Assert.That(current?.Scenario.Unit, Is.TypeOf<Numeral>());
 
         await _context.SaveAsync();
 

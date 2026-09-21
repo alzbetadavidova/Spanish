@@ -97,7 +97,15 @@ public static class SpanishNumerals
 
         // Spain says uno de mayo, Latin America primero de mayo.
         string[] days = date.Day == 1 ? ["uno", "primero"] : [ToWords(date.Day)];
-        var words = days.Select(day => $"{day} de {Months[date.Month - 1]} de {ToWords(date.Year)}").ToList();
+        string[] months = date.Month == 9 ? ["septiembre", "setiembre"] : [Months[date.Month - 1]];
+        // From 2000 on, del before the year is common too: del dos mil veinticinco.
+        string[] beforeYear = date.Year >= 2000 ? ["de", "del"] : ["de"];
+        var year = ToWords(date.Year);
+        var words = (
+            from day in days
+            from month in months
+            from de in beforeYear
+            select $"{day} de {month} {de} {year}").ToList();
         return new NumeralForms(digits.ToList(), [..words, ..words.Select(w => $"el {w}")]);
     }
 
@@ -153,6 +161,7 @@ public static class SpanishNumerals
                 break;
             case 45:
                 everyday.Add(($"{HourOnClock(hour + 1)} menos cuarto", hour + 1));
+                everyday.Add(($"{HourOnClock(hour + 1)} menos quince", hour + 1));
                 everyday.Add(($"{HourOnClock(hour)} y cuarenta y cinco", hour));
                 break;
             case > 30:
@@ -165,26 +174,41 @@ public static class SpanishNumerals
         }
 
         var words = everyday.Select(e => $"{e.Phrase} {PartOfDay(e.Hour % 24)}").ToList();
+        // Where the part of the day changes, the part of the actual hour is right too: 20:40 is
+        // las nueve menos veinte de la noche or de la tarde.
+        words.AddRange(everyday.Select(e => $"{e.Phrase} {PartOfDay(hour)}"));
         words.AddRange(everyday.Select(e => e.Phrase));
 
-        var hour24 = WithArticle(hour);
-        if (minute == 0)
+        // On the 24-hour clock the hour agrees with the feminine horas: las veintiuna (horas).
+        var hour24 = hour switch
         {
-            words.Add($"{hour24} horas");
-            words.Add(hour24);
-        }
-        else
+            1 => "la una",
+            21 => "las veintiuna",
+            _ => $"las {ToWords(hour)}"
+        };
+        if (minute > 0)
         {
             words.Add($"{hour24} y {ToWords(minute)}");
             words.Add($"{hour24} {ToWords(minute)}");
+        }
+        else if (hour != 1) // la una takes no horas
+        {
+            words.Add($"{hour24} horas");
+            if (hour == 21)
+            {
+                words.Add("las veintiún horas");
+            }
+            words.Add(hour24);
         }
         return words.Distinct().ToList();
     }
 
     /// <summary>The hour on a 12-hour clock: 0 and 12 are las doce, 13 is la una.</summary>
-    private static string HourOnClock(int hour) => WithArticle(hour % 12 == 0 ? 12 : hour % 12);
-
-    private static string WithArticle(int hour) => hour == 1 ? "la una" : $"las {ToWords(hour)}";
+    private static string HourOnClock(int hour)
+    {
+        var onClock = hour % 12 == 0 ? 12 : hour % 12;
+        return onClock == 1 ? "la una" : $"las {ToWords(onClock)}";
+    }
 
     private static string PartOfDay(int hour) => hour switch
     {

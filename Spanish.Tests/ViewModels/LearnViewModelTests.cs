@@ -446,7 +446,7 @@ public class SessionSettingsViewModelTests
         Assert.Multiple(() =>
         {
             Assert.That(vm.IncludeNumerals, Is.True);
-            Assert.That(vm.NumeralScenarios.Select(s => s.Label), Is.EqualTo(new[] { "Number to text", "Text to number" }));
+            Assert.That(vm.NumeralScenarios.Select(s => s.Label), Is.EqualTo(new[] { "To words", "To digits" }));
             Assert.That(vm.NumeralScenarios.Where(s => s.IsSelected).Select(s => s.Value), Is.EqualTo(new[] { ScenarioType.TextToNumber }));
             Assert.That(vm.MatchCount, Is.EqualTo(8));
         });

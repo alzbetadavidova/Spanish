@@ -5,9 +5,6 @@ namespace Spanish.Tests;
 
 public class NumeralLibraryTests
 {
-    private static Numeral Get(LearnLibrary library, NumeralCategory category) =>
-        library.Numerals.Single(n => n.Category == category);
-
     [Test]
     public void Units_AreWordsThenNumerals()
     {
@@ -34,7 +31,7 @@ public class NumeralLibraryTests
     public void ValidateAndSave_Numeral_AreRefused()
     {
         var library = TestData.Library();
-        var dates = Get(library, NumeralCategory.Dates);
+        var dates = TestData.NumeralOf(NumeralCategory.Dates, library);
 
         Assert.Multiple(() =>
         {
@@ -49,7 +46,7 @@ public class NumeralLibraryTests
     public void Remove_Numeral_KeepsIt()
     {
         var library = TestData.Library();
-        var dates = Get(library, NumeralCategory.Dates);
+        var dates = TestData.NumeralOf(NumeralCategory.Dates, library);
 
         Assert.That(library.Remove(dates), Is.False);
         Assert.That(library.Units, Does.Contain(dates));
@@ -59,9 +56,10 @@ public class NumeralLibraryTests
     public void SetTopicMembership_Numeral_Throws()
     {
         var library = TestData.Library();
-        var dates = Get(library, NumeralCategory.Dates);
+        var dates = TestData.NumeralOf(NumeralCategory.Dates, library);
 
-        Assert.That(() => library.SetTopicMembership("city", dates, true), Throws.ArgumentException);
+        Assert.That(() => library.SetTopicMembership("city", dates, true),
+            Throws.ArgumentException.With.Property(nameof(ArgumentException.ParamName)).EqualTo("unit"));
         Assert.That(dates.Topics, Is.Empty);
     }
 
@@ -71,25 +69,45 @@ public class NumeralLibraryTests
         var library = new LearnLibrary();
         Assert.That(library.NumeralProgress, Is.Empty);
 
-        Get(library, NumeralCategory.Times).RecordAnswer(ScenarioType.TextToNumber, true, new FakeClock().Now);
+        TestData.NumeralOf(NumeralCategory.Times, library).RecordAnswer(ScenarioType.TextToNumber, true, new FakeClock().Now);
 
-        Assert.That(library.NumeralProgress.Keys, Is.EqualTo(new[] { NumeralCategory.Times }));
-        Assert.That(library.NumeralProgress[NumeralCategory.Times], Is.SameAs(Get(library, NumeralCategory.Times).Progress));
+        Assert.That(library.NumeralProgress.Keys, Is.EqualTo(new[] { "Times" }));
+        Assert.That(library.NumeralProgress["Times"], Is.SameAs(TestData.NumeralOf(NumeralCategory.Times, library).Progress));
     }
 
     [Test]
-    public void NumeralProgress_Set_ReplacesEveryNumeralsProgress()
+    public void NumeralProgress_Set_ReplacesEveryNumeralsProgressIgnoringCase()
     {
         var library = new LearnLibrary();
-        Get(library, NumeralCategory.Dates).RecordAnswer(ScenarioType.NumberToText, true, new FakeClock().Now);
+        TestData.NumeralOf(NumeralCategory.Dates, library).RecordAnswer(ScenarioType.NumberToText, true, new FakeClock().Now);
         var progress = new Dictionary<ScenarioType, LearnProgress> { [ScenarioType.TextToNumber] = new() };
 
-        library.NumeralProgress = new() { [NumeralCategory.Millions] = progress };
+        library.NumeralProgress = new Dictionary<string, Dictionary<ScenarioType, LearnProgress>> { ["millions"] = progress };
 
         Assert.Multiple(() =>
         {
-            Assert.That(Get(library, NumeralCategory.Millions).Progress, Is.SameAs(progress));
-            Assert.That(Get(library, NumeralCategory.Dates).Progress, Is.Empty);
+            Assert.That(TestData.NumeralOf(NumeralCategory.Millions, library).Progress, Is.SameAs(progress));
+            Assert.That(TestData.NumeralOf(NumeralCategory.Dates, library).Progress, Is.Empty);
+        });
+    }
+
+    [Test]
+    public void Deserialize_UnknownNumeralCategory_IsIgnored()
+    {
+        const string json = """
+            {
+              "Nouns": [ { "BaseValue": "mesa", "Translation": "table" } ],
+              "NumeralProgress": { "Fractions": { "NumberToText": { "Attempts": 3 } }, "Times": { "TextToNumber": { "Attempts": 2 } } }
+            }
+            """;
+
+        var library = JsonSerializer.Deserialize<LearnLibrary>(json, JsonFileStore<LearnLibrary>.Options)!;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(library.Nouns, Has.Count.EqualTo(1));
+            Assert.That(TestData.NumeralOf(NumeralCategory.Times, library).GetProgress(ScenarioType.TextToNumber)!.Attempts, Is.EqualTo(2));
+            Assert.That(library.NumeralProgress.Keys, Is.EqualTo(new[] { "Times" }));
         });
     }
 
@@ -97,7 +115,7 @@ public class NumeralLibraryTests
     public void Serialize_RoundTripsNumeralProgress()
     {
         var library = TestData.Library();
-        Get(library, NumeralCategory.Dates).RecordAnswer(ScenarioType.TextToNumber, false, new FakeClock().Now);
+        TestData.NumeralOf(NumeralCategory.Dates, library).RecordAnswer(ScenarioType.TextToNumber, false, new FakeClock().Now);
 
         var json = JsonSerializer.Serialize(library, JsonFileStore<LearnLibrary>.Options);
         var loaded = JsonSerializer.Deserialize<LearnLibrary>(json, JsonFileStore<LearnLibrary>.Options)!;
@@ -105,7 +123,7 @@ public class NumeralLibraryTests
         Assert.Multiple(() =>
         {
             Assert.That(json, Does.Contain("\"NumeralProgress\"").And.Contain("\"Dates\"").And.Not.Contain("\"Numerals\""));
-            Assert.That(Get(loaded, NumeralCategory.Dates).GetProgress(ScenarioType.TextToNumber)!.Attempts, Is.EqualTo(1));
+            Assert.That(TestData.NumeralOf(NumeralCategory.Dates, loaded).GetProgress(ScenarioType.TextToNumber)!.Attempts, Is.EqualTo(1));
             Assert.That(loaded.Numerals.Where(n => n.Category != NumeralCategory.Dates).All(n => n.Progress.Count == 0), Is.True);
         });
     }
@@ -128,6 +146,6 @@ public class NumeralLibraryTests
 
         var library = JsonSerializer.Deserialize<LearnLibrary>(json, JsonFileStore<LearnLibrary>.Options)!;
 
-        Assert.That(Get(library, NumeralCategory.Times).GetProgress(ScenarioType.NumberToText)!.Recent, Is.Empty);
+        Assert.That(TestData.NumeralOf(NumeralCategory.Times, library).GetProgress(ScenarioType.NumberToText)!.Recent, Is.Empty);
     }
 }

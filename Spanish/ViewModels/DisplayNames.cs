@@ -27,8 +27,8 @@ public static class DisplayNames
     public static string Scenario(ScenarioType type) => type switch
     {
         ScenarioType.PairWithNoun => "Pair with noun",
-        ScenarioType.NumberToText => "Number to text",
-        ScenarioType.TextToNumber => "Text to number",
+        ScenarioType.NumberToText => "To words",
+        ScenarioType.TextToNumber => "To digits",
         _ => type.ToString()
     };
 }

@@ -26,16 +26,23 @@ public class LearnLibrary : IJsonOnDeserialized
     [JsonIgnore]
     public IReadOnlyList<Numeral> Numerals { get; } = Numeral.CreateBuiltIn();
 
-    /// <summary>The progress of the practiced numerals. Setting it replaces the progress of every numeral.</summary>
-    public Dictionary<NumeralCategory, Dictionary<ScenarioType, LearnProgress>> NumeralProgress
+    /// <summary>
+    /// The progress of the practiced numerals by category name, for storing. Setting it replaces the progress of
+    /// every numeral; unknown categories (e.g. a typo in a hand-edited file) are ignored rather than making the
+    /// whole file unreadable.
+    /// </summary>
+    public IReadOnlyDictionary<string, Dictionary<ScenarioType, LearnProgress>> NumeralProgress
     {
-        get => Numerals.Where(n => n.Progress.Count > 0).ToDictionary(n => n.Category, n => n.Progress);
+        get => Numerals.Where(n => n.Progress.Count > 0).ToDictionary(n => n.Category.ToString(), n => n.Progress);
         set
         {
             foreach (var numeral in Numerals)
             {
+                var category = numeral.Category.ToString();
                 // Null (possible in hand-edited JSON) means no progress.
-                numeral.Progress = value?.GetValueOrDefault(numeral.Category) ?? [];
+                numeral.Progress = value?
+                    .FirstOrDefault(p => string.Equals(p.Key, category, StringComparison.OrdinalIgnoreCase))
+                    .Value ?? [];
             }
         }
     }
@@ -92,7 +99,7 @@ public class LearnLibrary : IJsonOnDeserialized
         ArgumentNullException.ThrowIfNull(candidate);
         if (candidate is Numeral)
         {
-            return [new(nameof(LearnUnit.BaseValue), "Numerals are built in and can't be edited.")];
+            return [new(nameof(LearnUnit.BaseValue), Numeral.BuiltInMessage)];
         }
         var errors = new List<ValidationError>();
 

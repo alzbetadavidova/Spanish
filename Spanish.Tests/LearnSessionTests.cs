@@ -71,10 +71,15 @@ public class LearnSessionTests
     [Test]
     public void Next_EmptyLibrary_OffersNumerals()
     {
-        var scenario = CreateSession(new LearnLibrary(), new SessionSettings()).Next();
+        var scenario = (TypedScenario)CreateSession(new LearnLibrary(), new SessionSettings()).Next()!;
 
-        Assert.That(scenario, Is.TypeOf<TypedScenario>());
-        Assert.That(scenario!.Unit, Is.TypeOf<Numeral>());
+        // Nothing practiced yet, so the first exercise wins the tie: 0 to words.
+        Assert.Multiple(() =>
+        {
+            Assert.That(((Numeral)scenario.Unit).Category, Is.EqualTo(NumeralCategory.Numbers0To20));
+            Assert.That(scenario.Type, Is.EqualTo(ScenarioType.NumberToText));
+            Assert.That(scenario.Prompt, Is.EqualTo("0"));
+        });
     }
 
     [Test]

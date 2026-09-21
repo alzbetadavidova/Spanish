@@ -15,8 +15,13 @@ public class NumeralSessionTests
             Assert.That(settings.IncludeNumerals, Is.True);
             Assert.That(settings.NumeralScenarioTypes, Is.EqualTo(new[] { ScenarioType.NumberToText, ScenarioType.TextToNumber }));
             Assert.That(settings.ScenarioTypesFor(WordKind.Numeral), Is.SameAs(settings.NumeralScenarioTypes));
-            Assert.That(new SessionSettings { NumeralScenarioTypes = null! }.NumeralScenarioTypes, Is.Empty);
         });
+    }
+
+    [Test]
+    public void Settings_NullNumeralScenarios_BecomeEmpty()
+    {
+        Assert.That(new SessionSettings { NumeralScenarioTypes = null! }.NumeralScenarioTypes, Is.Empty);
     }
 
     [Test]
@@ -29,14 +34,14 @@ public class NumeralSessionTests
         Assert.That(settings.NumeralScenarioTypes, Is.EqualTo(SessionSettings.DefaultNumeralScenarioTypes));
     }
 
-    [TestCase(true, true)]
-    [TestCase(false, false)]
-    public void Includes_Numeral_FollowsItsFlagAndIgnoresTopics(bool include, bool expected)
+    [TestCase(true)]
+    [TestCase(false)]
+    public void Includes_Numeral_FollowsItsFlagAndIgnoresTopics(bool include)
     {
         var numeral = new LearnLibrary().Numerals[0];
         var settings = new SessionSettings { IncludeNumerals = include, Topics = ["animals"] };
 
-        Assert.That(settings.Includes(numeral), Is.EqualTo(expected));
+        Assert.That(settings.Includes(numeral), Is.EqualTo(include));
     }
 
     [Test]
@@ -61,7 +66,7 @@ public class NumeralSessionTests
         Assert.Multiple(() =>
         {
             Assert.That(new Exercise(scenario.Unit, scenario.Type).WordKey, Is.EqualTo("Numeral:números 0–20"));
-            Assert.That(library.NumeralProgress[NumeralCategory.Numbers0To20][ScenarioType.NumberToText].Attempts, Is.EqualTo(1));
+            Assert.That(library.Numerals[0].GetProgress(ScenarioType.NumberToText)!.Attempts, Is.EqualTo(1));
         });
     }
 }

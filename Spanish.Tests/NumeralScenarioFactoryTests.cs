@@ -4,15 +4,13 @@ namespace Spanish.Tests;
 
 public class NumeralScenarioFactoryTests
 {
-    private static Numeral Get(NumeralCategory category) => Numeral.CreateBuiltIn().Single(n => n.Category == category);
-
     private static TypedScenario Create(Numeral numeral, ScenarioType type, params int[] random) =>
         (TypedScenario)new ScenarioFactory(new FakeRandom(random), new LearnLibrary()).Create(numeral, type, Direction.Mixed);
 
     [Test]
     public void Create_NumberToText_ShowsDigitsAndExpectsWords()
     {
-        var numeral = Get(NumeralCategory.Numbers21To100);
+        var numeral = TestData.NumeralOf(NumeralCategory.Numbers21To100);
 
         var scenario = Create(numeral, ScenarioType.NumberToText, 1);
 
@@ -31,7 +29,7 @@ public class NumeralScenarioFactoryTests
     [Test]
     public void Create_TextToNumber_ShowsWordsAndExpectsDigits()
     {
-        var scenario = Create(Get(NumeralCategory.Thousands), ScenarioType.TextToNumber, 24_000);
+        var scenario = Create(TestData.NumeralOf(NumeralCategory.Thousands), ScenarioType.TextToNumber, 24_000);
 
         Assert.Multiple(() =>
         {
@@ -48,14 +46,14 @@ public class NumeralScenarioFactoryTests
     [TestCase(NumeralCategory.DatesWithTimes, "day/month/year hour:minute")]
     public void Create_TextToNumber_DescribesTheDigitFormat(NumeralCategory category, string expected)
     {
-        Assert.That(Create(Get(category), ScenarioType.TextToNumber).PromptDetail, Is.EqualTo(expected));
+        Assert.That(Create(TestData.NumeralOf(category), ScenarioType.TextToNumber).PromptDetail, Is.EqualTo(expected));
     }
 
     [Test]
     public void Create_Time_BothDirections()
     {
-        var toText = Create(Get(NumeralCategory.Times), ScenarioType.NumberToText, 14, 6);
-        var toNumber = Create(Get(NumeralCategory.Times), ScenarioType.TextToNumber, 14, 6);
+        var toText = Create(TestData.NumeralOf(NumeralCategory.Times), ScenarioType.NumberToText, 14, 6);
+        var toNumber = Create(TestData.NumeralOf(NumeralCategory.Times), ScenarioType.TextToNumber, 14, 6);
 
         Assert.Multiple(() =>
         {
@@ -69,6 +67,6 @@ public class NumeralScenarioFactoryTests
     [Test]
     public void Create_NumeralAsWordScenario_Throws()
     {
-        Assert.That(() => Create(Get(NumeralCategory.Dates), ScenarioType.Card), Throws.ArgumentException);
+        Assert.That(() => Create(TestData.NumeralOf(NumeralCategory.Dates), ScenarioType.Card), Throws.ArgumentException);
     }
 }

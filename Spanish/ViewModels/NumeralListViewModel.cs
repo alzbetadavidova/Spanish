@@ -28,8 +28,6 @@ public partial class NumeralListViewModel(LearnLibrary library) : ObservableObje
 /// <summary>What a numeral practices, with examples.</summary>
 public class NumeralDetailsViewModel(Numeral numeral)
 {
-    public const string BuiltInNote = "Numerals are built in and can't be edited.";
-
     public Numeral Numeral { get; } = numeral;
     public string Title => Numeral.BaseValue;
     public string English => Numeral.TranslationDisplay;

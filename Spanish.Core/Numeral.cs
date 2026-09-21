@@ -1,5 +1,6 @@
 namespace Spanish.Core;
 
+/// <summary>The names are stored as keys of <see cref="LearnLibrary.NumeralProgress"/>; renaming one loses its progress.</summary>
 public enum NumeralCategory
 {
     Numbers0To20,
@@ -26,6 +27,7 @@ public enum NumeralSubtype
 /// </summary>
 public sealed class Numeral : LearnUnit
 {
+    public const string BuiltInMessage = "Numerals are built in and can't be edited.";
     public const int MinYear = 1900;
     public const int MaxYear = 2099;
     public const int MinuteStep = 5;
@@ -101,8 +103,7 @@ public sealed class Numeral : LearnUnit
     }
 
     /// <exception cref="NotSupportedException">Always: numerals are built in.</exception>
-    public override void CopyContentFrom(LearnUnit other) =>
-        throw new NotSupportedException("Numerals are built in and can't be edited.");
+    public override void CopyContentFrom(LearnUnit other) => throw new NotSupportedException(BuiltInMessage);
 
     private static DateOnly DrawDate(IRandomSource random)
     {

@@ -4,8 +4,6 @@ namespace Spanish.Tests;
 
 public class NumeralTests
 {
-    private static Numeral Get(NumeralCategory category) => Numeral.CreateBuiltIn().Single(n => n.Category == category);
-
     [Test]
     public void CreateBuiltIn_OneFreshNumeralPerCategory()
     {
@@ -33,7 +31,7 @@ public class NumeralTests
     [TestCase(NumeralCategory.DatesWithTimes, NumeralSubtype.DateAndTime)]
     public void Subtype_FollowsCategory(NumeralCategory category, NumeralSubtype expected)
     {
-        Assert.That(Get(category).Subtype, Is.EqualTo(expected));
+        Assert.That(TestData.NumeralOf(category).Subtype, Is.EqualTo(expected));
     }
 
     [TestCase(NumeralCategory.Numbers0To20, 0, 20)]
@@ -43,7 +41,7 @@ public class NumeralTests
     [TestCase(NumeralCategory.Millions, 1_000_000, SpanishNumerals.MaxNumber)]
     public void Draw_Number_StaysWithinTheRange(NumeralCategory category, int min, int max)
     {
-        var numeral = Get(category);
+        var numeral = TestData.NumeralOf(category);
         var random = new FakeRandom(0, int.MaxValue);
 
         var lowest = numeral.Draw(random);
@@ -60,7 +58,7 @@ public class NumeralTests
     [Test]
     public void Draw_Date_StaysWithinYearsAndMonthLength()
     {
-        var numeral = Get(NumeralCategory.Dates);
+        var numeral = TestData.NumeralOf(NumeralCategory.Dates);
 
         Assert.Multiple(() =>
         {
@@ -74,7 +72,7 @@ public class NumeralTests
     [Test]
     public void Draw_Time_UsesFiveMinuteSteps()
     {
-        var numeral = Get(NumeralCategory.Times);
+        var numeral = TestData.NumeralOf(NumeralCategory.Times);
         var random = new FakeRandom(int.MaxValue, int.MaxValue);
 
         Assert.That(numeral.Draw(new FakeRandom()).Digits[0], Is.EqualTo("0:00"));
@@ -87,7 +85,7 @@ public class NumeralTests
     {
         var random = new FakeRandom(125, 2, 20, 14, 6);
 
-        var forms = Get(NumeralCategory.DatesWithTimes).Draw(random);
+        var forms = TestData.NumeralOf(NumeralCategory.DatesWithTimes).Draw(random);
 
         Assert.That(forms.Digits[0], Is.EqualTo("21/3/2025 14:30"));
         Assert.That(random.Requests, Is.EqualTo(new[] { 200, 12, 31, 24, 12 }));
@@ -96,32 +94,32 @@ public class NumeralTests
     [Test]
     public void Draw_NullRandom_Throws()
     {
-        Assert.That(() => Get(NumeralCategory.Times).Draw(null!), Throws.ArgumentNullException);
+        Assert.That(() => TestData.NumeralOf(NumeralCategory.Times).Draw(null!), Throws.ArgumentNullException);
     }
 
-    [TestCase(NumeralCategory.Numbers0To20, "7", "siete")]
-    [TestCase(NumeralCategory.Numbers21To100, "21", "veintiuno")]
-    [TestCase(NumeralCategory.Numbers101To999, "115", "ciento quince")]
-    [TestCase(NumeralCategory.Thousands, "21.000", "veintiún mil")]
-    [TestCase(NumeralCategory.Millions, "1.000.000", "un millón")]
-    [TestCase(NumeralCategory.Dates, "1/5/1998", "uno de mayo de mil novecientos noventa y ocho")]
-    [TestCase(NumeralCategory.Times, "14:30", "las dos y media de la tarde")]
-    [TestCase(NumeralCategory.DatesWithTimes, "21/3/2025 14:30",
+    [TestCase(NumeralCategory.Numbers0To20, new[] { "7", "16" }, "siete")]
+    [TestCase(NumeralCategory.Numbers21To100, new[] { "21", "45" }, "veintiuno")]
+    [TestCase(NumeralCategory.Numbers101To999, new[] { "115", "780" }, "ciento quince")]
+    [TestCase(NumeralCategory.Thousands, new[] { "21.000", "3.500" }, "veintiún mil")]
+    [TestCase(NumeralCategory.Millions, new[] { "1.000.000", "2.500.000" }, "un millón")]
+    [TestCase(NumeralCategory.Dates, new[] { "1/5/1998", "21/3/2025" }, "uno de mayo de mil novecientos noventa y ocho")]
+    [TestCase(NumeralCategory.Times, new[] { "14:30", "7:45" }, "las dos y media de la tarde")]
+    [TestCase(NumeralCategory.DatesWithTimes, new[] { "21/3/2025 14:30" },
         "veintiuno de marzo de dos mil veinticinco a las dos y media de la tarde")]
-    public void Examples_ShowTheCategory(NumeralCategory category, string digits, string words)
+    public void Examples_ShowTheCategory(NumeralCategory category, string[] digits, string firstWords)
     {
-        var example = Get(category).Examples[0];
+        var examples = TestData.NumeralOf(category).Examples;
 
-        Assert.That(example.Digits[0], Is.EqualTo(digits));
-        Assert.That(example.Words[0], Is.EqualTo(words));
+        Assert.That(examples.Select(e => e.Digits[0]), Is.EqualTo(digits));
+        Assert.That(examples[0].Words[0], Is.EqualTo(firstWords));
     }
 
     [Test]
     public void CopyContentFrom_Throws()
     {
-        var numeral = Get(NumeralCategory.Dates);
+        var numeral = TestData.NumeralOf(NumeralCategory.Dates);
 
-        Assert.That(() => numeral.CopyContentFrom(Get(NumeralCategory.Times)), Throws.InstanceOf<NotSupportedException>());
+        Assert.That(() => numeral.CopyContentFrom(TestData.NumeralOf(NumeralCategory.Times)), Throws.InstanceOf<NotSupportedException>());
         Assert.That(numeral.BaseValue, Is.EqualTo("fechas"));
     }
 

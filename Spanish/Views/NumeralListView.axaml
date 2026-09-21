@@ -11,13 +11,12 @@
                 <TextBlock DockPanel.Dock="Bottom" Text="{Binding CountText}" Classes="muted" Margin="10,10,0,0" />
                 <ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding Selected}" Background="Transparent">
                     <ListBox.ItemTemplate>
+                        <!-- Two lines: the names are too long to share a row, and the ranges tell them apart. -->
                         <DataTemplate x:DataType="core:Numeral">
-                            <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel>
                                 <TextBlock Text="{Binding BaseValue}" TextTrimming="CharacterEllipsis" />
-                                <TextBlock Grid.Column="1" Text="{Binding Translation}" Classes="muted"
-                                           MaxWidth="90" TextTrimming="CharacterEllipsis" Margin="8,0,0,0"
-                                           VerticalAlignment="Center" />
-                            </Grid>
+                                <TextBlock Text="{Binding Translation}" Classes="muted" TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
@@ -36,7 +35,7 @@
                                 <TextBlock DockPanel.Dock="Top" Text="{Binding Title}" Classes="heading" Margin="0,0,0,16" />
                                 <Border DockPanel.Dock="Bottom" BorderBrush="{DynamicResource Divider}"
                                         BorderThickness="0,1,0,0" Padding="0,14,0,0" Margin="0,20,0,0">
-                                    <TextBlock Text="{x:Static vm:NumeralDetailsViewModel.BuiltInNote}" Classes="muted" />
+                                    <TextBlock Text="{x:Static core:Numeral.BuiltInMessage}" Classes="muted" />
                                 </Border>
 
                                 <ScrollViewer>

@@ -215,7 +215,9 @@ public class JsonFileStoreTests
         var settings = new SessionSettings
         {
             IncludeVerbs = false,
+            IncludeNumerals = false,
             NounScenarioTypes = [ScenarioType.Plural],
+            NumeralScenarioTypes = [ScenarioType.TextToNumber],
             Topics = ["city"],
             Order = SessionOrder.Random,
             Direction = Direction.SpanishToEnglish
@@ -227,7 +229,9 @@ public class JsonFileStoreTests
         Assert.Multiple(() =>
         {
             Assert.That(loaded.IncludeVerbs, Is.False);
+            Assert.That(loaded.IncludeNumerals, Is.False);
             Assert.That(loaded.NounScenarioTypes, Is.EqualTo(new[] { ScenarioType.Plural }));
+            Assert.That(loaded.NumeralScenarioTypes, Is.EqualTo(new[] { ScenarioType.TextToNumber }));
             Assert.That(loaded.Topics, Is.EqualTo(new[] { "city" }));
             Assert.That(loaded.Order, Is.EqualTo(SessionOrder.Random));
             Assert.That(loaded.Direction, Is.EqualTo(Direction.SpanishToEnglish));
