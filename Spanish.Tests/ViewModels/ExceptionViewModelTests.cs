@@ -228,6 +228,17 @@ public class NounEditorExceptionTests
     }
 
     [Test]
+    public void TakesEl_ExistingMasculineWordWithLeftoverFlag_FollowsTheSuggestion()
+    {
+        var casa = new Noun { BaseValue = "casa", Translation = "house", Gender = Gender.Masculine, TakesElInSingular = true };
+
+        var editor = Create(casa);
+        editor.IsFeminine = true;
+
+        Assert.That(editor.TakesElInSingular, Is.False);
+    }
+
+    [Test]
     public async Task Save_Feminine_KeepsTheFlag()
     {
         var editor = Create();

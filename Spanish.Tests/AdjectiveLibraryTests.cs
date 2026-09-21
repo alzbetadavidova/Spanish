@@ -341,11 +341,14 @@ public class AdjectiveLibraryTests
         });
     }
 
+    /// <summary>Seed nouns the stressed-a guess gets wrong, e.g. la hache.</summary>
+    private static readonly string[] StressedAExceptions = [];
+
     [Test]
     public void SeedLibrary_FeminineNounsWithStressedA_TakeEl()
     {
         var nouns = LoadSeedLibrary().Nouns;
-        var feminine = nouns.Where(n => n.Gender == Gender.Feminine).ToList();
+        var feminine = nouns.Where(n => n.Gender == Gender.Feminine && !StressedAExceptions.Contains(n.BaseValue)).ToList();
 
         Assert.Multiple(() =>
         {
