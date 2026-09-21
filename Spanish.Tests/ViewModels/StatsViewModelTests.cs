@@ -57,6 +57,19 @@ public class StatsViewModelTests
     }
 
     [Test]
+    public void SortBy_RaisesHeaderChanges()
+    {
+        var changed = new List<string?>();
+        _vm.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
+
+        _vm.SortByCommand.Execute(StatsColumn.Word);
+        _vm.SortByCommand.Execute(StatsColumn.Word);
+
+        Assert.That(changed.Count(n => n == nameof(StatsViewModel.WordHeader)), Is.EqualTo(2));
+        Assert.That(changed, Does.Contain(nameof(StatsViewModel.OverallHeader)));
+    }
+
+    [Test]
     public void Headers_ShowArrowOnlyOnSortedColumn()
     {
         _vm.SortByCommand.Execute(StatsColumn.LastPracticed);
@@ -230,31 +243,54 @@ public class MainWindowViewModelTests
         Assert.That(vm.CurrentPage, Is.TypeOf<StatsViewModel>());
     }
 
-    [TestCase(typeof(IOException), false)]
-    [TestCase(typeof(UnauthorizedAccessException), false)]
-    [TestCase(typeof(System.Text.Json.JsonException), false)]
-    [TestCase(typeof(InvalidOperationException), true)]
-    public async Task Initialize_LoadFails_ShowsError(Type exceptionType, bool failLibrary)
+    private static readonly Type[] LoadExceptions =
+    [
+        typeof(IOException), typeof(UnauthorizedAccessException), typeof(System.Text.Json.JsonException),
+        typeof(InvalidOperationException)
+    ];
+
+    [TestCaseSource(nameof(LoadExceptions))]
+    public async Task Initialize_LibraryLoadFails_ShowsError(Type exceptionType)
     {
-        var exception = (Exception)Activator.CreateInstance(exceptionType, "boom")!;
-        if (failLibrary)
-        {
-            _libraryStore.LoadException = exception;
-        }
-        else
-        {
-            _settingsStore.LoadException = exception;
-        }
+        _libraryStore.LoadException = (Exception)Activator.CreateInstance(exceptionType, "boom")!;
         var vm = Create();
 
         await vm.InitializeAsync();
 
+        AssertLoadError(vm);
+    }
+
+    [TestCaseSource(nameof(LoadExceptions))]
+    public async Task Initialize_SettingsLoadFails_ShowsError(Type exceptionType)
+    {
+        _settingsStore.LoadException = (Exception)Activator.CreateInstance(exceptionType, "boom")!;
+        var vm = Create();
+
+        await vm.InitializeAsync();
+
+        AssertLoadError(vm);
+    }
+
+    private static void AssertLoadError(MainWindowViewModel vm) =>
         Assert.Multiple(() =>
         {
             Assert.That(vm.LoadError, Is.EqualTo("Couldn't open your library: boom"));
             Assert.That(vm.IsLoading, Is.False);
             Assert.That(vm.NavItems, Is.Empty);
         });
+
+    [Test]
+    public async Task SelectingNav_DeactivatesPreviousPage()
+    {
+        var vm = Create();
+        await vm.InitializeAsync();
+        var library = (LibraryViewModel)vm.NavItems[1].Page;
+
+        vm.SelectedNav = vm.NavItems[1];
+        Assert.That(library.IsActive, Is.True);
+
+        vm.SelectedNav = vm.NavItems[0];
+        Assert.That(library.IsActive, Is.False);
     }
 
     [Test]

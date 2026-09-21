@@ -24,6 +24,17 @@ public class SessionSettingsTopicTests
     }
 
     [Test]
+    public void WithTopicsFrom_OnlyCaseDiffers_UsesLibrarySpelling()
+    {
+        var settings = new SessionSettings { Topics = ["CITY"] };
+
+        var cleaned = settings.WithTopicsFrom(["city"]);
+
+        Assert.That(cleaned, Is.Not.SameAs(settings));
+        Assert.That(cleaned.Topics, Is.EqualTo(new[] { "city" }));
+    }
+
+    [Test]
     public void WithTopicsFrom_Null_Throws()
     {
         Assert.That(() => new SessionSettings().WithTopicsFrom(null!), Throws.ArgumentNullException);

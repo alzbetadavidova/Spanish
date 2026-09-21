@@ -512,6 +512,7 @@ public class LibraryViewModelTests
         var library = TestData.Library();
         var context = new LibraryContext(library, new InMemoryStore<LearnLibrary>(library));
         var vm = new LibraryViewModel(context);
+        vm.OnActivated();
         vm.Nouns.Selected = vm.Nouns.Items.Single(n => n.BaseValue == "perro");
         var perroEditor = vm.Nouns.Editor!;
         vm.Topics.SelectedTopic = "city";
@@ -531,6 +532,23 @@ public class LibraryViewModelTests
         await vm.Nouns.Editor.SaveCommand.ExecuteAsync(null);
 
         Assert.That(vm.Topics.Words.Select(w => w.Value.BaseValue), Does.Contain("mesa"));
+    }
+
+    [Test]
+    public async Task LibraryChanged_WhileHidden_RefreshesOnlyWhenShown()
+    {
+        var library = TestData.Library();
+        var context = new LibraryContext(library, new InMemoryStore<LearnLibrary>(library));
+        var vm = new LibraryViewModel(context);
+        vm.OnActivated();
+        vm.OnDeactivated();
+
+        library.Nouns.Add(new Noun { BaseValue = "mesa" });
+        await context.SaveAsync();
+        Assert.That(vm.Nouns.Items, Has.Count.EqualTo(2));
+
+        vm.OnActivated();
+        Assert.That(vm.Nouns.Items, Has.Count.EqualTo(3));
     }
 
     [Test]
@@ -696,6 +714,51 @@ public class TopicsViewModelTests
 
         Assert.That(_library.Nouns[1].Topics, Is.EqualTo(new[] { "animals", "city" }));
         Assert.That(_store.SaveCount, Is.EqualTo(1));
+    }
+
+    [Test]
+    public async Task ToggleWord_KeepsChipsSelectionAndTypedName()
+    {
+        _vm.SelectedTopic = "city";
+        _vm.RenameText = "town (draft)";
+        var chips = _vm.Words.ToList();
+        var perro = chips.Single(w => w.Value.BaseValue == "perro");
+        perro.IsSelected = true;
+
+        await _vm.ToggleWordCommand.ExecuteAsync(perro);
+        _vm.Refresh();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(_vm.Words, Is.EqualTo(chips));
+            Assert.That(perro.IsSelected, Is.True);
+            Assert.That(_vm.SelectedTopic, Is.EqualTo("city"));
+            Assert.That(_vm.RenameText, Is.EqualTo("town (draft)"));
+        });
+    }
+
+    [Test]
+    public void Refresh_MembershipChangedElsewhere_UpdatesChipsInPlace()
+    {
+        _vm.SelectedTopic = "city";
+        var chips = _vm.Words.ToList();
+
+        _library.SetTopicMembership("city", _library.Nouns[0], false);
+        _vm.Refresh();
+
+        Assert.That(_vm.Words, Is.EqualTo(chips));
+        Assert.That(chips.Single(w => w.Value.BaseValue == "ciudad").IsSelected, Is.False);
+    }
+
+    [Test]
+    public void Refresh_WordRenamed_RebuildsChips()
+    {
+        _vm.SelectedTopic = "city";
+        _library.Nouns[0].BaseValue = "urbe";
+
+        _vm.Refresh();
+
+        Assert.That(_vm.Words.Select(w => w.Label), Does.Contain("urbe · noun"));
     }
 
     [Test]

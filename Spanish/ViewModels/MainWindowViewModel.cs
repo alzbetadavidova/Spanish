@@ -82,6 +82,7 @@ public partial class MainWindowViewModel(
         {
             return;
         }
+        CurrentPage?.OnDeactivated();
         value.Page.OnActivated();
         CurrentPage = value.Page;
     }

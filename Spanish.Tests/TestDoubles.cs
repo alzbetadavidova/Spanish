@@ -45,6 +45,30 @@ public class InMemoryStore<T>(T value, string? corruptBackup = null) : IFileStor
     }
 }
 
+/// <summary>A store whose first save waits until <see cref="Release"/> is called.</summary>
+public class GatedStore<T> : IFileStore<T> where T : class
+{
+    private readonly TaskCompletionSource _gate = new();
+    private bool _first = true;
+
+    public List<T> Saved { get; } = [];
+
+    public void Release() => _gate.TrySetResult();
+
+    public Task<LoadResult<T>> LoadAsync(CancellationToken cancellationToken = default) =>
+        throw new NotSupportedException();
+
+    public async Task SaveAsync(T value, CancellationToken cancellationToken = default)
+    {
+        if (_first)
+        {
+            _first = false;
+            await _gate.Task;
+        }
+        Saved.Add(value);
+    }
+}
+
 public static class TestData
 {
     public static Noun Ciudad() => new()

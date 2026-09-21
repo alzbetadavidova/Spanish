@@ -190,7 +190,7 @@ public class LearnViewModelTests
     }
 
     [Test]
-    public async Task TopicDeleted_CleansSessionAndSavesSettingsAtNextAnswer()
+    public async Task TopicDeleted_OnlySelectedTopic_WidensToAllTopicsAndSavesSettings()
     {
         var learn = Create(GenderOnly with { Topics = ["animals"] });
         Assert.That(learn.CurrentScenario!.Scenario.Unit.BaseValue, Is.EqualTo("perro"));
@@ -200,17 +200,59 @@ public class LearnViewModelTests
 
         Assert.Multiple(() =>
         {
+            // "No topics selected" means all topics, so the session widens.
             Assert.That(learn.SummaryChips[1], Is.EqualTo("All topics"));
-            Assert.That(learn.CurrentScenario, Is.Not.Null);
-            Assert.That(_settingsStore.SaveCount, Is.Zero);
+            Assert.That(learn.CurrentScenario!.Scenario.Unit.BaseValue, Is.EqualTo("ciudad"));
+            Assert.That(_settingsStore.SaveCount, Is.EqualTo(1));
+            Assert.That(_settingsStore.Value.Topics, Is.Empty);
         });
+    }
 
-        var scenario = (GenderScenarioViewModel)learn.CurrentScenario!;
-        scenario.ChooseCommand.Execute(Article.El);
-        await scenario.SubmitCommand.ExecuteAsync(null);
+    [Test]
+    public async Task TopicDeleted_CurrentWordNoLongerMatches_ShowsNext()
+    {
+        var learn = Create(GenderOnly with { Topics = ["animals", "city"] });
+        Assert.That(learn.CurrentScenario!.Scenario.Unit.BaseValue, Is.EqualTo("ciudad"));
 
-        Assert.That(_settingsStore.SaveCount, Is.EqualTo(1));
-        Assert.That(_settingsStore.Value.Topics, Is.Empty);
+        _library.RemoveTopic("city");
+        await _context.SaveAsync();
+
+        Assert.That(learn.CurrentScenario!.Scenario.Unit.BaseValue, Is.EqualTo("perro"));
+        Assert.That(learn.SummaryChips[1], Is.EqualTo("Topics: animals"));
+    }
+
+    [TestCase("pets")]
+    [TestCase("Animals")]
+    public async Task PaneOpen_TopicRenamed_KeepsSelectionAndStartUsesNewName(string newName)
+    {
+        var learn = Create(GenderOnly with { Topics = ["animals"] });
+        learn.OpenSettingsCommand.Execute(null);
+
+        _context.RenameTopic("animals", newName);
+        await _context.SaveAsync();
+        learn.OnActivated();
+
+        Assert.That(learn.Settings.Topics.Single(t => t.IsSelected).Value, Is.EqualTo(newName));
+        await learn.StartSessionCommand.ExecuteAsync(null);
+        Assert.That(_settingsStore.Value.Topics, Is.EqualTo(new[] { newName }));
+    }
+
+    [Test]
+    public async Task SettingsChangedDuringSave_StayPending()
+    {
+        var gated = new GatedStore<SessionSettings>();
+        var learn = new LearnViewModel(_context, gated, GenderOnly with { Topics = ["gone", "animals"] }, new FakeRandom(), new FakeClock());
+
+        var firstSave = _context.SaveAsync(); // saves the cleaned settings, blocked by the gate
+        _context.RenameTopic("animals", "pets"); // changes the settings while that save runs
+        gated.Release();
+        await firstSave;
+        Assert.That(gated.Saved.Last().Topics, Is.EqualTo(new[] { "animals" }));
+
+        await _context.SaveAsync();
+
+        Assert.That(gated.Saved.Last().Topics, Is.EqualTo(new[] { "pets" }));
+        Assert.That(learn.SummaryChips[1], Is.EqualTo("Topics: pets"));
     }
 
     [Test]
@@ -408,6 +450,18 @@ public class SessionSettingsViewModelTests
     }
 
     [Test]
+    public void RenameTopic_RenamesOnlyMatchingSelection()
+    {
+        var library = TestData.Library();
+        var vm = new SessionSettingsViewModel(library, new SessionSettings { Topics = ["animals", "city"] });
+        library.RenameTopic("city", "town");
+
+        vm.RenameTopic("CITY", "town");
+
+        Assert.That(vm.Topics.Where(t => t.IsSelected).Select(t => t.Value), Is.EqualTo(new[] { "animals", "town" }));
+    }
+
+    [Test]
     public void RefreshTopics_KeepsSelectionAndAddsNew()
     {
         var library = TestData.Library();
@@ -458,8 +512,40 @@ public class LibraryContextTests
     {
         var context = new LibraryContext(new LearnLibrary(), new InMemoryStore<LearnLibrary>(new LearnLibrary()));
 
-        Assert.That(await context.RunSaveAsync(_ => Task.CompletedTask), Is.True);
-        Assert.That(await context.RunSaveAsync(_ => Task.FromException(new IOException())), Is.False);
+        Assert.That(await context.RunSaveAsync("x", _ => Task.CompletedTask), Is.True);
+        Assert.That(await context.RunSaveAsync("x", _ => Task.FromException(new IOException())), Is.False);
+    }
+
+    [Test]
+    public async Task SaveError_IsTrackedPerTarget()
+    {
+        var store = new InMemoryStore<LearnLibrary>(new LearnLibrary()) { SaveException = new IOException() };
+        var context = new LibraryContext(TestData.Library(), store);
+
+        await context.SaveAsync();
+        await context.RunSaveAsync("settings", _ => Task.CompletedTask);
+        Assert.That(context.SaveError, Is.EqualTo(LibraryContext.SaveFailedMessage));
+
+        store.SaveException = null;
+        await context.SaveAsync();
+        Assert.That(context.SaveError, Is.Null);
+    }
+
+    [Test]
+    public async Task SaveAsync_RunsParticipantsAfterLibrary()
+    {
+        var store = new InMemoryStore<LearnLibrary>(new LearnLibrary());
+        var context = new LibraryContext(TestData.Library(), store);
+        var libraryCountSeen = -1;
+        context.AddSaveParticipant(() =>
+        {
+            libraryCountSeen = store.SaveCount;
+            return Task.CompletedTask;
+        });
+
+        await context.SaveAsync();
+
+        Assert.That(libraryCountSeen, Is.EqualTo(1));
     }
 
     [Test]

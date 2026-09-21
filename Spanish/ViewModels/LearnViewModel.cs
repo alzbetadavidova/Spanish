@@ -11,6 +11,8 @@ namespace Spanish.ViewModels;
 
 public partial class LearnViewModel : ObservableObject, IPage
 {
+    public const string SettingsTarget = "settings";
+
     private readonly LibraryContext _context;
     private readonly IFileStore<SessionSettings> _settingsStore;
     private readonly ScenarioFactory _factory;
@@ -37,6 +39,8 @@ public partial class LearnViewModel : ObservableObject, IPage
 
         _context.Changed += OnLibraryChanged;
         _context.TopicRenamed += OnTopicRenamed;
+        // Library changes (topic renames, deletes) can change the settings; save them together.
+        _context.AddSaveParticipant(SaveSettingsIfNeededAsync);
         ShowNext();
     }
 
@@ -102,8 +106,7 @@ public partial class LearnViewModel : ObservableObject, IPage
         _session.Record(scenario, correct);
         OnPropertyChanged(nameof(ProgressText));
         ShowNext();
-        await _context.SaveAsync();
-        await SaveSettingsIfNeededAsync();
+        await _context.SaveAsync(); // also saves pending settings
     }
 
     private async Task SaveSettingsIfNeededAsync()
@@ -113,13 +116,21 @@ public partial class LearnViewModel : ObservableObject, IPage
             return;
         }
         var settings = _session.Settings;
-        // A failed save stays pending and is retried at the next save point.
-        _settingsNeedSaving = !await _context.RunSaveAsync(ct => _settingsStore.SaveAsync(settings, ct));
+        var saved = await _context.RunSaveAsync(SettingsTarget, ct => _settingsStore.SaveAsync(settings, ct));
+        // A failed save stays pending and is retried at the next save. Settings changed during the
+        // save also stay pending.
+        if (saved && ReferenceEquals(settings, _session.Settings))
+        {
+            _settingsNeedSaving = false;
+        }
     }
 
     // The renamed topic still matches the same words, so the current scenario stays.
-    private void OnTopicRenamed(object? sender, TopicRenamedEventArgs e) =>
+    private void OnTopicRenamed(object? sender, TopicRenamedEventArgs e)
+    {
+        Settings.RenameTopic(e.OldName, e.NewName);
         ApplySettings(_session.Settings.WithTopicRenamed(e.OldName, e.NewName));
+    }
 
     private void OnLibraryChanged(object? sender, EventArgs e)
     {

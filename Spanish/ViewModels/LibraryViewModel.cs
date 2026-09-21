@@ -16,9 +16,19 @@ public partial class LibraryViewModel : ObservableObject, IPage
         Nouns = new WordListViewModel(context, WordKind.Noun);
         Verbs = new WordListViewModel(context, WordKind.Verb);
         Topics = new TopicsViewModel(context);
-        // Tabs edit the same library; keep every tab (and open editors) in sync.
-        context.Changed += (_, _) => OnActivated();
+        // Tabs edit the same library; keep every tab (and open editors) in sync. While the page is
+        // hidden (e.g. answers saved on the Learn page) the refresh waits until it is shown again.
+        context.Changed += (_, _) =>
+        {
+            if (IsActive)
+            {
+                RefreshAll();
+            }
+        };
     }
+
+    /// <summary>Whether the page is shown.</summary>
+    public bool IsActive { get; private set; }
 
     public WordListViewModel Nouns { get; }
     public WordListViewModel Verbs { get; }
@@ -43,6 +53,14 @@ public partial class LibraryViewModel : ObservableObject, IPage
     private void Add() => CurrentList?.AddCommand.Execute(null);
 
     public void OnActivated()
+    {
+        IsActive = true;
+        RefreshAll();
+    }
+
+    public void OnDeactivated() => IsActive = false;
+
+    private void RefreshAll()
     {
         Nouns.Refresh();
         Verbs.Refresh();
@@ -197,15 +215,24 @@ public partial class TopicsViewModel : ObservableObject
         FillWords();
     }
 
+    /// <summary>
+    /// Brings the list up to date. An unchanged topic list and word chips are updated in place, so the
+    /// selection, a name typed into the rename box and the focused chip survive a refresh.
+    /// </summary>
     public void Refresh()
     {
-        var selected = SelectedTopic;
-        Topics.Clear();
-        foreach (var topic in _context.Library.Topics.Order())
+        var topics = _context.Library.Topics.Order().ToList();
+        if (!Topics.SequenceEqual(topics))
         {
-            Topics.Add(topic);
+            var selected = SelectedTopic;
+            Topics.Clear();
+            foreach (var topic in topics)
+            {
+                Topics.Add(topic);
+            }
+            // Clearing the list resets the selection in the view; restore it.
+            SelectedTopic = selected is not null && Topics.Contains(selected) ? selected : null;
         }
-        SelectedTopic = selected is not null && Topics.Contains(selected) ? selected : null;
         FillWords();
     }
 
@@ -276,15 +303,29 @@ public partial class TopicsViewModel : ObservableObject
 
     private void FillWords()
     {
-        Words.Clear();
         if (SelectedTopic is null)
         {
+            Words.Clear();
             return;
         }
-        foreach (var unit in _context.Library.Units.OrderBy(u => u.BaseValue, StringComparer.CurrentCultureIgnoreCase))
+
+        var units = _context.Library.Units.OrderBy(u => u.BaseValue, StringComparer.CurrentCultureIgnoreCase).ToList();
+        var sameWords = Words.Select(w => (w.Value, w.Label)).SequenceEqual(units.Select(u => (u, Label(u))));
+        if (sameWords)
         {
-            var label = $"{unit.BaseValue} · {(unit.Kind == WordKind.Noun ? "noun" : "verb")}";
-            Words.Add(new ToggleOption<LearnUnit>(unit, label, unit.HasTopic(SelectedTopic)));
+            foreach (var word in Words)
+            {
+                word.IsSelected = word.Value.HasTopic(SelectedTopic);
+            }
+            return;
+        }
+
+        Words.Clear();
+        foreach (var unit in units)
+        {
+            Words.Add(new ToggleOption<LearnUnit>(unit, Label(unit), unit.HasTopic(SelectedTopic)));
         }
     }
+
+    private static string Label(LearnUnit unit) => $"{unit.BaseValue} · {(unit.Kind == WordKind.Noun ? "noun" : "verb")}";
 }

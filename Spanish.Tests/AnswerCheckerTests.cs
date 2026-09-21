@@ -66,7 +66,7 @@ public class AnswerCheckerTests
     [Test]
     public void Check_DecomposedInput_IsCorrect()
     {
-        Assert.That(AnswerChecker.Check("año", ["año"]).Outcome, Is.EqualTo(AnswerOutcome.Correct));
+        Assert.That(AnswerChecker.Check("an\u0303o", ["año"]).Outcome, Is.EqualTo(AnswerOutcome.Correct));
     }
 
     [TestCase("ciudades")]

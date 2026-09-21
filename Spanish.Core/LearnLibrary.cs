@@ -10,7 +10,7 @@ public class LibraryValidationException(IReadOnlyList<ValidationError> errors)
     public IReadOnlyList<ValidationError> Errors { get; } = errors;
 }
 
-public class LearnLibrary
+public class LearnLibrary : IJsonOnDeserialized
 {
     // Setters replace null (possible in hand-edited JSON) with an empty value.
     private List<Noun> _nouns = [];
@@ -22,6 +22,26 @@ public class LearnLibrary
 
     [JsonIgnore]
     public IEnumerable<LearnUnit> Units => Nouns.Cast<LearnUnit>().Concat(Verbs);
+
+    /// <summary>Removes null entries a hand-edited file may contain (e.g. <c>"Topics": [null]</c>).</summary>
+    public void OnDeserialized()
+    {
+        Nouns.RemoveAll(n => n is null);
+        Verbs.RemoveAll(v => v is null);
+        Topics.RemoveAll(t => t is null);
+        foreach (var unit in Units)
+        {
+            unit.Topics.RemoveAll(t => t is null);
+            foreach (var type in unit.Progress.Where(p => p.Value is null).Select(p => p.Key).ToList())
+            {
+                unit.Progress.Remove(type);
+            }
+            foreach (var progress in unit.Progress.Values)
+            {
+                progress.Recent.RemoveAll(r => r is null);
+            }
+        }
+    }
 
     /// <summary>Validates a new unit (<paramref name="existing"/> null) or an edit of <paramref name="existing"/>.</summary>
     public IReadOnlyList<ValidationError> Validate(LearnUnit candidate, LearnUnit? existing = null)

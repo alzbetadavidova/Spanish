@@ -62,6 +62,8 @@ public class PluralSuggesterTests
     [TestCase(" Luz ", "Luces")]
     [TestCase("rubí", "rubíes")]
     [TestCase("ratón", "ratones")]
+    [TestCase("país", "países")]
+    [TestCase("baúl", "baúles")]
     [TestCase("inglés", "ingleses")]
     [TestCase("autobús", "autobuses")]
     [TestCase("lunes", "lunes")]

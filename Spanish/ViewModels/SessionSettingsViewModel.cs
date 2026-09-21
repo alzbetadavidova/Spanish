@@ -76,6 +76,16 @@ public partial class SessionSettingsViewModel : ObservableObject
         UpdateMatchCount();
     }
 
+    /// <summary>Follows a topic rename that already happened in the library, keeping the selection.</summary>
+    public void RenameTopic(string oldName, string newName)
+    {
+        var selected = Selected(Topics)
+            .Select(t => string.Equals(t, oldName, StringComparison.OrdinalIgnoreCase) ? newName : t)
+            .ToList();
+        FillTopics(selected);
+        UpdateMatchCount();
+    }
+
     /// <summary>Shows <paramref name="settings"/>, discarding unapplied edits.</summary>
     public void Load(SessionSettings settings)
     {

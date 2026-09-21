@@ -6,6 +6,8 @@ public static class PluralSuggester
     private const string Vowels = "aeiouáéíóú";
     private const string AccentedVowels = "áéíóú";
     private const string PlainVowels = "aeiou";
+    // Endings that take -s; stressed í and ú take -es (rubí -> rubíes).
+    private const string EndingsTakingS = "aeiouáéó";
 
     public static string Suggest(string singular)
     {
@@ -30,16 +32,18 @@ public static class PluralSuggester
         {
             return word[..^1] + "ces"; // luz -> luces
         }
-        if ("aeiouáéó".Contains(last))
+        if (EndingsTakingS.Contains(last))
         {
             return word + "s"; // casa -> casas, café -> cafés
         }
 
         var beforeLast = word.Length > 1 ? word[^2] : '\0';
         var accent = AccentedVowels.IndexOf(beforeLast);
-        if (last is 'n' or 's' && accent >= 0)
+        var isHiatus = beforeLast is 'í' or 'ú' && word.Length > 2 && Vowels.Contains(word[^3]);
+        if (last is 'n' or 's' && accent >= 0 && !isHiatus)
         {
             // The stress moves into the new syllable, so the accent is dropped: canción -> canciones.
+            // An accent that splits two vowels stays: país -> países.
             return word[..^2] + PlainVowels[accent] + last + "es";
         }
         if (last == 's' && CountVowelGroups(word) > 1)

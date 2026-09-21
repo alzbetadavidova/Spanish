@@ -163,6 +163,32 @@ public class JsonFileStoreTests
     }
 
     [Test]
+    public async Task Load_NullElements_AreRemoved()
+    {
+        var store = Store();
+        await File.WriteAllTextAsync(store.Path, """
+            {
+              "Nouns": [ null, { "BaseValue": "mesa", "Topics": [ null, "home" ],
+                                 "Progress": { "Card": null, "Fill": { "Recent": [ null ], "Attempts": 1 } } } ],
+              "Verbs": [ null ],
+              "Topics": [ null, "home" ]
+            }
+            """);
+
+        var library = (await store.LoadAsync()).Value;
+
+        var mesa = library.Nouns.Single();
+        Assert.Multiple(() =>
+        {
+            Assert.That(library.Verbs, Is.Empty);
+            Assert.That(library.Topics, Is.EqualTo(new[] { "home" }));
+            Assert.That(mesa.Topics, Is.EqualTo(new[] { "home" }));
+            Assert.That(mesa.Progress.Keys, Is.EqualTo(new[] { ScenarioType.Fill }));
+            Assert.That(mesa.OverallIndex, Is.Null);
+        });
+    }
+
+    [Test]
     public async Task Load_LegacyFile_IgnoresOldFieldsAndReadsGender()
     {
         var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "test.json");
