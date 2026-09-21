@@ -1,0 +1,64 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Spanish.ViewModels"
+             x:Class="Spanish.Views.TopicsView"
+             x:DataType="vm:TopicsViewModel">
+
+    <Grid ColumnDefinitions="220,*">
+        <Border Grid.Column="0" BorderBrush="{DynamicResource Divider}" BorderThickness="0,1,1,0" Padding="12,16">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top" Spacing="4" Margin="0,0,0,10">
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                        <TextBox Text="{Binding NewTopicName}" PlaceholderText="New topic">
+                            <TextBox.KeyBindings>
+                                <KeyBinding Gesture="Enter" Command="{Binding AddTopicCommand}" />
+                            </TextBox.KeyBindings>
+                        </TextBox>
+                        <Button Grid.Column="1" Content="Add" Command="{Binding AddTopicCommand}" />
+                    </Grid>
+                    <TextBlock Text="{Binding TopicError}" Classes="error"
+                               IsVisible="{Binding TopicError, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                </StackPanel>
+                <ListBox ItemsSource="{Binding Topics}" SelectedItem="{Binding SelectedTopic}" Background="Transparent" />
+            </DockPanel>
+        </Border>
+
+        <Border Grid.Column="1" BorderBrush="{DynamicResource Divider}" BorderThickness="0,1,0,0" Padding="20,16">
+            <Panel>
+                <TextBlock Text="Select a topic or add a new one." Classes="label"
+                           HorizontalAlignment="Center" IsVisible="{Binding !HasSelection}" />
+
+                <DockPanel IsVisible="{Binding HasSelection}">
+                    <Grid DockPanel.Dock="Top" ColumnDefinitions="96,*,Auto" ColumnSpacing="16" Margin="0,0,0,20">
+                        <TextBlock Text="Name" Classes="label" />
+                        <TextBox Grid.Column="1" Text="{Binding RenameText}" />
+                        <Button Grid.Column="2" Content="Rename" Command="{Binding RenameTopicCommand}" />
+                    </Grid>
+
+                    <Border DockPanel.Dock="Bottom" BorderBrush="{DynamicResource Divider}" BorderThickness="0,1,0,0"
+                            Padding="0,14,0,0" Margin="0,20,0,0">
+                        <Button Classes="dangerText" Content="{Binding DeleteLabel}" Command="{Binding DeleteTopicCommand}" />
+                    </Border>
+
+                    <Grid ColumnDefinitions="96,*" ColumnSpacing="16">
+                        <TextBlock Text="Words" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
+                        <ScrollViewer Grid.Column="1">
+                            <ItemsControl ItemsSource="{Binding Words}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate><UniformGrid Columns="3" /></ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:ToggleOption">
+                                        <ToggleButton Classes="chip" Content="{Binding Label}" IsChecked="{Binding IsSelected}"
+                                                      Command="{Binding $parent[ItemsControl].((vm:TopicsViewModel)DataContext).ToggleWordCommand}"
+                                                      CommandParameter="{Binding}" Margin="0,0,8,8" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </DockPanel>
+            </Panel>
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,113 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Spanish.ViewModels"
+             x:Class="Spanish.Views.SessionSettingsView"
+             x:DataType="vm:LearnViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="Grid.row">
+            <Setter Property="Margin" Value="20,14" />
+        </Style>
+        <Style Selector="Border.separator">
+            <Setter Property="BorderBrush" Value="{DynamicResource Divider}" />
+            <Setter Property="BorderThickness" Value="0,0,0,1" />
+        </Style>
+        <Style Selector="TextBlock.rowLabel">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
+            <Setter Property="Margin" Value="0,7,0,0" />
+        </Style>
+    </UserControl.Styles>
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="ChipTemplate" x:DataType="vm:ToggleOption">
+            <ToggleButton Classes="chip" Content="{Binding Label}" IsChecked="{Binding IsSelected}" Margin="0,0,8,8" />
+        </DataTemplate>
+        <ItemsPanelTemplate x:Key="FourColumns">
+            <UniformGrid Columns="4" />
+        </ItemsPanelTemplate>
+    </UserControl.Resources>
+
+    <DockPanel DataContext="{Binding Settings}" x:DataType="vm:SessionSettingsViewModel">
+        <Border DockPanel.Dock="Top" Classes="separator" Padding="20,14">
+            <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Text="Session settings" Classes="heading" VerticalAlignment="Center" />
+                <Button Grid.Column="1" Content="Close"
+                        Command="{Binding $parent[UserControl].((vm:LearnViewModel)DataContext).CloseSettingsCommand}" />
+            </Grid>
+        </Border>
+
+        <Border DockPanel.Dock="Bottom" Background="{DynamicResource SubtleSurface}"
+                BorderBrush="{DynamicResource Divider}" BorderThickness="0,1,0,0" Padding="20,12">
+            <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Text="{Binding MatchText}" Classes="label" />
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                    <Button Content="Reset" Command="{Binding ResetCommand}" />
+                    <Button Content="Start session" Classes="accent"
+                            Command="{Binding $parent[UserControl].((vm:LearnViewModel)DataContext).StartSessionCommand}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <ScrollViewer>
+            <StackPanel>
+                <Border Classes="separator">
+                    <Grid Classes="row" ColumnDefinitions="128,*">
+                        <TextBlock Text="Word types" Classes="rowLabel" />
+                        <UniformGrid Grid.Column="1" Columns="4">
+                            <ToggleButton Classes="chip" Content="Nouns" IsChecked="{Binding IncludeNouns}" Margin="0,0,8,0" />
+                            <ToggleButton Classes="chip" Content="Verbs" IsChecked="{Binding IncludeVerbs}" Margin="0,0,8,0" />
+                        </UniformGrid>
+                    </Grid>
+                </Border>
+
+                <Border Classes="separator">
+                    <Grid Classes="row" ColumnDefinitions="128,*">
+                        <TextBlock Text="Scenarios" Classes="rowLabel" />
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="Nouns" Classes="muted" Margin="0,0,0,6" />
+                            <ItemsControl ItemsSource="{Binding NounScenarios}" IsEnabled="{Binding IncludeNouns}"
+                                          ItemTemplate="{StaticResource ChipTemplate}"
+                                          ItemsPanel="{StaticResource FourColumns}" />
+                            <TextBlock Text="Verbs" Classes="muted" Margin="0,6,0,6" />
+                            <ItemsControl ItemsSource="{Binding VerbScenarios}" IsEnabled="{Binding IncludeVerbs}"
+                                          ItemTemplate="{StaticResource ChipTemplate}"
+                                          ItemsPanel="{StaticResource FourColumns}" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <Border Classes="separator">
+                    <Grid Classes="row" ColumnDefinitions="128,*">
+                        <TextBlock Text="Topics" Classes="rowLabel" />
+                        <StackPanel Grid.Column="1">
+                            <ItemsControl ItemsSource="{Binding Topics}"
+                                          ItemTemplate="{StaticResource ChipTemplate}"
+                                          ItemsPanel="{StaticResource FourColumns}" />
+                            <TextBlock Text="None selected means all topics." Classes="muted" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <Border Classes="separator">
+                    <Grid Classes="row" ColumnDefinitions="128,*">
+                        <TextBlock Text="Order" Classes="rowLabel" />
+                        <ComboBox Grid.Column="1" HorizontalAlignment="Stretch"
+                                  ItemsSource="{x:Static vm:SessionSettingsViewModel.Orders}"
+                                  SelectedItem="{Binding SelectedOrder}" />
+                    </Grid>
+                </Border>
+
+                <Grid Classes="row" ColumnDefinitions="128,*">
+                    <TextBlock Text="Direction" Classes="rowLabel" />
+                    <StackPanel Grid.Column="1" Spacing="8">
+                        <ComboBox HorizontalAlignment="Stretch"
+                                  ItemsSource="{x:Static vm:SessionSettingsViewModel.Directions}"
+                                  SelectedItem="{Binding SelectedDirection}" />
+                        <TextBlock Text="Applies to card and fill exercises." Classes="muted" />
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>

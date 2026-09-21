@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Spanish.ViewModels"
+             xmlns:core="using:Spanish.Core"
+             x:Class="Spanish.Views.WordListView"
+             x:DataType="vm:WordListViewModel">
+
+    <Grid ColumnDefinitions="220,*">
+        <Border Grid.Column="0" BorderBrush="{DynamicResource Divider}" BorderThickness="0,1,1,0" Padding="12,16">
+            <DockPanel>
+                <TextBox DockPanel.Dock="Top" Text="{Binding SearchText}" PlaceholderText="{Binding SearchPlaceholder}"
+                         Margin="0,0,0,10" />
+                <TextBlock DockPanel.Dock="Bottom" Text="{Binding CountText}" Classes="muted" Margin="10,10,0,0" />
+                <ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding Selected}" Background="Transparent">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="core:LearnUnit">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Text="{Binding BaseValue}" TextTrimming="CharacterEllipsis" />
+                                <TextBlock Grid.Column="1" Text="{Binding Translation}" Classes="muted"
+                                           MaxWidth="90" TextTrimming="CharacterEllipsis" Margin="8,0,0,0"
+                                           VerticalAlignment="Center" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </Border>
+
+        <Border Grid.Column="1" BorderBrush="{DynamicResource Divider}" BorderThickness="0,1,0,0">
+            <Panel>
+                <ContentControl Content="{Binding Editor}" Margin="20,16" />
+                <TextBlock Text="Select a word or add a new one." Classes="label"
+                           HorizontalAlignment="Center" IsVisible="{Binding !HasEditor}" />
+            </Panel>
+        </Border>
+    </Grid>
+</UserControl>

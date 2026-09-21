@@ -1,15 +1,22 @@
+using System;
 using Avalonia.Controls;
-using Spanish.Core;
+using Spanish.ViewModels;
 
 namespace Spanish;
 
 public partial class MainWindow : Window
 {
-    private readonly LearnLibrary _library = LearnLibrary.LoadFromFile("library.json");
-    
     public MainWindow()
     {
         InitializeComponent();
-        DataContext = new MainWindowViewModel(_library);
+    }
+
+    protected override async void OnOpened(EventArgs e)
+    {
+        base.OnOpened(e);
+        if (DataContext is MainWindowViewModel viewModel)
+        {
+            await viewModel.InitializeAsync();
+        }
     }
 }

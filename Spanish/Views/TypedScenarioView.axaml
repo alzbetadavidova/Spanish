@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Spanish.ViewModels"
+             x:Class="Spanish.Views.TypedScenarioView"
+             x:DataType="vm:TypedScenarioViewModel">
+
+    <StackPanel Spacing="12" Width="360">
+        <TextBlock Text="{Binding Heading}" Classes="muted" HorizontalAlignment="Center" />
+        <StackPanel Spacing="2">
+            <TextBlock Text="{Binding Prompt}" FontSize="26" FontWeight="SemiBold"
+                       HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" />
+            <TextBlock Text="{Binding PromptDetail}" Classes="label" HorizontalAlignment="Center"
+                       IsVisible="{Binding PromptDetail, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+        </StackPanel>
+
+        <TextBox x:Name="AnswerBox" Text="{Binding Answer}" PlaceholderText="Type your answer"
+                 HorizontalContentAlignment="Center" IsReadOnly="{Binding IsChecked}">
+            <TextBox.KeyBindings>
+                <KeyBinding Gesture="Enter" Command="{Binding SubmitCommand}" />
+            </TextBox.KeyBindings>
+        </TextBox>
+        <TextBlock Text="{Binding ValidationMessage}" Classes="error" HorizontalAlignment="Center"
+                   IsVisible="{Binding ValidationMessage, Converter={x:Static ObjectConverters.IsNotNull}}" />
+
+        <Border Classes="feedback" Classes.success="{Binding IsCorrect}" Classes.danger="{Binding IsIncorrect}"
+                IsVisible="{Binding IsChecked}">
+            <TextBlock Text="{Binding Feedback}" HorizontalAlignment="Center" TextWrapping="Wrap" />
+        </Border>
+
+        <Button Command="{Binding SubmitCommand}" HorizontalAlignment="Center" Classes="accent">
+            <Panel>
+                <TextBlock Text="Check · Enter" IsVisible="{Binding !IsChecked}" />
+                <TextBlock Text="Next · Enter" IsVisible="{Binding IsChecked}" />
+            </Panel>
+        </Button>
+    </StackPanel>
+</UserControl>

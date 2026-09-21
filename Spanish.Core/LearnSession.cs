@@ -40,7 +40,7 @@ public class LearnSession
         ArgumentNullException.ThrowIfNull(settings);
         return library.Units
             .Where(settings.Includes)
-            .SelectMany(u => settings.ScenarioTypes.Where(u.CanPractice).Select(t => new Exercise(u, t)))
+            .SelectMany(u => settings.ScenarioTypesFor(u.Kind).Where(u.CanPractice).Select(t => new Exercise(u, t)))
             .ToList();
     }
 

@@ -1,0 +1,23 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Spanish.ViewModels"
+             xmlns:views="using:Spanish.Views"
+             x:Class="Spanish.Views.LibraryView"
+             x:DataType="vm:LibraryViewModel">
+
+    <Grid>
+        <TabControl SelectedIndex="{Binding SelectedTabIndex}" Padding="0" Margin="12,4,0,0">
+            <TabItem Header="Nouns" FontSize="15">
+                <views:WordListView DataContext="{Binding Nouns}" />
+            </TabItem>
+            <TabItem Header="Verbs" FontSize="15">
+                <views:WordListView DataContext="{Binding Verbs}" />
+            </TabItem>
+            <TabItem Header="Topics" FontSize="15">
+                <views:TopicsView DataContext="{Binding Topics}" />
+            </TabItem>
+        </TabControl>
+        <Button Content="{Binding AddLabel}" Command="{Binding AddCommand}" IsVisible="{Binding IsAddVisible}"
+                HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,14,20,0" />
+    </Grid>
+</UserControl>

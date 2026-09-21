@@ -1,0 +1,46 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Spanish.ViewModels"
+             xmlns:views="using:Spanish.Views"
+             x:Class="Spanish.Views.LearnView"
+             x:DataType="vm:LearnViewModel">
+
+    <SplitView IsPaneOpen="{Binding IsSettingsOpen, Mode=TwoWay}" DisplayMode="Overlay"
+               PanePlacement="Right" OpenPaneLength="480">
+        <SplitView.Pane>
+            <views:SessionSettingsView />
+        </SplitView.Pane>
+
+        <DockPanel Margin="24,20">
+            <Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto">
+                <ItemsControl ItemsSource="{Binding SummaryChips}" VerticalAlignment="Center">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <Border Classes="chipLabel"><TextBlock Text="{Binding}" FontSize="12" /></Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Button Grid.Column="1" Content="Session settings" Command="{Binding OpenSettingsCommand}" />
+            </Grid>
+
+            <TextBlock DockPanel.Dock="Bottom" Text="{Binding ProgressText}" Classes="muted"
+                       HorizontalAlignment="Center" Margin="0,12,0,0" />
+
+            <Grid>
+                <ContentControl Content="{Binding CurrentScenario}"
+                                HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <StackPanel IsVisible="{Binding IsEmpty}" Spacing="8"
+                            HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="360">
+                    <TextBlock Text="Nothing to practice" Classes="heading" HorizontalAlignment="Center" />
+                    <TextBlock Text="No exercises match your session settings. Pick other word types or topics, or add words in the library."
+                               TextWrapping="Wrap" TextAlignment="Center" Classes="label" />
+                    <Button Content="Change settings" Command="{Binding OpenSettingsCommand}"
+                            HorizontalAlignment="Center" Margin="0,8,0,0" />
+                </StackPanel>
+            </Grid>
+        </DockPanel>
+    </SplitView>
+</UserControl>

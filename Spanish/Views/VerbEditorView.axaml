@@ -1,0 +1,58 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Spanish.ViewModels"
+             xmlns:views="using:Spanish.Views"
+             x:Class="Spanish.Views.VerbEditorView"
+             x:DataType="vm:VerbEditorViewModel">
+
+    <DockPanel>
+        <TextBlock DockPanel.Dock="Top" Text="{Binding Title}" Classes="heading" Margin="0,0,0,16" />
+        <views:EditorFooter DockPanel.Dock="Bottom" />
+
+        <ScrollViewer>
+            <Grid ColumnDefinitions="96,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="12" ColumnSpacing="16">
+                <TextBlock Grid.Row="0" Text="Infinitive" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
+                <StackPanel Grid.Row="0" Grid.Column="1" Spacing="4">
+                    <TextBox Text="{Binding Spanish}" PlaceholderText="hablar" />
+                    <TextBlock Text="{Binding SpanishError}" Classes="error"
+                               IsVisible="{Binding SpanishError, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                </StackPanel>
+
+                <TextBlock Grid.Row="1" Text="English" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
+                <StackPanel Grid.Row="1" Grid.Column="1" Spacing="4">
+                    <TextBox Text="{Binding English}" PlaceholderText="to speak; to talk" />
+                    <TextBlock Text="Separate alternatives with a semicolon." Classes="muted" />
+                    <TextBlock Text="{Binding EnglishError}" Classes="error"
+                               IsVisible="{Binding EnglishError, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                </StackPanel>
+
+                <TextBlock Grid.Row="2" Text="Conjugation" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
+                <StackPanel Grid.Row="2" Grid.Column="1" Spacing="6">
+                    <Grid ColumnDefinitions="150,*,*" ColumnSpacing="8">
+                        <TextBlock Grid.Column="1" Text="Present" Classes="muted" />
+                        <TextBlock Grid.Column="2" Text="Preterite (past)" Classes="muted" />
+                    </Grid>
+                    <ItemsControl ItemsSource="{Binding Conjugations}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:ConjugationRow">
+                                <Grid ColumnDefinitions="150,*,*" ColumnSpacing="8" Margin="0,0,0,6">
+                                    <TextBlock Text="{Binding Person}" Classes="label" />
+                                    <TextBox Grid.Column="1" Text="{Binding Present}" />
+                                    <TextBox Grid.Column="2" Text="{Binding Preterite}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <TextBlock Text="{Binding ConjugationError}" Classes="error"
+                               IsVisible="{Binding ConjugationError, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                </StackPanel>
+
+                <TextBlock Grid.Row="3" Text="Gerund" Classes="label" />
+                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Gerund}" PlaceholderText="hablando" />
+
+                <TextBlock Grid.Row="4" Text="Topics" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
+                <views:TopicChips Grid.Row="4" Grid.Column="1" />
+            </Grid>
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>
