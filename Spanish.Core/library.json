@@ -3499,6 +3499,70 @@
       "PluralValue": "entradas",
       "Gender": "Feminine",
       "Topics": ["city", "leisure"]
+    },
+    {
+      "BaseValue": "agua",
+      "Translation": "water",
+      "PluralValue": "aguas",
+      "Gender": "Feminine",
+      "TakesElInSingular": true,
+      "Topics": ["food", "nature"]
+    },
+    {
+      "BaseValue": "hambre",
+      "Translation": "hunger",
+      "PluralValue": "",
+      "Gender": "Feminine",
+      "TakesElInSingular": true,
+      "Topics": ["food", "health"]
+    },
+    {
+      "BaseValue": "alma",
+      "Translation": "soul",
+      "PluralValue": "almas",
+      "Gender": "Feminine",
+      "TakesElInSingular": true,
+      "Topics": ["emotions"]
+    },
+    {
+      "BaseValue": "águila",
+      "Translation": "eagle",
+      "PluralValue": "águilas",
+      "Gender": "Feminine",
+      "TakesElInSingular": true,
+      "Topics": ["animals"]
+    },
+    {
+      "BaseValue": "aula",
+      "Translation": "classroom",
+      "PluralValue": "aulas",
+      "Gender": "Feminine",
+      "TakesElInSingular": true,
+      "Topics": ["school"]
+    },
+    {
+      "BaseValue": "arma",
+      "Translation": "weapon",
+      "PluralValue": "armas",
+      "Gender": "Feminine",
+      "TakesElInSingular": true,
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "área",
+      "Translation": "area",
+      "PluralValue": "áreas",
+      "Gender": "Feminine",
+      "TakesElInSingular": true,
+      "Topics": ["basics"]
+    },
+    {
+      "BaseValue": "hacha",
+      "Translation": "axe",
+      "PluralValue": "hachas",
+      "Gender": "Feminine",
+      "TakesElInSingular": true,
+      "Topics": ["home"]
     }
   ],
   "Verbs": [
@@ -4197,7 +4261,7 @@
     {
       "BaseValue": "limpio",
       "Translation": "clean",
-      "LinkedNouns": ["ropa", "baño", "cocina", "vaso"],
+      "LinkedNouns": ["ropa", "baño", "agua", "vaso"],
       "Topics": ["home"]
     },
     {
@@ -4239,7 +4303,7 @@
     {
       "BaseValue": "frío",
       "Translation": "cold",
-      "LinkedNouns": ["cerveza", "invierno", "mano", "zumo"],
+      "LinkedNouns": ["cerveza", "invierno", "mano", "agua"],
       "Topics": ["weather"]
     },
     {
