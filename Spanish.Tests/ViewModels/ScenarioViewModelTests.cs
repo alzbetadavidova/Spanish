@@ -31,6 +31,8 @@ public class ScenarioViewModelTests
                 Is.TypeOf<TypedScenarioViewModel>());
             Assert.That(ScenarioViewModel.Create(new GenderScenario(noun, "ciudad", Article.La), OnCompleted),
                 Is.TypeOf<GenderScenarioViewModel>());
+            Assert.That(ScenarioViewModel.Create(new EndingsScenario(TestData.Hablar(), ScenarioType.PresentEndings, "i", []), OnCompleted),
+                Is.TypeOf<EndingsScenarioViewModel>());
             Assert.That(() => ScenarioViewModel.Create(new OtherScenario(noun), OnCompleted), Throws.ArgumentException);
         });
     }
@@ -166,6 +168,8 @@ public class ScenarioViewModelTests
     [TestCase(ScenarioType.Present, true)]
     [TestCase(ScenarioType.Preterite, true)]
     [TestCase(ScenarioType.Gerund, true)]
+    [TestCase(ScenarioType.PresentEndings, true)]
+    [TestCase(ScenarioType.PreteriteEndings, true)]
     [TestCase(ScenarioType.Fill, false)]
     public void VerbForms_OnlyForVerbConjugations(ScenarioType type, bool expected)
     {

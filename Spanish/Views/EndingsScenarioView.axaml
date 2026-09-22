@@ -1,0 +1,66 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Spanish.ViewModels"
+             xmlns:views="using:Spanish.Views"
+             x:Class="Spanish.Views.EndingsScenarioView"
+             x:DataType="vm:EndingsScenarioViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock.success">
+            <Setter Property="Foreground" Value="{DynamicResource SuccessForeground}" />
+        </Style>
+        <Style Selector="TextBlock.danger">
+            <Setter Property="Foreground" Value="{DynamicResource DangerForeground}" />
+        </Style>
+    </UserControl.Styles>
+
+    <StackPanel Spacing="12" Width="420">
+        <TextBlock Text="{Binding Heading}" Classes="muted" HorizontalAlignment="Center" />
+        <StackPanel Spacing="2">
+            <TextBlock Text="{Binding Prompt}" FontSize="26" FontWeight="SemiBold"
+                       HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" />
+            <TextBlock Text="{Binding PromptDetail}" Classes="label" HorizontalAlignment="Center"
+                       IsVisible="{Binding PromptDetail, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+        </StackPanel>
+
+        <!-- The root sits right before its box (habl|o); Enter is handled in code-behind. -->
+        <ItemsControl x:Name="RowList" ItemsSource="{Binding Rows}" Grid.IsSharedSizeScope="True">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:EndingRowViewModel">
+                    <Grid Margin="0,0,0,6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Person" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Root" />
+                            <ColumnDefinition Width="120" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Person}" Classes="label" Margin="0,0,16,0" />
+                        <TextBlock Grid.Column="1" Text="{Binding Root}" FontSize="16"
+                                   HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,2,0" />
+                        <TextBox Grid.Column="2" Text="{Binding Answer}" PlaceholderText="{Binding Placeholder}"
+                                 FontSize="16" IsReadOnly="{Binding IsChecked}" />
+                        <TextBlock Grid.Column="3" Text="{Binding Feedback}" Margin="10,0,0,0"
+                                   VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+                                   Classes.success="{Binding IsCorrect}" Classes.danger="{Binding IsIncorrect}" />
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <TextBlock Text="{Binding ValidationMessage}" Classes="error" HorizontalAlignment="Center"
+                   IsVisible="{Binding ValidationMessage, Converter={x:Static ObjectConverters.IsNotNull}}" />
+
+        <Border Classes="feedback" Classes.success="{Binding IsCorrect}" Classes.danger="{Binding IsIncorrect}"
+                IsVisible="{Binding IsChecked}">
+            <TextBlock Text="{Binding Feedback}" HorizontalAlignment="Center" TextWrapping="Wrap" />
+        </Border>
+        <views:ExceptionNotes Notes="{Binding Notes}" IsVisible="{Binding ShowNotes}" />
+        <ContentControl Content="{Binding VerbForms}" IsVisible="{Binding ShowVerbForms}" />
+
+        <Button Command="{Binding SubmitCommand}" HorizontalAlignment="Center" Classes="accent">
+            <Panel>
+                <TextBlock Text="Check · Enter" IsVisible="{Binding !IsChecked}" />
+                <TextBlock Text="Next · Enter" IsVisible="{Binding IsChecked}" />
+            </Panel>
+        </Button>
+    </StackPanel>
+</UserControl>

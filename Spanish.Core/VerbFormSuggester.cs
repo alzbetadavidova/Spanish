@@ -12,21 +12,26 @@ public static class VerbFormSuggester
     /// <summary>The regular forms, or null when <paramref name="infinitive"/> does not end in -ar, -er or -ir.</summary>
     public static VerbForms? Suggest(string? infinitive)
     {
-        var word = infinitive?.Trim().ToLowerInvariant() ?? string.Empty;
-        if (word.Length < 2)
-        {
-            return null;
-        }
-
-        var stem = word[..^2];
-        return word[^2..] switch
+        var stem = StemOf(infinitive);
+        return stem is null ? null : Normalize(infinitive)[stem.Length..] switch
         {
             "ar" => Ar(stem),
             "er" => ErIr(stem, "emos"),
-            "ir" or "ír" => ErIr(stem, "imos"),
-            _ => null
+            _ => ErIr(stem, "imos") // -ir, -ír
         };
     }
+
+    /// <summary>
+    /// The lowercase infinitive without -ar, -er or -ir (hablar -> habl), or null when it has none of these
+    /// endings. Empty for ir.
+    /// </summary>
+    public static string? StemOf(string? infinitive)
+    {
+        var word = Normalize(infinitive);
+        return word.Length >= 2 && word[^2..] is "ar" or "er" or "ir" or "ír" ? word[..^2] : null;
+    }
+
+    private static string Normalize(string? infinitive) => infinitive?.Trim().ToLowerInvariant() ?? string.Empty;
 
     private static VerbForms Ar(string stem)
     {

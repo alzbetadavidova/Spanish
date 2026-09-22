@@ -403,7 +403,7 @@ public class SessionSettingsViewModelTests
             Assert.That(vm.IncludeVerbs, Is.False);
             Assert.That(vm.IncludeNumerals, Is.False);
             Assert.That(vm.NounScenarios.Where(s => s.IsSelected).Select(s => s.Value), Is.EqualTo(new[] { ScenarioType.Plural }));
-            Assert.That(vm.VerbScenarios.Select(s => s.Label), Is.EqualTo(new[] { "Card", "Fill", "Present", "Preterite", "Gerund" }));
+            Assert.That(vm.VerbScenarios.Select(s => s.Label), Is.EqualTo(new[] { "Card", "Fill", "Present", "Preterite", "Gerund", "Present endings", "Preterite endings" }));
             Assert.That(vm.Topics.Select(t => t.Label), Is.EqualTo(new[] { "animals", "city" }));
             Assert.That(vm.Topics.Single(t => t.IsSelected).Value, Is.EqualTo("city"));
             Assert.That(vm.SelectedOrder.Value, Is.EqualTo(SessionOrder.Random));
@@ -417,10 +417,10 @@ public class SessionSettingsViewModelTests
     public void Changes_UpdateMatchCount()
     {
         var vm = new SessionSettingsViewModel(TestData.Library(), new SessionSettings());
-        Assert.That(vm.MatchText, Is.EqualTo("26 exercises match"));
+        Assert.That(vm.MatchText, Is.EqualTo("28 exercises match"));
 
         vm.IncludeNumerals = false;
-        Assert.That(vm.MatchText, Is.EqualTo("10 exercises match"));
+        Assert.That(vm.MatchText, Is.EqualTo("12 exercises match"));
 
         vm.IncludeVerbs = false;
         Assert.That(vm.MatchCount, Is.EqualTo(6));

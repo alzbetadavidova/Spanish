@@ -39,7 +39,7 @@ public class LearnSessionTests
         {
             "ciudad:Card", "ciudad:Fill", "ciudad:Gender",
             "perro:Card", "perro:Fill", "perro:Gender",
-            "hablar:Card", "hablar:Fill", "hablar:Present", "hablar:Preterite",
+            "hablar:Card", "hablar:Fill", "hablar:Present", "hablar:Preterite", "hablar:PresentEndings", "hablar:PreteriteEndings",
             "números 0–20:NumberToText", "números 0–20:TextToNumber",
             "números 21–100:NumberToText", "números 21–100:TextToNumber",
             "números 101–999:NumberToText", "números 101–999:TextToNumber",

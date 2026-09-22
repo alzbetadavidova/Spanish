@@ -27,6 +27,10 @@ public class ScenarioFactory(IRandomSource random, LearnLibrary library)
             (Verb verb, ScenarioType.Present) => CreateConjugation(verb, type, "Conjugate · present", verb.PresentConjugations),
             (Verb verb, ScenarioType.Preterite) => CreateConjugation(verb, type, "Conjugate · preterite (past)", verb.PreteriteConjugations),
             (Verb verb, ScenarioType.Gerund) => CreateGerund(verb),
+            (Verb verb, ScenarioType.PresentEndings) => CreateEndings(verb, type, "Fill in the endings · present",
+                verb.PresentConjugations, VerbFormSuggester.Suggest(verb.BaseValue)?.Present),
+            (Verb verb, ScenarioType.PreteriteEndings) => CreateEndings(verb, type, "Fill in the endings · preterite (past)",
+                verb.PreteriteConjugations, VerbFormSuggester.Suggest(verb.BaseValue)?.Preterite),
             (Adjective adjective, ScenarioType.PairWithNoun) => CreatePair(adjective),
             (Preposition preposition, ScenarioType.PairWithNoun) => CreatePrepositionPair(preposition),
             (Numeral numeral, ScenarioType.NumberToText or ScenarioType.TextToNumber) => CreateNumeral(numeral, type),
@@ -102,6 +106,18 @@ public class ScenarioFactory(IRandomSource random, LearnLibrary library)
 
     private static TypedScenario CreateGerund(Verb verb) =>
         new(verb, ScenarioType.Gerund, "Type the gerund", verb.BaseValue, verb.TranslationDisplay, [verb.NonPersonalGerund]);
+
+    /// <summary>
+    /// hablar: habl + o, habl + as, … Irregular forms are typed whole. A verb whose infinitive doesn't end in
+    /// -ar, -er or -ir has no root and no <paramref name="regularForms"/>, so all its forms are typed whole.
+    /// </summary>
+    private static EndingsScenario CreateEndings(Verb verb, ScenarioType type, string instruction, string[] forms,
+        IReadOnlyList<string>? regularForms)
+    {
+        var root = VerbFormSuggester.StemOf(verb.BaseValue) ?? string.Empty;
+        var rows = forms.Select((form, i) => EndingRow.Create(Verb.PersonLabels[i], root, form, regularForms?[i])).ToList();
+        return new EndingsScenario(verb, type, instruction, rows);
+    }
 
     /// <summary>bajo + mujeres: the user types "mujeres bajas" (the article is optional).</summary>
     private Scenario CreatePair(Adjective adjective)

@@ -11,7 +11,9 @@ public enum ScenarioType
     Gerund, // type the gerund of a verb
     PairWithNoun, // adjective + noun: type the agreeing form; preposition: translate "from the park" to "del parque"
     NumberToText, // show a number, date or time in digits, type it in spanish words
-    TextToNumber // show a number, date or time in spanish words, type it in digits
+    TextToNumber, // show a number, date or time in spanish words, type it in digits
+    PresentEndings, // show a verb's root, type the endings of all its present forms
+    PreteriteEndings // show a verb's root, type the endings of all its preterite forms
 }
 
 public enum WordKind

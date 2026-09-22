@@ -131,6 +131,8 @@ public class LearnUnitTests
     [TestCase(ScenarioType.Present, true)]
     [TestCase(ScenarioType.Preterite, true)]
     [TestCase(ScenarioType.Gerund, true)]
+    [TestCase(ScenarioType.PresentEndings, true)]
+    [TestCase(ScenarioType.PreteriteEndings, true)]
     [TestCase(ScenarioType.Gender, false)]
     public void Verb_CanPractice_CompleteVerb(ScenarioType type, bool expected)
     {
@@ -140,6 +142,8 @@ public class LearnUnitTests
     [TestCase(ScenarioType.Present, false)]
     [TestCase(ScenarioType.Preterite, false)]
     [TestCase(ScenarioType.Gerund, false)]
+    [TestCase(ScenarioType.PresentEndings, false)]
+    [TestCase(ScenarioType.PreteriteEndings, false)]
     [TestCase(ScenarioType.Fill, true)]
     public void Verb_CanPractice_MissingForms(ScenarioType type, bool expected)
     {

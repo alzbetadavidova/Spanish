@@ -53,8 +53,8 @@ public static class Irregularities
         ScenarioType.Card or ScenarioType.Fill => true,
         ScenarioType.Gender => GenderKinds.Contains(kind),
         ScenarioType.Plural => kind == IrregularityKind.IrregularPlural,
-        ScenarioType.Present => kind == IrregularityKind.IrregularPresent,
-        ScenarioType.Preterite => kind == IrregularityKind.IrregularPreterite,
+        ScenarioType.Present or ScenarioType.PresentEndings => kind == IrregularityKind.IrregularPresent,
+        ScenarioType.Preterite or ScenarioType.PreteriteEndings => kind == IrregularityKind.IrregularPreterite,
         ScenarioType.Gerund => kind == IrregularityKind.IrregularGerund,
         ScenarioType.PairWithNoun => kind == IrregularityKind.IrregularAdjectiveForms,
         _ => false
