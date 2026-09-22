@@ -133,6 +133,9 @@ public partial class EndingRowViewModel(EndingRow row) : ObservableObject
     public string Root => row.Root;
     public string Placeholder => row.HasRoot ? "ending" : "whole form";
 
+    /// <summary>What a screen reader announces for the answer box: "yo, habl…" or "yo, whole form".</summary>
+    public string AccessibleName => row.HasRoot ? $"{row.Person}, {row.Root}…" : $"{row.Person}, whole form";
+
     [ObservableProperty]
     private string _answer = string.Empty;
 
@@ -160,13 +163,14 @@ public partial class EndingRowViewModel(EndingRow row) : ObservableObject
 public partial class EndingsScenarioViewModel : ScenarioViewModel
 {
     private readonly EndingsScenario _scenario;
+    private readonly List<EndingRowViewModel> _rows;
 
     public EndingsScenarioViewModel(EndingsScenario scenario, Func<Scenario, bool, Task> onCompleted)
         : base(scenario, onCompleted)
     {
         _scenario = scenario;
-        Rows = scenario.Rows.Select(r => new EndingRowViewModel(r)).ToList();
-        foreach (var row in Rows)
+        _rows = scenario.Rows.Select(r => new EndingRowViewModel(r)).ToList();
+        foreach (var row in _rows)
         {
             row.PropertyChanged += OnRowChanged;
         }
@@ -175,7 +179,7 @@ public partial class EndingsScenarioViewModel : ScenarioViewModel
     public override string Heading => _scenario.Instruction;
     public string Prompt => _scenario.Prompt;
     public string? PromptDetail => _scenario.PromptDetail;
-    public IReadOnlyList<EndingRowViewModel> Rows { get; }
+    public IReadOnlyList<EndingRowViewModel> Rows => _rows;
 
     [ObservableProperty]
     private string? _validationMessage;
@@ -198,17 +202,22 @@ public partial class EndingsScenarioViewModel : ScenarioViewModel
                 : "Correct";
 
     /// <summary>
-    /// Where Enter moves from row <paramref name="index"/>: the next empty row (wrapping around), or null
+    /// Where Enter moves from <paramref name="current"/>: the next empty row (wrapping around), or null
     /// when the other rows are filled and Enter should submit. Checked answers are all filled.
     /// </summary>
-    public int? NextEmptyRow(int index)
+    /// <exception cref="ArgumentException"><paramref name="current"/> is not one of <see cref="Rows"/>.</exception>
+    public EndingRowViewModel? NextEmptyRow(EndingRowViewModel current)
     {
-        ArgumentOutOfRangeException.ThrowIfNegative(index);
-        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Rows.Count);
-        for (var step = 1; step < Rows.Count; step++)
+        ArgumentNullException.ThrowIfNull(current);
+        var index = _rows.IndexOf(current);
+        if (index < 0)
         {
-            var next = (index + step) % Rows.Count;
-            if (string.IsNullOrWhiteSpace(Rows[next].Answer))
+            throw new ArgumentException("The row is not part of this exercise.", nameof(current));
+        }
+        for (var step = 1; step < _rows.Count; step++)
+        {
+            var next = _rows[(index + step) % _rows.Count];
+            if (string.IsNullOrWhiteSpace(next.Answer))
             {
                 return next;
             }

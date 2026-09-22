@@ -161,15 +161,16 @@ public class EndingRowTests
     [TestCase("busc", "busqué", "busqué")] // regular, but the spelling changes the root
     [TestCase("habl", "habl", "habl")] // nothing left to type after the root
     [TestCase("habl", "hablo", null)] // no regular forms
+    [TestCase("ten", " tengo ", "teno")] // spaces from a hand-edited file
     public void Create_OtherForms_AreTypedWhole(string root, string form, string? regular)
     {
         var row = EndingRow.Create("yo", root, form, regular);
 
         Assert.Multiple(() =>
         {
-            Assert.That(row, Is.EqualTo(new EndingRow("yo", string.Empty, form)));
+            Assert.That(row, Is.EqualTo(new EndingRow("yo", string.Empty, form.Trim())));
             Assert.That(row.HasRoot, Is.False);
-            Assert.That(row.ExpectedAnswers, Is.EqualTo(new[] { form }));
+            Assert.That(row.ExpectedAnswers, Is.EqualTo(new[] { form.Trim() }));
         });
     }
 
@@ -187,16 +188,13 @@ public class EndingRowTests
 
 public class ScenarioTypeExtensionsTests
 {
-    [TestCase(ScenarioType.Present, true)]
-    [TestCase(ScenarioType.Preterite, true)]
-    [TestCase(ScenarioType.Gerund, true)]
-    [TestCase(ScenarioType.PresentEndings, true)]
-    [TestCase(ScenarioType.PreteriteEndings, true)]
-    [TestCase(ScenarioType.Card, false)]
-    [TestCase(ScenarioType.Fill, false)]
-    [TestCase(ScenarioType.Plural, false)]
-    public void IsConjugation_OnlyVerbFormScenarios(ScenarioType type, bool expected)
+    [Test]
+    public void IsConjugation_OnlyVerbFormScenarios()
     {
-        Assert.That(type.IsConjugation(), Is.EqualTo(expected));
+        Assert.That(Enum.GetValues<ScenarioType>().Where(t => t.IsConjugation()), Is.EquivalentTo(new[]
+        {
+            ScenarioType.Present, ScenarioType.Preterite, ScenarioType.Gerund,
+            ScenarioType.PresentEndings, ScenarioType.PreteriteEndings
+        }));
     }
 }

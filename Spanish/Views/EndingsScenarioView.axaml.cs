@@ -34,7 +34,8 @@ public partial class EndingsScenarioView : UserControl
     }
 
     // The boxes are created when the rows are laid out, so wait for that.
-    private void FocusFirstBox() => Dispatcher.UIThread.Post(() => FocusRow(0), DispatcherPriority.Loaded);
+    private void FocusFirstBox() =>
+        Dispatcher.UIThread.Post(() => FocusBoxIn(RowList.ContainerFromIndex(0)), DispatcherPriority.Loaded);
 
     /// <summary>Enter moves to the next empty box, and submits once the other boxes are filled.</summary>
     private void OnKeyDown(object? sender, KeyEventArgs e)
@@ -45,10 +46,10 @@ public partial class EndingsScenarioView : UserControl
         }
         e.Handled = true;
 
-        var index = e.Source is Control { DataContext: EndingRowViewModel row } ? vm.Rows.ToList().IndexOf(row) : -1;
-        if (index >= 0 && vm.NextEmptyRow(index) is { } next)
+        // The focused answer box belongs to a row; the button (or nothing) submits right away.
+        if (e.Source is Control { DataContext: EndingRowViewModel row } && vm.NextEmptyRow(row) is { } next)
         {
-            FocusRow(next);
+            FocusBoxIn(RowList.ContainerFromItem(next));
         }
         else if (vm.SubmitCommand.CanExecute(null))
         {
@@ -56,6 +57,6 @@ public partial class EndingsScenarioView : UserControl
         }
     }
 
-    private void FocusRow(int index) =>
-        RowList.ContainerFromIndex(index)?.GetVisualDescendants().OfType<TextBox>().FirstOrDefault()?.Focus();
+    private static void FocusBoxIn(Control? rowContainer) =>
+        rowContainer?.GetVisualDescendants().OfType<TextBox>().FirstOrDefault()?.Focus();
 }

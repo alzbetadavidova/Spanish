@@ -28,8 +28,8 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{Binding Person}" Classes="label" />
-                                <TextBlock Grid.Column="1" Text="{Binding Present}" />
-                                <TextBlock Grid.Column="2" Text="{Binding Preterite}" />
+                                <TextBlock Grid.Column="1" Text="{Binding Present}" TextWrapping="Wrap" />
+                                <TextBlock Grid.Column="2" Text="{Binding Preterite}" TextWrapping="Wrap" />
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -41,7 +41,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="gerund" Classes="label" />
-                <TextBlock Grid.Column="1" Text="{Binding Gerund}" />
+                <TextBlock Grid.Column="1" Text="{Binding Gerund}" TextWrapping="Wrap" />
             </Grid>
         </StackPanel>
     </Border>
