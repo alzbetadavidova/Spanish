@@ -177,7 +177,31 @@ public class Verb : LearnUnit
     }
 }
 
-public class Adjective : LearnUnit
+/// <summary>A word practiced together with nouns in the pair-with-noun scenario: adjectives and prepositions.</summary>
+public abstract class NounLinkedUnit : LearnUnit
+{
+    // The setter replaces null (possible in hand-edited JSON) with an empty list.
+    private List<string> _linkedNouns = [];
+    /// <summary>Base values of the nouns this word is practiced with.</summary>
+    public List<string> LinkedNouns { get => _linkedNouns; set => _linkedNouns = value ?? []; }
+
+    /// <summary>Whether the pair-with-noun scenario can use <paramref name="noun"/>, one of the linked nouns.</summary>
+    public virtual bool CanPairWith(Noun noun) => true;
+
+    protected override bool HasDataFor(ScenarioType type) => type switch
+    {
+        ScenarioType.PairWithNoun => LinkedNouns.Count > 0,
+        _ => base.HasDataFor(type)
+    };
+
+    public override void CopyContentFrom(LearnUnit other)
+    {
+        base.CopyContentFrom(other);
+        LinkedNouns = [..((NounLinkedUnit)other).LinkedNouns];
+    }
+}
+
+public class Adjective : NounLinkedUnit
 {
     private static readonly ScenarioType[] Scenarios =
         [ScenarioType.Card, ScenarioType.Fill, ScenarioType.PairWithNoun];
@@ -190,10 +214,6 @@ public class Adjective : LearnUnit
     public string MasculinePluralValue { get => _masculinePluralValue; set => _masculinePluralValue = value ?? string.Empty; }
     private string _femininePluralValue = string.Empty;
     public string FemininePluralValue { get => _femininePluralValue; set => _femininePluralValue = value ?? string.Empty; }
-
-    private List<string> _linkedNouns = [];
-    /// <summary>Base values of the nouns this adjective is practiced with.</summary>
-    public List<string> LinkedNouns { get => _linkedNouns; set => _linkedNouns = value ?? []; }
 
     public override WordKind Kind => WordKind.Adjective;
     public override IReadOnlyList<ScenarioType> SupportedScenarios => Scenarios;
@@ -211,12 +231,6 @@ public class Adjective : LearnUnit
         };
     }
 
-    protected override bool HasDataFor(ScenarioType type) => type switch
-    {
-        ScenarioType.PairWithNoun => LinkedNouns.Count > 0,
-        _ => base.HasDataFor(type)
-    };
-
     public override void CopyContentFrom(LearnUnit other)
     {
         base.CopyContentFrom(other);
@@ -224,7 +238,6 @@ public class Adjective : LearnUnit
         FeminineValue = adjective.FeminineValue;
         MasculinePluralValue = adjective.MasculinePluralValue;
         FemininePluralValue = adjective.FemininePluralValue;
-        LinkedNouns = [..adjective.LinkedNouns];
     }
 
     private static string OrSuggested(string value, string suggested) =>

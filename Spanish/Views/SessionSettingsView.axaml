@@ -54,10 +54,11 @@
                 <Border Classes="separator">
                     <Grid Classes="row" ColumnDefinitions="128,*">
                         <TextBlock Text="Word types" Classes="rowLabel" />
-                        <UniformGrid Grid.Column="1" Columns="4">
-                            <ToggleButton Classes="chip" Content="Nouns" IsChecked="{Binding IncludeNouns}" Margin="0,0,8,0" />
-                            <ToggleButton Classes="chip" Content="Verbs" IsChecked="{Binding IncludeVerbs}" Margin="0,0,8,0" />
-                            <ToggleButton Classes="chip" Content="Adjectives" IsChecked="{Binding IncludeAdjectives}" Margin="0,0,8,0" />
+                        <UniformGrid Grid.Column="1" Columns="3">
+                            <ToggleButton Classes="chip" Content="Nouns" IsChecked="{Binding IncludeNouns}" Margin="0,0,8,8" />
+                            <ToggleButton Classes="chip" Content="Verbs" IsChecked="{Binding IncludeVerbs}" Margin="0,0,8,8" />
+                            <ToggleButton Classes="chip" Content="Adjectives" IsChecked="{Binding IncludeAdjectives}" Margin="0,0,8,8" />
+                            <ToggleButton Classes="chip" Content="Prepositions" IsChecked="{Binding IncludePrepositions}" Margin="0,0,8,0" />
                             <ToggleButton Classes="chip" Content="Numerals" IsChecked="{Binding IncludeNumerals}" Margin="0,0,8,0" />
                         </UniformGrid>
                     </Grid>
@@ -77,6 +78,10 @@
                                           ItemsPanel="{StaticResource FourColumns}" />
                             <TextBlock Text="Adjectives" Classes="muted" Margin="0,6,0,6" />
                             <ItemsControl ItemsSource="{Binding AdjectiveScenarios}" IsEnabled="{Binding IncludeAdjectives}"
+                                          ItemTemplate="{StaticResource ChipTemplate}"
+                                          ItemsPanel="{StaticResource FourColumns}" />
+                            <TextBlock Text="Prepositions" Classes="muted" Margin="0,6,0,6" />
+                            <ItemsControl ItemsSource="{Binding PrepositionScenarios}" IsEnabled="{Binding IncludePrepositions}"
                                           ItemTemplate="{StaticResource ChipTemplate}"
                                           ItemsPanel="{StaticResource FourColumns}" />
                             <TextBlock Text="Numerals" Classes="muted" Margin="0,6,0,6" />

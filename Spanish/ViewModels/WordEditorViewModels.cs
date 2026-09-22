@@ -318,41 +318,23 @@ public partial class VerbEditorViewModel : WordEditorViewModel
     private static string At(string[] forms, int index) => index < forms.Length ? forms[index] ?? string.Empty : string.Empty;
 }
 
-public partial class AdjectiveEditorViewModel : WordEditorViewModel
+/// <summary>An editor of a word practiced with linked nouns, which it offers as chips.</summary>
+public abstract partial class NounLinkedEditorViewModel : WordEditorViewModel
 {
     private readonly HashSet<string> _nounBaseline = new(StringComparer.OrdinalIgnoreCase);
 
-    public AdjectiveEditorViewModel(LibraryContext context, Adjective? existing, EditorCallbacks callbacks)
+    protected NounLinkedEditorViewModel(LibraryContext context, NounLinkedUnit? existing, EditorCallbacks callbacks)
         : base(context, existing, callbacks)
     {
-        _feminine = existing?.FeminineValue ?? string.Empty;
-        _masculinePlural = existing?.MasculinePluralValue ?? string.Empty;
-        _femininePlural = existing?.FemininePluralValue ?? string.Empty;
         RefreshNouns();
     }
 
-    public override string Title => IsNew ? "New adjective" : "Edit adjective";
-
-    /// <summary>The nouns the adjective can be paired with.</summary>
+    /// <summary>The nouns the word can be paired with.</summary>
     public ObservableCollection<ToggleOption<string>> Nouns { get; } = [];
     public bool HasNouns => Nouns.Count > 0;
 
-    // The form boxes hold only manual fixes; an empty box uses the suggestion shown as its placeholder.
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(Suggested))]
-    private string _feminine;
-
-    [ObservableProperty]
-    private string _masculinePlural;
-
-    [ObservableProperty]
-    private string _femininePlural;
-
     [ObservableProperty]
     private string? _nounsError;
-
-    /// <summary>The regular forms of the Spanish word, used where no form is typed.</summary>
-    public AdjectiveForms Suggested => AdjectiveFormSuggester.Suggest(Spanish, Feminine);
 
     public override void RefreshChoices()
     {
@@ -360,43 +342,24 @@ public partial class AdjectiveEditorViewModel : WordEditorViewModel
         RefreshNouns();
     }
 
-    protected override void OnSpanishEdited(string value) => OnPropertyChanged(nameof(Suggested));
-
-    protected override LearnUnit BuildCandidate()
-    {
-        var suggested = Suggested;
-        return new Adjective
-        {
-            // A typed form that matches the suggestion is not a fix; keep following the word.
-            FeminineValue = Override(Feminine, suggested.Feminine),
-            MasculinePluralValue = Override(MasculinePlural, suggested.MasculinePlural),
-            FemininePluralValue = Override(FemininePlural, suggested.FemininePlural),
-            LinkedNouns = Nouns.Where(n => n.IsSelected).Select(n => n.Value).ToList()
-        };
-    }
-
     protected override void ShowErrors(IReadOnlyList<ValidationError> errors)
     {
         base.ShowErrors(errors);
-        NounsError = Message(errors, nameof(Adjective.LinkedNouns));
+        NounsError = Message(errors, nameof(NounLinkedUnit.LinkedNouns));
     }
 
-    private static string Override(string typed, string suggested)
-    {
-        var form = typed.Trim();
-        return form == suggested ? string.Empty : form;
-    }
+    protected List<string> SelectedNouns() => Nouns.Where(n => n.IsSelected).Select(n => n.Value).ToList();
 
     /// <summary>
     /// Rebuilds the noun chips from the library. Chips the user changed keep their state; the others
-    /// follow the adjective's current links.
+    /// follow the word's current links.
     /// </summary>
     private void RefreshNouns()
     {
         var edited = Nouns
             .Where(n => n.IsSelected != _nounBaseline.Contains(n.Value))
             .ToDictionary(n => n.Value, n => n.IsSelected, StringComparer.OrdinalIgnoreCase);
-        var linked = (Existing as Adjective)?.LinkedNouns ?? [];
+        var linked = (Existing as NounLinkedUnit)?.LinkedNouns ?? [];
 
         foreach (var chip in Nouns)
         {
@@ -423,4 +386,60 @@ public partial class AdjectiveEditorViewModel : WordEditorViewModel
 
     // IsSelected is the only property of a chip that changes.
     private void OnNounToggled(object? sender, System.ComponentModel.PropertyChangedEventArgs e) => NounsError = null;
+}
+
+public partial class AdjectiveEditorViewModel : NounLinkedEditorViewModel
+{
+    public AdjectiveEditorViewModel(LibraryContext context, Adjective? existing, EditorCallbacks callbacks)
+        : base(context, existing, callbacks)
+    {
+        _feminine = existing?.FeminineValue ?? string.Empty;
+        _masculinePlural = existing?.MasculinePluralValue ?? string.Empty;
+        _femininePlural = existing?.FemininePluralValue ?? string.Empty;
+    }
+
+    public override string Title => IsNew ? "New adjective" : "Edit adjective";
+
+    // The form boxes hold only manual fixes; an empty box uses the suggestion shown as its placeholder.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(Suggested))]
+    private string _feminine;
+
+    [ObservableProperty]
+    private string _masculinePlural;
+
+    [ObservableProperty]
+    private string _femininePlural;
+
+    /// <summary>The regular forms of the Spanish word, used where no form is typed.</summary>
+    public AdjectiveForms Suggested => AdjectiveFormSuggester.Suggest(Spanish, Feminine);
+
+    protected override void OnSpanishEdited(string value) => OnPropertyChanged(nameof(Suggested));
+
+    protected override LearnUnit BuildCandidate()
+    {
+        var suggested = Suggested;
+        return new Adjective
+        {
+            // A typed form that matches the suggestion is not a fix; keep following the word.
+            FeminineValue = Override(Feminine, suggested.Feminine),
+            MasculinePluralValue = Override(MasculinePlural, suggested.MasculinePlural),
+            FemininePluralValue = Override(FemininePlural, suggested.FemininePlural),
+            LinkedNouns = SelectedNouns()
+        };
+    }
+
+    private static string Override(string typed, string suggested)
+    {
+        var form = typed.Trim();
+        return form == suggested ? string.Empty : form;
+    }
+}
+
+public class PrepositionEditorViewModel(LibraryContext context, Preposition? existing, EditorCallbacks callbacks)
+    : NounLinkedEditorViewModel(context, existing, callbacks)
+{
+    public override string Title => IsNew ? "New preposition" : "Edit preposition";
+
+    protected override LearnUnit BuildCandidate() => new Preposition { LinkedNouns = SelectedNouns() };
 }

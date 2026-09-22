@@ -9,7 +9,7 @@ public enum ScenarioType
     Present, // conjugate a verb in present tense
     Preterite, // conjugate a verb in simple past tense
     Gerund, // type the gerund of a verb
-    PairWithNoun, // show an adjective and a noun, type the noun with the agreeing adjective form
+    PairWithNoun, // adjective + noun: type the agreeing form; preposition: translate "from the park" to "del parque"
     NumberToText, // show a number, date or time in digits, type it in spanish words
     TextToNumber // show a number, date or time in spanish words, type it in digits
 }
@@ -19,6 +19,7 @@ public enum WordKind
     Noun,
     Verb,
     Adjective,
+    Preposition,
     Numeral
 }
 

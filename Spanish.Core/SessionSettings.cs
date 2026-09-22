@@ -11,18 +11,23 @@ public record SessionSettings
     public static readonly IReadOnlyList<ScenarioType> DefaultAdjectiveScenarioTypes =
         [ScenarioType.Card, ScenarioType.Fill, ScenarioType.PairWithNoun];
 
+    public static readonly IReadOnlyList<ScenarioType> DefaultPrepositionScenarioTypes =
+        [ScenarioType.Card, ScenarioType.Fill, ScenarioType.PairWithNoun];
+
     public static readonly IReadOnlyList<ScenarioType> DefaultNumeralScenarioTypes = Numeral.ScenarioTypes;
 
     // Setters replace null (possible in hand-edited JSON) with an empty list.
     private readonly IReadOnlyList<ScenarioType> _nounScenarioTypes = DefaultNounScenarioTypes;
     private readonly IReadOnlyList<ScenarioType> _verbScenarioTypes = DefaultVerbScenarioTypes;
     private readonly IReadOnlyList<ScenarioType> _adjectiveScenarioTypes = DefaultAdjectiveScenarioTypes;
+    private readonly IReadOnlyList<ScenarioType> _prepositionScenarioTypes = DefaultPrepositionScenarioTypes;
     private readonly IReadOnlyList<ScenarioType> _numeralScenarioTypes = DefaultNumeralScenarioTypes;
     private readonly IReadOnlyList<string> _topics = [];
 
     public bool IncludeNouns { get; init; } = true;
     public bool IncludeVerbs { get; init; } = true;
     public bool IncludeAdjectives { get; init; } = true;
+    public bool IncludePrepositions { get; init; } = true;
     public bool IncludeNumerals { get; init; } = true;
 
     public IReadOnlyList<ScenarioType> NounScenarioTypes
@@ -41,6 +46,12 @@ public record SessionSettings
     {
         get => _adjectiveScenarioTypes;
         init => _adjectiveScenarioTypes = value ?? [];
+    }
+
+    public IReadOnlyList<ScenarioType> PrepositionScenarioTypes
+    {
+        get => _prepositionScenarioTypes;
+        init => _prepositionScenarioTypes = value ?? [];
     }
 
     public IReadOnlyList<ScenarioType> NumeralScenarioTypes
@@ -67,6 +78,7 @@ public record SessionSettings
             WordKind.Noun => IncludeNouns,
             WordKind.Verb => IncludeVerbs,
             WordKind.Adjective => IncludeAdjectives,
+            WordKind.Preposition => IncludePrepositions,
             WordKind.Numeral => IncludeNumerals,
             _ => false
         };
@@ -79,6 +91,7 @@ public record SessionSettings
         WordKind.Noun => NounScenarioTypes,
         WordKind.Verb => VerbScenarioTypes,
         WordKind.Adjective => AdjectiveScenarioTypes,
+        WordKind.Preposition => PrepositionScenarioTypes,
         WordKind.Numeral => NumeralScenarioTypes,
         _ => []
     };

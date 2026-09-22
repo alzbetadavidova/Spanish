@@ -10,6 +10,7 @@ public static class DisplayNames
         WordKind.Noun => "noun",
         WordKind.Verb => "verb",
         WordKind.Adjective => "adjective",
+        WordKind.Preposition => "preposition",
         WordKind.Numeral => "numeral",
         _ => "word"
     };
