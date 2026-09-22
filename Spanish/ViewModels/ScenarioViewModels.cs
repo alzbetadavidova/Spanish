@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -18,6 +19,10 @@ public abstract partial class ScenarioViewModel(Scenario scenario, Func<Scenario
     public IReadOnlyList<string> Notes { get; } = scenario.Notes.Select(n => n.Reason).ToList();
     public bool HasNotes => Notes.Count > 0;
 
+    /// <summary>All forms of the verb in a conjugation exercise, shown after a wrong answer; null for other exercises.</summary>
+    public VerbFormsTableViewModel? VerbForms { get; } =
+        scenario is { Unit: Verb verb } && scenario.Type.IsConjugation() ? new VerbFormsTableViewModel(verb) : null;
+
     /// <summary>True once the answer was handed over; further input is ignored.</summary>
     public bool IsCompleted { get; private set; }
 
@@ -35,6 +40,7 @@ public abstract partial class ScenarioViewModel(Scenario scenario, Func<Scenario
     {
         CardScenario card => new CardScenarioViewModel(card, onCompleted),
         TypedScenario typed => new TypedScenarioViewModel(typed, onCompleted),
+        EndingsScenario endings => new EndingsScenarioViewModel(endings, onCompleted),
         GenderScenario gender => new GenderScenarioViewModel(gender, onCompleted),
         _ => throw new ArgumentException($"Unsupported scenario {scenario.GetType().Name}.", nameof(scenario))
     };
@@ -82,13 +88,15 @@ public partial class TypedScenarioViewModel(TypedScenario scenario, Func<Scenari
     private string? _validationMessage;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsChecked), nameof(IsCorrect), nameof(IsIncorrect), nameof(Feedback), nameof(ShowNotes))]
+    [NotifyPropertyChangedFor(nameof(IsChecked), nameof(IsCorrect), nameof(IsIncorrect), nameof(Feedback), nameof(ShowNotes),
+        nameof(ShowVerbForms))]
     private AnswerResult? _result;
 
     public bool IsChecked => Result is not null;
     public bool ShowNotes => IsChecked && HasNotes;
     public bool IsCorrect => Result?.IsCorrect == true;
     public bool IsIncorrect => Result is { IsCorrect: false };
+    public bool ShowVerbForms => IsIncorrect && VerbForms is not null;
 
     public string? Feedback => Result switch
     {
@@ -115,6 +123,145 @@ public partial class TypedScenarioViewModel(TypedScenario scenario, Func<Scenari
             return;
         }
         Result = AnswerChecker.Check(Answer, scenario.ExpectedAnswers);
+    }
+}
+
+/// <summary>One person of an endings exercise: the root is shown, the ending is typed.</summary>
+public partial class EndingRowViewModel(EndingRow row) : ObservableObject
+{
+    public string Person => row.Person;
+    public string Root => row.Root;
+    public string Placeholder => row.HasRoot ? "ending" : "whole form";
+
+    /// <summary>What a screen reader announces for the answer box: "yo, habl…" or "yo, whole form".</summary>
+    public string AccessibleName => row.HasRoot ? $"{row.Person}, {row.Root}…" : $"{row.Person}, whole form";
+
+    [ObservableProperty]
+    private string _answer = string.Empty;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsChecked), nameof(IsCorrect), nameof(IsIncorrect), nameof(HasAccentHint), nameof(Feedback),
+        nameof(AccessibleFeedback))]
+    private AnswerResult? _result;
+
+    public bool IsChecked => Result is not null;
+    public bool IsCorrect => Result?.IsCorrect == true;
+    public bool IsIncorrect => Result is { IsCorrect: false };
+    public bool HasAccentHint => Result?.Outcome == AnswerOutcome.CorrectWithAccentHint;
+
+    /// <summary>A tick when right; the whole form when the accents differ or (after an arrow) when wrong.</summary>
+    public string? Feedback => Result?.Outcome switch
+    {
+        null => null,
+        AnswerOutcome.Correct => "✓",
+        AnswerOutcome.CorrectWithAccentHint => $"✓ {row.Form}",
+        _ => $"→ {row.Form}"
+    };
+
+    /// <summary><see cref="Feedback"/> in words, for screen readers that skip the symbols.</summary>
+    public string? AccessibleFeedback => Result?.Outcome switch
+    {
+        null => null,
+        AnswerOutcome.Correct => "correct",
+        AnswerOutcome.CorrectWithAccentHint => $"correct, watch the accent: {row.Form}",
+        _ => $"wrong, the answer is {row.Form}"
+    };
+
+    public void Check() => Result = AnswerChecker.Check(Answer, row.ExpectedAnswers);
+}
+
+public partial class EndingsScenarioViewModel : ScenarioViewModel
+{
+    private readonly EndingsScenario _scenario;
+    private readonly List<EndingRowViewModel> _rows;
+
+    public EndingsScenarioViewModel(EndingsScenario scenario, Func<Scenario, bool, Task> onCompleted)
+        : base(scenario, onCompleted)
+    {
+        _scenario = scenario;
+        _rows = scenario.Rows.Select(r => new EndingRowViewModel(r)).ToList();
+        foreach (var row in _rows)
+        {
+            row.PropertyChanged += OnRowChanged;
+        }
+    }
+
+    public override string Heading => _scenario.Instruction;
+    public string Prompt => _scenario.Prompt;
+    public string? PromptDetail => _scenario.PromptDetail;
+    public IReadOnlyList<EndingRowViewModel> Rows => _rows;
+
+    [ObservableProperty]
+    private string? _validationMessage;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsCorrect), nameof(IsIncorrect), nameof(Feedback), nameof(ShowNotes), nameof(ShowVerbForms))]
+    private bool _isChecked;
+
+    public bool ShowNotes => IsChecked && HasNotes;
+    public bool IsCorrect => IsChecked && Rows.All(r => r.IsCorrect);
+    public bool IsIncorrect => IsChecked && !IsCorrect;
+    public bool ShowVerbForms => IsIncorrect && VerbForms is not null;
+
+    public string? Feedback => !IsChecked
+        ? null
+        : IsIncorrect
+            ? $"{Rows.Count(r => r.IsCorrect)} of {Rows.Count} correct"
+            : Rows.Any(r => r.HasAccentHint)
+                ? "Correct. Watch the accents"
+                : "Correct";
+
+    /// <summary>
+    /// Where Enter moves from <paramref name="current"/>: the next empty row (wrapping around), or null
+    /// when the other rows are filled and Enter should submit. Checked answers are all filled.
+    /// </summary>
+    /// <exception cref="ArgumentException"><paramref name="current"/> is not one of <see cref="Rows"/>.</exception>
+    public EndingRowViewModel? NextEmptyRow(EndingRowViewModel current)
+    {
+        ArgumentNullException.ThrowIfNull(current);
+        var index = _rows.IndexOf(current);
+        if (index < 0)
+        {
+            throw new ArgumentException("The row is not part of this exercise.", nameof(current));
+        }
+        for (var step = 1; step < _rows.Count; step++)
+        {
+            var next = _rows[(index + step) % _rows.Count];
+            if (string.IsNullOrWhiteSpace(next.Answer))
+            {
+                return next;
+            }
+        }
+        return null;
+    }
+
+    /// <summary>Enter: checks the endings, or moves on when they were already checked.</summary>
+    [RelayCommand]
+    private async Task Submit()
+    {
+        if (IsChecked)
+        {
+            await CompleteAsync(IsCorrect);
+            return;
+        }
+        if (Rows.Any(r => string.IsNullOrWhiteSpace(r.Answer)))
+        {
+            ValidationMessage = "Fill in every ending first.";
+            return;
+        }
+        foreach (var row in Rows)
+        {
+            row.Check();
+        }
+        IsChecked = true;
+    }
+
+    private void OnRowChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(EndingRowViewModel.Answer))
+        {
+            ValidationMessage = null;
+        }
     }
 }
 

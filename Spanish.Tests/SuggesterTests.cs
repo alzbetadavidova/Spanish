@@ -91,4 +91,25 @@ public class VerbFormSuggesterTests
     {
         Assert.That(VerbFormSuggester.Suggest(word), Is.Null);
     }
+
+    [TestCase("hablar", "habl")]
+    [TestCase("comer", "com")]
+    [TestCase("vivir", "viv")]
+    [TestCase("oír", "o")]
+    [TestCase("  Tomar ", "tom")]
+    [TestCase("ir", "")]
+    public void StemOf_DropsTheInfinitiveEnding(string infinitive, string expected)
+    {
+        Assert.That(VerbFormSuggester.StemOf(infinitive), Is.EqualTo(expected));
+    }
+
+    [TestCase(null)]
+    [TestCase("")]
+    [TestCase("a")]
+    [TestCase("casa")]
+    [TestCase("llamarse")]
+    public void StemOf_NotAnInfinitive_ReturnsNull(string? word)
+    {
+        Assert.That(VerbFormSuggester.StemOf(word), Is.Null);
+    }
 }

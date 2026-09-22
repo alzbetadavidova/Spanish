@@ -53,8 +53,8 @@ public static class Irregularities
         ScenarioType.Card or ScenarioType.Fill => true,
         ScenarioType.Gender => GenderKinds.Contains(kind),
         ScenarioType.Plural => kind == IrregularityKind.IrregularPlural,
-        ScenarioType.Present => kind == IrregularityKind.IrregularPresent,
-        ScenarioType.Preterite => kind == IrregularityKind.IrregularPreterite,
+        ScenarioType.Present or ScenarioType.PresentEndings => kind == IrregularityKind.IrregularPresent,
+        ScenarioType.Preterite or ScenarioType.PreteriteEndings => kind == IrregularityKind.IrregularPreterite,
         ScenarioType.Gerund => kind == IrregularityKind.IrregularGerund,
         ScenarioType.PairWithNoun => kind == IrregularityKind.IrregularAdjectiveForms,
         _ => false
@@ -84,7 +84,7 @@ public static class Irregularities
         }
 
         var regularPlural = PluralSuggester.Suggest(head) + word[head.Length..];
-        if (plural.Length > 0 && !Same(plural, regularPlural))
+        if (plural.Length > 0 && !MatchesRule(plural, regularPlural))
         {
             result.Add(new(IrregularityKind.IrregularPlural,
                 $"Irregular plural: {plural} (the regular rule gives {regularPlural})."));
@@ -101,7 +101,7 @@ public static class Irregularities
             (Label: "masculine plural", Form: adjective.GetForm(Gender.Masculine, true), Regular: regular.MasculinePlural),
             (Label: "feminine plural", Form: adjective.GetForm(Gender.Feminine, true), Regular: regular.FemininePlural)
         };
-        var irregular = forms.Where(f => !Same(f.Form, f.Regular)).Select(f => $"{f.Form.Trim()} ({f.Label})").ToList();
+        var irregular = forms.Where(f => !MatchesRule(f.Form, f.Regular)).Select(f => $"{f.Form.Trim()} ({f.Label})").ToList();
         return irregular.Count == 0
             ? []
             : [new(IrregularityKind.IrregularAdjectiveForms, $"Irregular forms: {string.Join(", ", irregular)}.")];
@@ -119,7 +119,7 @@ public static class Irregularities
         AddTense(result, IrregularityKind.IrregularPresent, "present", verb.PresentConjugations, regular.Present);
         AddTense(result, IrregularityKind.IrregularPreterite, "preterite", verb.PreteriteConjugations, regular.Preterite);
         var gerund = verb.NonPersonalGerund.Trim();
-        if (gerund.Length > 0 && !Same(gerund, regular.Gerund))
+        if (gerund.Length > 0 && !MatchesRule(gerund, regular.Gerund))
         {
             result.Add(new(IrregularityKind.IrregularGerund, $"Irregular gerund: {gerund}."));
         }
@@ -135,7 +135,7 @@ public static class Irregularities
             return;
         }
         var irregular = Enumerable.Range(0, Verb.PersonCount)
-            .Where(i => !Same(forms[i], regular[i]))
+            .Where(i => !MatchesRule(forms[i], regular[i]))
             .Select(i => $"{Subjects[i]} {forms[i].Trim()}")
             .ToList();
         if (irregular.Count > 0)
@@ -146,6 +146,10 @@ public static class Irregularities
 
     private static bool EndsWith(string word, char letter) => char.ToLowerInvariant(word[^1]) == letter;
 
-    private static bool Same(string form, string regular) =>
-        string.Equals(form.Trim(), regular, StringComparison.OrdinalIgnoreCase);
+    /// <summary>
+    /// Whether a stored form is the one the rules give (false when they give none), ignoring case and surrounding
+    /// spaces. Also decides which rows of an endings exercise keep the root, so the notes and the exercise agree.
+    /// </summary>
+    internal static bool MatchesRule(string form, string? ruleForm) =>
+        string.Equals(form.Trim(), ruleForm, StringComparison.OrdinalIgnoreCase);
 }

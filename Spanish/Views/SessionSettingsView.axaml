@@ -26,6 +26,10 @@
         <ItemsPanelTemplate x:Key="FourColumns">
             <UniformGrid Columns="4" />
         </ItemsPanelTemplate>
+        <!-- Scenario names are longer ("Preterite endings"), so they get wider chips. -->
+        <ItemsPanelTemplate x:Key="ThreeColumns">
+            <UniformGrid Columns="3" />
+        </ItemsPanelTemplate>
     </UserControl.Resources>
 
     <DockPanel DataContext="{Binding Settings}" x:DataType="vm:SessionSettingsViewModel">
@@ -71,23 +75,23 @@
                             <TextBlock Text="Nouns" Classes="muted" Margin="0,0,0,6" />
                             <ItemsControl ItemsSource="{Binding NounScenarios}" IsEnabled="{Binding IncludeNouns}"
                                           ItemTemplate="{StaticResource ChipTemplate}"
-                                          ItemsPanel="{StaticResource FourColumns}" />
+                                          ItemsPanel="{StaticResource ThreeColumns}" />
                             <TextBlock Text="Verbs" Classes="muted" Margin="0,6,0,6" />
                             <ItemsControl ItemsSource="{Binding VerbScenarios}" IsEnabled="{Binding IncludeVerbs}"
                                           ItemTemplate="{StaticResource ChipTemplate}"
-                                          ItemsPanel="{StaticResource FourColumns}" />
+                                          ItemsPanel="{StaticResource ThreeColumns}" />
                             <TextBlock Text="Adjectives" Classes="muted" Margin="0,6,0,6" />
                             <ItemsControl ItemsSource="{Binding AdjectiveScenarios}" IsEnabled="{Binding IncludeAdjectives}"
                                           ItemTemplate="{StaticResource ChipTemplate}"
-                                          ItemsPanel="{StaticResource FourColumns}" />
+                                          ItemsPanel="{StaticResource ThreeColumns}" />
                             <TextBlock Text="Prepositions" Classes="muted" Margin="0,6,0,6" />
                             <ItemsControl ItemsSource="{Binding PrepositionScenarios}" IsEnabled="{Binding IncludePrepositions}"
                                           ItemTemplate="{StaticResource ChipTemplate}"
-                                          ItemsPanel="{StaticResource FourColumns}" />
+                                          ItemsPanel="{StaticResource ThreeColumns}" />
                             <TextBlock Text="Numerals" Classes="muted" Margin="0,6,0,6" />
                             <ItemsControl ItemsSource="{Binding NumeralScenarios}" IsEnabled="{Binding IncludeNumerals}"
                                           ItemTemplate="{StaticResource ChipTemplate}"
-                                          ItemsPanel="{StaticResource FourColumns}" />
+                                          ItemsPanel="{StaticResource ThreeColumns}" />
                         </StackPanel>
                     </Grid>
                 </Border>

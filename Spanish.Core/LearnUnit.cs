@@ -123,7 +123,10 @@ public class Verb : LearnUnit
     public const int PersonCount = 5;
 
     private static readonly ScenarioType[] Scenarios =
-        [ScenarioType.Card, ScenarioType.Fill, ScenarioType.Present, ScenarioType.Preterite, ScenarioType.Gerund];
+    [
+        ScenarioType.Card, ScenarioType.Fill, ScenarioType.Present, ScenarioType.Preterite, ScenarioType.Gerund,
+        ScenarioType.PresentEndings, ScenarioType.PreteriteEndings
+    ];
 
     /// <summary>Maps each subject to its index in the conjugation arrays.</summary>
     public static readonly IReadOnlyDictionary<string, int> ConjugationsDefinitions = new Dictionary<string, int>
@@ -161,8 +164,8 @@ public class Verb : LearnUnit
 
     protected override bool HasDataFor(ScenarioType type) => type switch
     {
-        ScenarioType.Present => IsComplete(PresentConjugations),
-        ScenarioType.Preterite => IsComplete(PreteriteConjugations),
+        ScenarioType.Present or ScenarioType.PresentEndings => IsComplete(PresentConjugations),
+        ScenarioType.Preterite or ScenarioType.PreteriteEndings => IsComplete(PreteriteConjugations),
         ScenarioType.Gerund => !string.IsNullOrWhiteSpace(NonPersonalGerund),
         _ => base.HasDataFor(type)
     };

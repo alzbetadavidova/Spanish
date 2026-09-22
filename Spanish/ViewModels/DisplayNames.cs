@@ -30,6 +30,8 @@ public static class DisplayNames
         ScenarioType.PairWithNoun => "Pair with noun",
         ScenarioType.NumberToText => "To words",
         ScenarioType.TextToNumber => "To digits",
+        ScenarioType.PresentEndings => "Present endings",
+        ScenarioType.PreteriteEndings => "Preterite endings",
         _ => type.ToString()
     };
 }

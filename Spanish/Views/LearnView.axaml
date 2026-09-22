@@ -30,8 +30,11 @@
                        HorizontalAlignment="Center" Margin="0,12,0,0" />
 
             <Grid>
-                <ContentControl Content="{Binding CurrentScenario}"
-                                HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <!-- A wrong conjugation adds the table of all forms, which can be taller than the window. -->
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <ContentControl Content="{Binding CurrentScenario}"
+                                    HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </ScrollViewer>
                 <StackPanel IsVisible="{Binding IsEmpty}" Spacing="8"
                             HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="360">
                     <TextBlock Text="Nothing to practice" Classes="heading" HorizontalAlignment="Center" />

@@ -11,7 +11,16 @@ public enum ScenarioType
     Gerund, // type the gerund of a verb
     PairWithNoun, // adjective + noun: type the agreeing form; preposition: translate "from the park" to "del parque"
     NumberToText, // show a number, date or time in digits, type it in spanish words
-    TextToNumber // show a number, date or time in spanish words, type it in digits
+    TextToNumber, // show a number, date or time in spanish words, type it in digits
+    PresentEndings, // show a verb's root, type the endings of all its present forms
+    PreteriteEndings // show a verb's root, type the endings of all its preterite forms
+}
+
+public static class ScenarioTypeExtensions
+{
+    /// <summary>Whether the scenario practices the forms of a verb (not its meaning).</summary>
+    public static bool IsConjugation(this ScenarioType type) => type is ScenarioType.Present or ScenarioType.Preterite
+        or ScenarioType.Gerund or ScenarioType.PresentEndings or ScenarioType.PreteriteEndings;
 }
 
 public enum WordKind

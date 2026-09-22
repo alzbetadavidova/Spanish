@@ -210,6 +210,8 @@ public class IrregularitiesTests
     [TestCase(ScenarioType.Present, new[] { IrregularityKind.IrregularPresent })]
     [TestCase(ScenarioType.Preterite, new[] { IrregularityKind.IrregularPreterite })]
     [TestCase(ScenarioType.Gerund, new[] { IrregularityKind.IrregularGerund })]
+    [TestCase(ScenarioType.PresentEndings, new[] { IrregularityKind.IrregularPresent })]
+    [TestCase(ScenarioType.PreteriteEndings, new[] { IrregularityKind.IrregularPreterite })]
     [TestCase(ScenarioType.Gender, new IrregularityKind[0])]
     [TestCase(ScenarioType.Plural, new IrregularityKind[0])]
     [TestCase(ScenarioType.PairWithNoun, new IrregularityKind[0])]

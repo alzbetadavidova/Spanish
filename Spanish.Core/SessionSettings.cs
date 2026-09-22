@@ -6,7 +6,10 @@ public record SessionSettings
         [ScenarioType.Card, ScenarioType.Fill, ScenarioType.Gender];
 
     public static readonly IReadOnlyList<ScenarioType> DefaultVerbScenarioTypes =
-        [ScenarioType.Card, ScenarioType.Fill, ScenarioType.Present, ScenarioType.Preterite];
+    [
+        ScenarioType.Card, ScenarioType.Fill, ScenarioType.Present, ScenarioType.Preterite,
+        ScenarioType.PresentEndings, ScenarioType.PreteriteEndings
+    ];
 
     public static readonly IReadOnlyList<ScenarioType> DefaultAdjectiveScenarioTypes =
         [ScenarioType.Card, ScenarioType.Fill, ScenarioType.PairWithNoun];
