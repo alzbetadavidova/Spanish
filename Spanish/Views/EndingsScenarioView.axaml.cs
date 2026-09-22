@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
@@ -35,8 +34,7 @@ public partial class EndingsScenarioView : UserControl
     }
 
     // The boxes are created when the rows are laid out, so wait for that.
-    private void FocusFirstBox() =>
-        Dispatcher.UIThread.Post(() => AnswerBoxes().FirstOrDefault()?.Focus(), DispatcherPriority.Loaded);
+    private void FocusFirstBox() => Dispatcher.UIThread.Post(() => FocusRow(0), DispatcherPriority.Loaded);
 
     /// <summary>Enter moves to the next empty box, and submits once the other boxes are filled.</summary>
     private void OnKeyDown(object? sender, KeyEventArgs e)
@@ -47,15 +45,17 @@ public partial class EndingsScenarioView : UserControl
         }
         e.Handled = true;
 
-        var boxes = AnswerBoxes();
-        var index = e.Source is TextBox box ? boxes.IndexOf(box) : -1;
+        var index = e.Source is Control { DataContext: EndingRowViewModel row } ? vm.Rows.ToList().IndexOf(row) : -1;
         if (index >= 0 && vm.NextEmptyRow(index) is { } next)
         {
-            boxes[next].Focus();
-            return;
+            FocusRow(next);
         }
-        vm.SubmitCommand.Execute(null);
+        else if (vm.SubmitCommand.CanExecute(null))
+        {
+            vm.SubmitCommand.Execute(null);
+        }
     }
 
-    private List<TextBox> AnswerBoxes() => RowList.GetVisualDescendants().OfType<TextBox>().ToList();
+    private void FocusRow(int index) =>
+        RowList.ContainerFromIndex(index)?.GetVisualDescendants().OfType<TextBox>().FirstOrDefault()?.Focus();
 }

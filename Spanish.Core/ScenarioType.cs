@@ -16,6 +16,13 @@ public enum ScenarioType
     PreteriteEndings // show a verb's root, type the endings of all its preterite forms
 }
 
+public static class ScenarioTypeExtensions
+{
+    /// <summary>Whether the scenario practices the forms of a verb (not its meaning).</summary>
+    public static bool IsConjugation(this ScenarioType type) => type is ScenarioType.Present or ScenarioType.Preterite
+        or ScenarioType.Gerund or ScenarioType.PresentEndings or ScenarioType.PreteriteEndings;
+}
+
 public enum WordKind
 {
     Noun,

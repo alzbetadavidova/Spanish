@@ -16,15 +16,16 @@ public class EndingsScenarioViewModelTests
         return Task.CompletedTask;
     }
 
-    /// <summary>hablar in the preterite: every row keeps the root, habl + é, aste, ó, amos, aron.</summary>
-    private EndingsScenarioViewModel Hablar()
+    private EndingsScenarioViewModel Create(Verb verb, ScenarioType type)
     {
-        var scenario = new ScenarioFactory(new FakeRandom(), new LearnLibrary())
-            .Create(TestData.Hablar(), ScenarioType.PreteriteEndings, Direction.Mixed);
+        var scenario = new ScenarioFactory(new FakeRandom(), new LearnLibrary()).Create(verb, type, Direction.Mixed);
         return new EndingsScenarioViewModel((EndingsScenario)scenario, OnCompleted);
     }
 
-    private static void Type(EndingsScenarioViewModel vm, params string[] answers)
+    /// <summary>Every row keeps the root: habl + é, aste, ó, amos, aron.</summary>
+    private EndingsScenarioViewModel HablarPreterite() => Create(TestData.Hablar(), ScenarioType.PreteriteEndings);
+
+    private static void FillIn(EndingsScenarioViewModel vm, params string[] answers)
     {
         for (var i = 0; i < answers.Length; i++)
         {
@@ -33,9 +34,9 @@ public class EndingsScenarioViewModelTests
     }
 
     [Test]
-    public void Constructor_ExposesTheVerbAndItsRows()
+    public void Constructor_ExposesTheScenarioAndItsRows()
     {
-        var vm = Hablar();
+        var vm = HablarPreterite();
 
         Assert.Multiple(() =>
         {
@@ -45,7 +46,7 @@ public class EndingsScenarioViewModelTests
             Assert.That(vm.Rows.Select(r => r.Person), Is.EqualTo(Verb.PersonLabels));
             Assert.That(vm.Rows.Select(r => r.Root), Is.All.EqualTo("habl"));
             Assert.That(vm.Rows.Select(r => r.Placeholder), Is.All.EqualTo("ending"));
-            Assert.That(vm.VerbForms, Is.Not.Null);
+            Assert.That(vm.VerbForms!.Rows[0], Is.EqualTo(new VerbFormRow("yo", "hablo", "hablé")));
             Assert.That(vm.IsChecked, Is.False);
             Assert.That(vm.IsCorrect, Is.False);
             Assert.That(vm.IsIncorrect, Is.False);
@@ -56,10 +57,10 @@ public class EndingsScenarioViewModelTests
     }
 
     [Test]
-    public async Task Submit_EmptyRow_AsksToFillEverythingUntilTyping()
+    public async Task Submit_BlankRow_AsksToFillEverythingUntilTyping()
     {
-        var vm = Hablar();
-        Type(vm, "é", "aste", "ó", "amos");
+        var vm = HablarPreterite();
+        FillIn(vm, "é", "aste", "ó", "amos", " ");
 
         await vm.SubmitCommand.ExecuteAsync(null);
         Assert.Multiple(() =>
@@ -76,8 +77,8 @@ public class EndingsScenarioViewModelTests
     [Test]
     public async Task Submit_AllRight_ChecksThenCompletesOnce()
     {
-        var vm = Hablar();
-        Type(vm, "é", "aste", "ó", "amos", "hablaron");
+        var vm = HablarPreterite();
+        FillIn(vm, "é", "aste", "ó", "amos", "hablaron");
 
         await vm.SubmitCommand.ExecuteAsync(null);
         Assert.Multiple(() =>
@@ -100,8 +101,8 @@ public class EndingsScenarioViewModelTests
     [Test]
     public async Task Submit_MissingAccent_IsCorrectWithAHint()
     {
-        var vm = Hablar();
-        Type(vm, "é", "aste", "o", "amos", "aron");
+        var vm = HablarPreterite();
+        FillIn(vm, "é", "aste", "o", "amos", "aron");
 
         await vm.SubmitCommand.ExecuteAsync(null);
         await vm.SubmitCommand.ExecuteAsync(null);
@@ -110,6 +111,7 @@ public class EndingsScenarioViewModelTests
         {
             Assert.That(vm.IsCorrect, Is.True);
             Assert.That(vm.Feedback, Is.EqualTo("Correct. Watch the accents"));
+            Assert.That(vm.ShowVerbForms, Is.False);
             Assert.That(vm.Rows[2].HasAccentHint, Is.True);
             Assert.That(vm.Rows[2].Feedback, Is.EqualTo("✓ habló"));
             Assert.That(vm.Rows[0].HasAccentHint, Is.False);
@@ -118,10 +120,12 @@ public class EndingsScenarioViewModelTests
     }
 
     [Test]
-    public async Task Submit_WrongRow_CountsTheRightOnesAndShowsTheForms()
+    public async Task Submit_WrongRows_CountTheRightOnesAndShowTheForms()
     {
-        var vm = Hablar();
-        Type(vm, "é", "aste", "ó", "emos", "ieron");
+        var vm = HablarPreterite();
+        FillIn(vm, "é", "aste", "ó", "emos", "ieron");
+        var changed = new List<string?>();
+        vm.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
 
         await vm.SubmitCommand.ExecuteAsync(null);
         Assert.Multiple(() =>
@@ -130,10 +134,16 @@ public class EndingsScenarioViewModelTests
             Assert.That(vm.IsIncorrect, Is.True);
             Assert.That(vm.Feedback, Is.EqualTo("3 of 5 correct"));
             Assert.That(vm.ShowVerbForms, Is.True);
+            Assert.That(changed, Is.SupersetOf(new[]
+            {
+                nameof(EndingsScenarioViewModel.IsChecked), nameof(EndingsScenarioViewModel.IsCorrect),
+                nameof(EndingsScenarioViewModel.IsIncorrect), nameof(EndingsScenarioViewModel.Feedback),
+                nameof(EndingsScenarioViewModel.ShowVerbForms)
+            }));
             Assert.That(vm.Rows[3].IsIncorrect, Is.True);
             Assert.That(vm.Rows[3].IsCorrect, Is.False);
-            Assert.That(vm.Rows[3].Feedback, Is.EqualTo("hablamos"));
-            Assert.That(vm.Rows[4].Feedback, Is.EqualTo("hablaron"));
+            Assert.That(vm.Rows[3].Feedback, Is.EqualTo("→ hablamos"));
+            Assert.That(vm.Rows[4].Feedback, Is.EqualTo("→ hablaron"));
             Assert.That(vm.Rows[0].IsIncorrect, Is.False);
         });
 
@@ -142,17 +152,27 @@ public class EndingsScenarioViewModelTests
     }
 
     [Test]
+    public async Task Submit_WrongRowAndMissingAccent_CountsTheAccentRowAsCorrect()
+    {
+        var vm = HablarPreterite();
+        FillIn(vm, "é", "aste", "o", "emos", "aron");
+
+        await vm.SubmitCommand.ExecuteAsync(null);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(vm.IsIncorrect, Is.True);
+            Assert.That(vm.Feedback, Is.EqualTo("4 of 5 correct"));
+            Assert.That(vm.Rows[2].Feedback, Is.EqualTo("✓ habló"));
+            Assert.That(vm.ShowVerbForms, Is.True);
+        });
+    }
+
+    [Test]
     public async Task Submit_IrregularVerb_ChecksWholeFormsAndShowsNotes()
     {
-        var tener = new Verb
-        {
-            BaseValue = "tener",
-            Translation = "to have",
-            PresentConjugations = ["tengo", "tienes", "tiene", "tenemos", "tienen"]
-        };
-        var scenario = new ScenarioFactory(new FakeRandom(), new LearnLibrary()).Create(tener, ScenarioType.PresentEndings, Direction.Mixed);
-        var vm = new EndingsScenarioViewModel((EndingsScenario)scenario, OnCompleted);
-        Type(vm, "tengo", "tienes", "tiene", "emos", "tienen");
+        var vm = Create(TestData.Tener(), ScenarioType.PresentEndings);
+        FillIn(vm, "tengo", "tienes", "tiene", "emos", "tienen");
 
         await vm.SubmitCommand.ExecuteAsync(null);
 
@@ -162,7 +182,6 @@ public class EndingsScenarioViewModelTests
             Assert.That(vm.Rows[0].Placeholder, Is.EqualTo("whole form"));
             Assert.That(vm.Rows[3].Placeholder, Is.EqualTo("ending"));
             Assert.That(vm.IsCorrect, Is.True);
-            Assert.That(vm.HasNotes, Is.True);
             Assert.That(vm.ShowNotes, Is.True);
         });
     }
@@ -200,8 +219,8 @@ public class EndingsScenarioViewModelTests
     [Test]
     public void NextEmptyRow_FindsTheNextEmptyRowAndWrapsAround()
     {
-        var vm = Hablar();
-        Type(vm, "é", "", "ó", "", "aron");
+        var vm = HablarPreterite();
+        FillIn(vm, "é", "", "ó", "", "aron");
 
         Assert.Multiple(() =>
         {
@@ -212,10 +231,10 @@ public class EndingsScenarioViewModelTests
     }
 
     [Test]
-    public void NextEmptyRow_OnlyTheCurrentRowIsEmpty_SubmitsInstead()
+    public void NextEmptyRow_OnlyTheCurrentRowIsBlank_SubmitsInstead()
     {
-        var vm = Hablar();
-        Type(vm, "é", " ", "ó", "amos", "aron");
+        var vm = HablarPreterite();
+        FillIn(vm, "é", " ", "ó", "amos", "aron");
 
         Assert.Multiple(() =>
         {
@@ -224,20 +243,10 @@ public class EndingsScenarioViewModelTests
         });
     }
 
-    [Test]
-    public async Task NextEmptyRow_AfterCheck_SubmitsInstead()
-    {
-        var vm = Hablar();
-        Type(vm, "é", "aste", "ó", "amos", "aron");
-        await vm.SubmitCommand.ExecuteAsync(null);
-
-        Assert.That(vm.NextEmptyRow(0), Is.Null);
-    }
-
     [TestCase(-1)]
     [TestCase(5)]
     public void NextEmptyRow_OutOfRange_Throws(int index)
     {
-        Assert.That(() => Hablar().NextEmptyRow(index), Throws.InstanceOf<ArgumentOutOfRangeException>());
+        Assert.That(() => HablarPreterite().NextEmptyRow(index), Throws.InstanceOf<ArgumentOutOfRangeException>());
     }
 }

@@ -8,7 +8,7 @@
     <Border Background="{DynamicResource SubtleSurface}" CornerRadius="6" Padding="12,8">
         <StackPanel Spacing="4" Grid.IsSharedSizeScope="True">
             <TextBlock Text="All forms" FontWeight="SemiBold" />
-            <StackPanel Spacing="4" IsVisible="{Binding HasConjugations}">
+            <StackPanel Spacing="4">
                 <Grid ColumnSpacing="12">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" SharedSizeGroup="Person" />
@@ -35,7 +35,7 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </StackPanel>
-            <Grid ColumnSpacing="12" IsVisible="{Binding HasGerund}">
+            <Grid ColumnSpacing="12">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="Person" />
                     <ColumnDefinition Width="*" />

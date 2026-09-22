@@ -116,7 +116,7 @@ public class ScenarioFactory(IRandomSource random, LearnLibrary library)
     {
         var root = VerbFormSuggester.StemOf(verb.BaseValue) ?? string.Empty;
         var rows = forms.Select((form, i) => EndingRow.Create(Verb.PersonLabels[i], root, form, regularForms?[i])).ToList();
-        return new EndingsScenario(verb, type, instruction, rows);
+        return new EndingsScenario(verb, type, instruction, verb.BaseValue, verb.TranslationDisplay, rows);
     }
 
     /// <summary>bajo + mujeres: the user types "mujeres bajas" (the article is optional).</summary>

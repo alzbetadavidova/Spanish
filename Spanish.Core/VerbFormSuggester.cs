@@ -10,28 +10,26 @@ public record VerbForms(IReadOnlyList<string> Present, IReadOnlyList<string> Pre
 public static class VerbFormSuggester
 {
     /// <summary>The regular forms, or null when <paramref name="infinitive"/> does not end in -ar, -er or -ir.</summary>
-    public static VerbForms? Suggest(string? infinitive)
+    public static VerbForms? Suggest(string? infinitive) => Split(infinitive) switch
     {
-        var stem = StemOf(infinitive);
-        return stem is null ? null : Normalize(infinitive)[stem.Length..] switch
-        {
-            "ar" => Ar(stem),
-            "er" => ErIr(stem, "emos"),
-            _ => ErIr(stem, "imos") // -ir, -ír
-        };
-    }
+        null => null,
+        (var stem, "ar") => Ar(stem),
+        (var stem, "er") => ErIr(stem, "emos"),
+        var (stem, _) => ErIr(stem, "imos") // -ir, -ír
+    };
 
     /// <summary>
     /// The lowercase infinitive without -ar, -er or -ir (hablar -> habl), or null when it has none of these
     /// endings. Empty for ir.
     /// </summary>
-    public static string? StemOf(string? infinitive)
-    {
-        var word = Normalize(infinitive);
-        return word.Length >= 2 && word[^2..] is "ar" or "er" or "ir" or "ír" ? word[..^2] : null;
-    }
+    public static string? StemOf(string? infinitive) => Split(infinitive)?.Stem;
 
-    private static string Normalize(string? infinitive) => infinitive?.Trim().ToLowerInvariant() ?? string.Empty;
+    /// <summary>hablar -> (habl, ar); null when the infinitive doesn't end in -ar, -er, -ir or -ír.</summary>
+    private static (string Stem, string Ending)? Split(string? infinitive)
+    {
+        var word = infinitive?.Trim().ToLowerInvariant() ?? string.Empty;
+        return word.Length >= 2 && word[^2..] is "ar" or "er" or "ir" or "ír" ? (word[..^2], word[^2..]) : null;
+    }
 
     private static VerbForms Ar(string stem)
     {

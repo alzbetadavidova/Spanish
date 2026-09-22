@@ -73,6 +73,31 @@ public class ExceptionNotesViewModelTests
 
     [TestCase(true)]
     [TestCase(false)]
+    public async Task Endings_ShowsNotesOnceChecked(bool hasNotes)
+    {
+        var scenario = new EndingsScenario(TestData.Hablar(), ScenarioType.PresentEndings, "i", "p", null,
+            [new EndingRow("yo", "habl", "o")])
+        {
+            Notes = hasNotes ? Why : []
+        };
+        var vm = new EndingsScenarioViewModel(scenario, OnCompleted);
+        vm.Rows[0].Answer = "o";
+        var changed = new List<string?>();
+        vm.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
+        var before = vm.ShowNotes;
+
+        await vm.SubmitCommand.ExecuteAsync(null);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(before, Is.False);
+            Assert.That(vm.ShowNotes, Is.EqualTo(hasNotes));
+            Assert.That(changed, Does.Contain(nameof(EndingsScenarioViewModel.ShowNotes)));
+        });
+    }
+
+    [TestCase(true)]
+    [TestCase(false)]
     public void Card_ShowsNotesOnceFlipped(bool hasNotes)
     {
         var scenario = new CardScenario(TestData.Ciudad(), Direction.EnglishToSpanish, "a", "b", null) { Notes = hasNotes ? Why : [] };

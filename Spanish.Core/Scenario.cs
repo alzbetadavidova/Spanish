@@ -20,8 +20,13 @@ public sealed record TypedScenario(
     IReadOnlyList<string> ExpectedAnswers) : Scenario(Unit, Type);
 
 /// <summary>The user types the endings of every person of one tense after the verb's root.</summary>
-public sealed record EndingsScenario(Verb Verb, ScenarioType Type, string Instruction, IReadOnlyList<EndingRow> Rows)
-    : Scenario(Verb, Type);
+public sealed record EndingsScenario(
+    Verb Verb,
+    ScenarioType Type,
+    string Instruction,
+    string Prompt,
+    string? PromptDetail,
+    IReadOnlyList<EndingRow> Rows) : Scenario(Verb, Type);
 
 /// <summary>One person of an <see cref="EndingsScenario"/>: habl + o. A form typed whole (tengo) has an empty root.</summary>
 public sealed record EndingRow(string Person, string Root, string Ending)
@@ -47,7 +52,7 @@ public sealed record EndingRow(string Person, string Root, string Ending)
         var keepsRoot = root.Length > 0
                         && trimmed.Length > root.Length
                         && trimmed.StartsWith(root, StringComparison.OrdinalIgnoreCase)
-                        && string.Equals(trimmed, regularForm, StringComparison.OrdinalIgnoreCase);
+                        && Irregularities.MatchesRule(trimmed, regularForm);
         return keepsRoot
             ? new EndingRow(person, trimmed[..root.Length], trimmed[root.Length..])
             : new EndingRow(person, string.Empty, trimmed);

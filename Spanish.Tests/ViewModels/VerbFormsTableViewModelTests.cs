@@ -5,6 +5,8 @@ namespace Spanish.Tests.ViewModels;
 
 public class VerbFormsTableViewModelTests
 {
+    private const string Missing = VerbFormsTableViewModel.Missing;
+
     [Test]
     public void Constructor_ListsEveryPersonWithBothTensesAndTheGerund()
     {
@@ -20,14 +22,12 @@ public class VerbFormsTableViewModelTests
                 new VerbFormRow("nosotros / nosotras", "hablamos", "hablamos"),
                 new VerbFormRow("ellos / ellas / ustedes", "hablan", "hablaron")
             }));
-            Assert.That(table.HasConjugations, Is.True);
             Assert.That(table.Gerund, Is.EqualTo("hablando"));
-            Assert.That(table.HasGerund, Is.True);
         });
     }
 
     [Test]
-    public void Constructor_MissingPresent_ShowsDashes()
+    public void Constructor_MissingTense_ShowsDashes()
     {
         var verb = TestData.Hablar();
         verb.PresentConjugations = Verb.EmptyConjugations();
@@ -36,24 +36,8 @@ public class VerbFormsTableViewModelTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(table.Rows.Select(r => r.Present), Is.All.EqualTo(VerbFormsTableViewModel.Missing));
+            Assert.That(table.Rows.Select(r => r.Present), Is.All.EqualTo(Missing));
             Assert.That(table.Rows[0].Preterite, Is.EqualTo("hablé"));
-            Assert.That(table.HasConjugations, Is.True);
-        });
-    }
-
-    [Test]
-    public void Constructor_MissingPreterite_ShowsDashes()
-    {
-        var verb = TestData.Hablar();
-        verb.PreteriteConjugations = Verb.EmptyConjugations();
-
-        var table = new VerbFormsTableViewModel(verb);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(table.Rows.Select(r => r.Preterite), Is.All.EqualTo(VerbFormsTableViewModel.Missing));
-            Assert.That(table.HasConjugations, Is.True);
         });
     }
 
@@ -65,12 +49,11 @@ public class VerbFormsTableViewModelTests
 
         var table = new VerbFormsTableViewModel(verb);
 
-        Assert.That(table.Rows.Select(r => r.Preterite),
-            Is.EqualTo(new[] { "hablé", "—", "—", "—", "—" }));
+        Assert.That(table.Rows.Select(r => r.Preterite), Is.EqualTo(new[] { "hablé", Missing, Missing, Missing, Missing }));
     }
 
     [Test]
-    public void Constructor_OnlyAGerund_HasNoConjugations()
+    public void Constructor_OnlyAGerund_ShowsDashesForEveryPerson()
     {
         var verb = new Verb { BaseValue = "hablar", NonPersonalGerund = " hablando " };
 
@@ -78,25 +61,18 @@ public class VerbFormsTableViewModelTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(table.HasConjugations, Is.False);
+            Assert.That(table.Rows.Select(r => (r.Present, r.Preterite)), Is.All.EqualTo((Missing, Missing)));
             Assert.That(table.Gerund, Is.EqualTo("hablando"));
-            Assert.That(table.HasGerund, Is.True);
         });
     }
 
     [Test]
-    public void Constructor_NoGerund_HidesIt()
+    public void Constructor_NoGerund_ShowsADash()
     {
         var verb = TestData.Hablar();
         verb.NonPersonalGerund = " ";
 
-        var table = new VerbFormsTableViewModel(verb);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(table.Gerund, Is.Empty);
-            Assert.That(table.HasGerund, Is.False);
-        });
+        Assert.That(new VerbFormsTableViewModel(verb).Gerund, Is.EqualTo(Missing));
     }
 
     [Test]

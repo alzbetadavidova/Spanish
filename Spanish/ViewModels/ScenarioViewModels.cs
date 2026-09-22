@@ -20,14 +20,8 @@ public abstract partial class ScenarioViewModel(Scenario scenario, Func<Scenario
     public bool HasNotes => Notes.Count > 0;
 
     /// <summary>All forms of the verb in a conjugation exercise, shown after a wrong answer; null for other exercises.</summary>
-    public VerbFormsTableViewModel? VerbForms { get; } = scenario is
-    {
-        Unit: Verb verb,
-        Type: ScenarioType.Present or ScenarioType.Preterite or ScenarioType.Gerund
-            or ScenarioType.PresentEndings or ScenarioType.PreteriteEndings
-    }
-        ? new VerbFormsTableViewModel(verb)
-        : null;
+    public VerbFormsTableViewModel? VerbForms { get; } =
+        scenario is { Unit: Verb verb } && scenario.Type.IsConjugation() ? new VerbFormsTableViewModel(verb) : null;
 
     /// <summary>True once the answer was handed over; further input is ignored.</summary>
     public bool IsCompleted { get; private set; }
@@ -151,13 +145,13 @@ public partial class EndingRowViewModel(EndingRow row) : ObservableObject
     public bool IsIncorrect => Result is { IsCorrect: false };
     public bool HasAccentHint => Result?.Outcome == AnswerOutcome.CorrectWithAccentHint;
 
-    /// <summary>A tick when right; the whole form when wrong or when the accents differ.</summary>
+    /// <summary>A tick when right; the whole form when the accents differ or (after an arrow) when wrong.</summary>
     public string? Feedback => Result?.Outcome switch
     {
         null => null,
         AnswerOutcome.Correct => "✓",
         AnswerOutcome.CorrectWithAccentHint => $"✓ {row.Form}",
-        _ => row.Form
+        _ => $"→ {row.Form}"
     };
 
     public void Check() => Result = AnswerChecker.Check(Answer, row.ExpectedAnswers);
@@ -179,8 +173,8 @@ public partial class EndingsScenarioViewModel : ScenarioViewModel
     }
 
     public override string Heading => _scenario.Instruction;
-    public string Prompt => _scenario.Verb.BaseValue;
-    public string PromptDetail => _scenario.Verb.TranslationDisplay;
+    public string Prompt => _scenario.Prompt;
+    public string? PromptDetail => _scenario.PromptDetail;
     public IReadOnlyList<EndingRowViewModel> Rows { get; }
 
     [ObservableProperty]
@@ -205,16 +199,12 @@ public partial class EndingsScenarioViewModel : ScenarioViewModel
 
     /// <summary>
     /// Where Enter moves from row <paramref name="index"/>: the next empty row (wrapping around), or null
-    /// when the other rows are filled (or already checked) and Enter should submit.
+    /// when the other rows are filled and Enter should submit. Checked answers are all filled.
     /// </summary>
     public int? NextEmptyRow(int index)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(index);
         ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Rows.Count);
-        if (IsChecked)
-        {
-            return null;
-        }
         for (var step = 1; step < Rows.Count; step++)
         {
             var next = (index + step) % Rows.Count;

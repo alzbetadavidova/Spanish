@@ -100,6 +100,15 @@ public static class TestData
         Topics = ["city"]
     };
 
+    /// <summary>Irregular in both tenses; only nosotros keeps the root in the present (ten + emos).</summary>
+    public static Verb Tener() => new()
+    {
+        BaseValue = "tener",
+        Translation = "to have",
+        PresentConjugations = ["tengo", "tienes", "tiene", "tenemos", "tienen"],
+        PreteriteConjugations = ["tuve", "tuviste", "tuvo", "tuvimos", "tuvieron"]
+    };
+
     public static Noun Mujer() => new()
     {
         BaseValue = "mujer",

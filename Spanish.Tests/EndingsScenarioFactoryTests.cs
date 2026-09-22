@@ -7,13 +7,8 @@ public class EndingsScenarioFactoryTests
     private static EndingsScenario Create(Verb verb, ScenarioType type) =>
         (EndingsScenario)new ScenarioFactory(new FakeRandom(), new LearnLibrary()).Create(verb, type, Direction.Mixed);
 
-    private static Verb Tener() => new()
-    {
-        BaseValue = "tener",
-        Translation = "to have",
-        PresentConjugations = ["tengo", "tienes", "tiene", "tenemos", "tienen"],
-        PreteriteConjugations = ["tuve", "tuviste", "tuvo", "tuvimos", "tuvieron"]
-    };
+    /// <summary>Root|ending per row; an empty root means the form is typed whole.</summary>
+    private static IEnumerable<string> Split(EndingsScenario endings) => endings.Rows.Select(r => $"{r.Root}|{r.Ending}");
 
     [Test]
     public void Create_PresentEndings_RegularVerb_KeepsTheRootInEveryRow()
@@ -28,6 +23,8 @@ public class EndingsScenarioFactoryTests
             Assert.That(endings.Unit, Is.SameAs(verb));
             Assert.That(endings.Type, Is.EqualTo(ScenarioType.PresentEndings));
             Assert.That(endings.Instruction, Is.EqualTo("Fill in the endings · present"));
+            Assert.That(endings.Prompt, Is.EqualTo("hablar"));
+            Assert.That(endings.PromptDetail, Is.EqualTo("to speak, talk"));
             Assert.That(endings.Rows, Is.EqualTo(new[]
             {
                 new EndingRow("yo", "habl", "o"),
@@ -49,20 +46,31 @@ public class EndingsScenarioFactoryTests
         {
             Assert.That(endings.Type, Is.EqualTo(ScenarioType.PreteriteEndings));
             Assert.That(endings.Instruction, Is.EqualTo("Fill in the endings · preterite (past)"));
-            Assert.That(endings.Rows.Select(r => r.Root), Is.All.EqualTo("habl"));
-            Assert.That(endings.Rows.Select(r => r.Ending), Is.EqualTo(new[] { "é", "aste", "ó", "amos", "aron" }));
+            Assert.That(Split(endings), Is.EqualTo(new[] { "habl|é", "habl|aste", "habl|ó", "habl|amos", "habl|aron" }));
         });
+    }
+
+    [Test]
+    public void Create_PreteriteEndings_RegularIrVerb()
+    {
+        var vivir = new Verb
+        {
+            BaseValue = "vivir",
+            PreteriteConjugations = ["viví", "viviste", "vivió", "vivimos", "vivieron"]
+        };
+
+        Assert.That(Split(Create(vivir, ScenarioType.PreteriteEndings)),
+            Is.EqualTo(new[] { "viv|í", "viv|iste", "viv|ió", "viv|imos", "viv|ieron" }));
     }
 
     [Test]
     public void Create_PresentEndings_IrregularVerb_TypesIrregularFormsWhole()
     {
-        var endings = Create(Tener(), ScenarioType.PresentEndings);
+        var endings = Create(TestData.Tener(), ScenarioType.PresentEndings);
 
         Assert.Multiple(() =>
         {
-            Assert.That(endings.Rows.Select(r => $"{r.Root}|{r.Ending}"),
-                Is.EqualTo(new[] { "|tengo", "|tienes", "|tiene", "ten|emos", "|tienen" }));
+            Assert.That(Split(endings), Is.EqualTo(new[] { "|tengo", "|tienes", "|tiene", "ten|emos", "|tienen" }));
             Assert.That(endings.Notes.Select(n => n.Kind), Is.EqualTo(new[] { IrregularityKind.IrregularPresent }));
         });
     }
@@ -70,28 +78,37 @@ public class EndingsScenarioFactoryTests
     [Test]
     public void Create_PreteriteEndings_IrregularVerb_AddsPreteriteNotes()
     {
-        var endings = Create(Tener(), ScenarioType.PreteriteEndings);
+        var endings = Create(TestData.Tener(), ScenarioType.PreteriteEndings);
 
         Assert.Multiple(() =>
         {
-            Assert.That(endings.Rows.All(r => !r.HasRoot), Is.True);
+            Assert.That(Split(endings), Is.EqualTo(new[] { "|tuve", "|tuviste", "|tuvo", "|tuvimos", "|tuvieron" }));
             Assert.That(endings.Notes.Select(n => n.Kind), Is.EqualTo(new[] { IrregularityKind.IrregularPreterite }));
         });
     }
 
     [Test]
-    public void Create_PreteriteEndings_SpellingChangeOfTheRoot_TypesThatFormWhole()
+    public void Create_PreteriteEndings_SpellingChanges()
     {
         var buscar = new Verb
         {
             BaseValue = "buscar",
             PreteriteConjugations = ["busqué", "buscaste", "buscó", "buscamos", "buscaron"]
         };
+        var llegar = new Verb
+        {
+            BaseValue = "llegar",
+            PreteriteConjugations = ["llegué", "llegaste", "llegó", "llegamos", "llegaron"]
+        };
 
-        var endings = Create(buscar, ScenarioType.PreteriteEndings);
-
-        Assert.That(endings.Rows.Select(r => $"{r.Root}|{r.Ending}"),
-            Is.EqualTo(new[] { "|busqué", "busc|aste", "busc|ó", "busc|amos", "busc|aron" }));
+        Assert.Multiple(() =>
+        {
+            // busqué changes the root, so it is typed whole; llegué keeps it.
+            Assert.That(Split(Create(buscar, ScenarioType.PreteriteEndings)),
+                Is.EqualTo(new[] { "|busqué", "busc|aste", "busc|ó", "busc|amos", "busc|aron" }));
+            Assert.That(Split(Create(llegar, ScenarioType.PreteriteEndings)),
+                Is.EqualTo(new[] { "lleg|ué", "lleg|aste", "lleg|ó", "lleg|amos", "lleg|aron" }));
+        });
     }
 
     [TestCase(ScenarioType.PresentEndings)]
@@ -102,9 +119,7 @@ public class EndingsScenarioFactoryTests
         string[] forms = ["me llamo", "te llamas", "se llama", "nos llamamos", "se llaman"];
         var llamarse = new Verb { BaseValue = "llamarse", PresentConjugations = forms, PreteriteConjugations = forms };
 
-        var endings = Create(llamarse, type);
-
-        Assert.That(endings.Rows.Select(r => $"{r.Root}|{r.Ending}"),
+        Assert.That(Split(Create(llamarse, type)),
             Is.EqualTo(new[] { "|me llamo", "|te llamas", "|se llama", "|nos llamamos", "|se llaman" }));
     }
 
@@ -116,9 +131,12 @@ public class EndingsScenarioFactoryTests
 
         Assert.That(() => Create(verb, ScenarioType.PresentEndings), Throws.ArgumentException);
     }
+}
 
+public class EndingRowTests
+{
     [Test]
-    public void EndingRow_Create_RegularForm_SplitsAfterTheRoot()
+    public void Create_RegularForm_SplitsAfterTheRoot()
     {
         var row = EndingRow.Create("tú", "habl", " hablas ", "hablas");
 
@@ -132,7 +150,7 @@ public class EndingsScenarioFactoryTests
     }
 
     [Test]
-    public void EndingRow_Create_IgnoresCaseAndKeepsTheFormsSpelling()
+    public void Create_IgnoresCaseAndKeepsTheFormsSpelling()
     {
         Assert.That(EndingRow.Create("yo", "habl", "Hablo", "hablo"), Is.EqualTo(new EndingRow("yo", "Habl", "o")));
     }
@@ -143,7 +161,7 @@ public class EndingsScenarioFactoryTests
     [TestCase("busc", "busqué", "busqué")] // regular, but the spelling changes the root
     [TestCase("habl", "habl", "habl")] // nothing left to type after the root
     [TestCase("habl", "hablo", null)] // no regular forms
-    public void EndingRow_Create_OtherForms_AreTypedWhole(string root, string form, string? regular)
+    public void Create_OtherForms_AreTypedWhole(string root, string form, string? regular)
     {
         var row = EndingRow.Create("yo", root, form, regular);
 
@@ -156,7 +174,7 @@ public class EndingsScenarioFactoryTests
     }
 
     [Test]
-    public void EndingRow_Create_NullArguments_Throw()
+    public void Create_NullArguments_Throw()
     {
         Assert.Multiple(() =>
         {
@@ -164,5 +182,21 @@ public class EndingsScenarioFactoryTests
             Assert.That(() => EndingRow.Create("yo", null!, "hablo", "hablo"), Throws.ArgumentNullException);
             Assert.That(() => EndingRow.Create("yo", "habl", null!, "hablo"), Throws.ArgumentNullException);
         });
+    }
+}
+
+public class ScenarioTypeExtensionsTests
+{
+    [TestCase(ScenarioType.Present, true)]
+    [TestCase(ScenarioType.Preterite, true)]
+    [TestCase(ScenarioType.Gerund, true)]
+    [TestCase(ScenarioType.PresentEndings, true)]
+    [TestCase(ScenarioType.PreteriteEndings, true)]
+    [TestCase(ScenarioType.Card, false)]
+    [TestCase(ScenarioType.Fill, false)]
+    [TestCase(ScenarioType.Plural, false)]
+    public void IsConjugation_OnlyVerbFormScenarios(ScenarioType type, bool expected)
+    {
+        Assert.That(type.IsConjugation(), Is.EqualTo(expected));
     }
 }

@@ -31,7 +31,7 @@ public class ScenarioViewModelTests
                 Is.TypeOf<TypedScenarioViewModel>());
             Assert.That(ScenarioViewModel.Create(new GenderScenario(noun, "ciudad", Article.La), OnCompleted),
                 Is.TypeOf<GenderScenarioViewModel>());
-            Assert.That(ScenarioViewModel.Create(new EndingsScenario(TestData.Hablar(), ScenarioType.PresentEndings, "i", []), OnCompleted),
+            Assert.That(ScenarioViewModel.Create(new EndingsScenario(TestData.Hablar(), ScenarioType.PresentEndings, "i", "p", null, []), OnCompleted),
                 Is.TypeOf<EndingsScenarioViewModel>());
             Assert.That(() => ScenarioViewModel.Create(new OtherScenario(noun), OnCompleted), Throws.ArgumentException);
         });
@@ -146,6 +146,7 @@ public class ScenarioViewModelTests
 
         Assert.That(typed.Feedback, Is.EqualTo("Correct. Watch the accent: hablás"));
         Assert.That(typed.IsCorrect, Is.True);
+        Assert.That(typed.ShowVerbForms, Is.False);
     }
 
     [Test]
@@ -179,17 +180,24 @@ public class ScenarioViewModelTests
     }
 
     [Test]
-    public void VerbForms_NotForOtherWords()
+    public void VerbForms_NotForOtherWordsOrCards()
     {
-        var typed = new TypedScenarioViewModel(new TypedScenario(TestData.Ciudad(), ScenarioType.Plural, "i", "p", null, ["x"]), OnCompleted);
+        var plural = new TypedScenarioViewModel(new TypedScenario(TestData.Ciudad(), ScenarioType.Plural, "i", "p", null, ["x"]), OnCompleted);
+        var card = new CardScenarioViewModel(new CardScenario(TestData.Hablar(), Direction.SpanishToEnglish, "a", "b", null), OnCompleted);
 
-        Assert.That(typed.VerbForms, Is.Null);
+        Assert.Multiple(() =>
+        {
+            Assert.That(plural.VerbForms, Is.Null);
+            Assert.That(card.VerbForms, Is.Null);
+        });
     }
 
     [Test]
     public async Task Typed_WrongConjugation_ShowsVerbForms()
     {
         var typed = Typed();
+        var changed = new List<string?>();
+        typed.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
         Assert.That(typed.ShowVerbForms, Is.False);
 
         typed.Answer = "hablo";
@@ -198,6 +206,7 @@ public class ScenarioViewModelTests
         Assert.Multiple(() =>
         {
             Assert.That(typed.ShowVerbForms, Is.True);
+            Assert.That(changed, Does.Contain(nameof(TypedScenarioViewModel.ShowVerbForms)));
             Assert.That(typed.VerbForms!.Rows[0], Is.EqualTo(new VerbFormRow("yo", "hablo", "hablé")));
         });
     }
