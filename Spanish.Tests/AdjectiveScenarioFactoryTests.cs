@@ -67,7 +67,7 @@ public class AdjectiveScenarioFactoryTests
         Assert.Multiple(() =>
         {
             Assert.That(pair.Type, Is.EqualTo(ScenarioType.PairWithNoun));
-            Assert.That(pair.Instruction, Is.EqualTo(ScenarioFactory.PairInstruction));
+            Assert.That(pair.Instruction, Is.EqualTo(ScenarioFactory.AdjectivePairInstruction));
             Assert.That(pair.Prompt, Is.EqualTo(prompt));
             Assert.That(pair.PromptDetail, Is.EqualTo(detail));
             Assert.That(pair.ExpectedAnswers, Is.EqualTo(new[] { answer, withArticle }));
@@ -117,7 +117,7 @@ public class AdjectiveScenarioFactoryTests
         var adjective = TestData.Bajo();
 
         Assert.That(() => Factory(new LearnLibrary()).Create(adjective, ScenarioType.PairWithNoun, Direction.Mixed),
-            Throws.ArgumentException.With.Message.Contains("not linked to a noun"));
+            Throws.ArgumentException.With.Message.Contains("no linked noun"));
     }
 
     [Test]
