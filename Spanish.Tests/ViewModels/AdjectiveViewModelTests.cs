@@ -8,6 +8,7 @@ public class DisplayNamesTests
     [TestCase(WordKind.Noun, "noun", "nouns")]
     [TestCase(WordKind.Verb, "verb", "verbs")]
     [TestCase(WordKind.Adjective, "adjective", "adjectives")]
+    [TestCase(WordKind.Preposition, "preposition", "prepositions")]
     [TestCase((WordKind)99, "word", "words")]
     public void Kind_SingularAndPlural(WordKind kind, string singular, string plural)
     {

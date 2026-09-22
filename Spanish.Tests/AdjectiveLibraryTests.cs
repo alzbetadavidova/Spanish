@@ -311,7 +311,7 @@ public class AdjectiveLibraryTests
     [Test]
     public void SeedLibrary_AdjectivesAreValidAndPracticable()
     {
-        var library = LoadSeedLibrary();
+        var library = SeedLibrary.Load();
 
         Assert.That(library.Adjectives, Is.Not.Empty);
         Assert.Multiple(() =>
@@ -327,7 +327,7 @@ public class AdjectiveLibraryTests
     [Test]
     public void SeedLibrary_NounsAndVerbsAreValidAndPracticable()
     {
-        var library = LoadSeedLibrary();
+        var library = SeedLibrary.Load();
 
         Assert.Multiple(() =>
         {
@@ -347,7 +347,7 @@ public class AdjectiveLibraryTests
     [Test]
     public void SeedLibrary_FeminineNounsWithStressedA_TakeEl()
     {
-        var nouns = LoadSeedLibrary().Nouns;
+        var nouns = SeedLibrary.Load().Nouns;
         var feminine = nouns.Where(n => n.Gender == Gender.Feminine && !StressedAExceptions.Contains(n.BaseValue)).ToList();
 
         Assert.Multiple(() =>
@@ -359,11 +359,5 @@ public class AdjectiveLibraryTests
                 Assert.That(noun.TakesElInSingular, Is.EqualTo(StressedASuggester.StartsWithStressedA(noun.BaseValue)), noun.BaseValue);
             }
         });
-    }
-
-    private static LearnLibrary LoadSeedLibrary()
-    {
-        var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "library.json");
-        return JsonSerializer.Deserialize<LearnLibrary>(File.ReadAllText(path), JsonFileStore<LearnLibrary>.Options)!;
     }
 }

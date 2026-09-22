@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Spanish.Core;
 
 namespace Spanish.Tests;
@@ -124,6 +125,41 @@ public static class TestData
         Topics = ["city", "animals"]
     };
 
+    /// <summary>Feminine, but takes el in the singular.</summary>
+    public static Noun Agua() => new()
+    {
+        BaseValue = "agua",
+        Translation = "water",
+        Gender = Gender.Feminine,
+        PluralValue = "aguas",
+        TakesElInSingular = true
+    };
+
+    /// <summary>"of; from", linked to "perro" and "ciudad".</summary>
+    public static Preposition De() => new()
+    {
+        BaseValue = "de",
+        Translation = "of; from",
+        LinkedNouns = ["perro", "ciudad"],
+        Topics = ["animals"]
+    };
+
+    /// <summary>"from; since", linked to "ciudad"; shares "from" with <see cref="De"/>.</summary>
+    public static Preposition Desde() => new()
+    {
+        BaseValue = "desde",
+        Translation = "from; since",
+        LinkedNouns = ["ciudad"]
+    };
+
+    /// <summary>ciudad, perro and agua, plus the prepositions de and desde.</summary>
+    public static LearnLibrary PrepositionLibrary() => new()
+    {
+        Nouns = [Ciudad(), Perro(), Agua()],
+        Prepositions = [De(), Desde()],
+        Topics = ["city", "animals"]
+    };
+
     /// <summary>The built-in numeral of <paramref name="category"/>, from <paramref name="library"/> or a fresh set.</summary>
     public static Numeral NumeralOf(NumeralCategory category, LearnLibrary? library = null) =>
         (library?.Numerals ?? Numeral.CreateBuiltIn()).Single(n => n.Category == category);
@@ -141,4 +177,13 @@ public class UnknownUnit : LearnUnit
 {
     public override WordKind Kind => (WordKind)99;
     public override IReadOnlyList<ScenarioType> SupportedScenarios { get; } = [ScenarioType.Gender, ScenarioType.Card];
+}
+
+/// <summary>The seed library.json copied next to the tests.</summary>
+public static class SeedLibrary
+{
+    public static string Path => System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, "library.json");
+
+    public static LearnLibrary Load() =>
+        JsonSerializer.Deserialize<LearnLibrary>(File.ReadAllText(Path), JsonFileStore<LearnLibrary>.Options)!;
 }
