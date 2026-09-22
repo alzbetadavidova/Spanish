@@ -7,6 +7,10 @@
 
     <Grid>
         <TabControl SelectedIndex="{Binding SelectedTabIndex}" Padding="0" Margin="12,4,0,0">
+            <!-- Keeps the tab headers clear of the Add button; they wrap when the window is narrow. -->
+            <TabControl.ItemsPanel>
+                <ItemsPanelTemplate><WrapPanel Margin="0,0,160,0" /></ItemsPanelTemplate>
+            </TabControl.ItemsPanel>
             <TabItem Header="Nouns" FontSize="15">
                 <views:WordListView DataContext="{Binding Nouns}" />
             </TabItem>
@@ -15,6 +19,9 @@
             </TabItem>
             <TabItem Header="Adjectives" FontSize="15">
                 <views:WordListView DataContext="{Binding Adjectives}" />
+            </TabItem>
+            <TabItem Header="Prepositions" FontSize="15">
+                <views:WordListView DataContext="{Binding Prepositions}" />
             </TabItem>
             <TabItem Header="Numerals" FontSize="15">
                 <views:NumeralListView DataContext="{Binding Numerals}" />

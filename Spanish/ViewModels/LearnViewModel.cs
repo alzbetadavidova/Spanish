@@ -173,6 +173,7 @@ public partial class LearnViewModel : ObservableObject, IPage
                 (settings.IncludeNouns, WordKind.Noun),
                 (settings.IncludeVerbs, WordKind.Verb),
                 (settings.IncludeAdjectives, WordKind.Adjective),
+                (settings.IncludePrepositions, WordKind.Preposition),
                 (settings.IncludeNumerals, WordKind.Numeral)
             }
             .Where(k => k.Item1)

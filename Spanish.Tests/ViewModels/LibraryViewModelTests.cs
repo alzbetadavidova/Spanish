@@ -518,8 +518,17 @@ public class LibraryViewModelTests
             Assert.That(vm.Adjectives.Editor, Is.TypeOf<AdjectiveEditorViewModel>());
         });
 
+        vm.SelectedTabIndex = 3;
+        vm.AddCommand.Execute(null);
+        Assert.Multiple(() =>
+        {
+            Assert.That(vm.CurrentList, Is.SameAs(vm.Prepositions));
+            Assert.That(vm.AddLabel, Is.EqualTo("Add preposition"));
+            Assert.That(vm.Prepositions.Editor, Is.TypeOf<PrepositionEditorViewModel>());
+        });
+
         // Numerals and topics have no word list.
-        foreach (var tab in new[] { 3, 4 })
+        foreach (var tab in new[] { 4, 5 })
         {
             vm.SelectedTabIndex = tab;
             vm.AddCommand.Execute(null);

@@ -3,6 +3,7 @@ namespace Spanish.Core;
 public class ScenarioFactory(IRandomSource random, LearnLibrary library)
 {
     public const string PairInstruction = "Put the adjective with the noun";
+    public const string PrepositionPairInstruction = "Translate the phrase to Spanish";
     public const string NumberToTextInstruction = "Write it in Spanish words";
     public const string TextToNumberInstruction = "Write it in digits";
 
@@ -27,6 +28,7 @@ public class ScenarioFactory(IRandomSource random, LearnLibrary library)
             (Verb verb, ScenarioType.Preterite) => CreateConjugation(verb, type, "Conjugate · preterite (past)", verb.PreteriteConjugations),
             (Verb verb, ScenarioType.Gerund) => CreateGerund(verb),
             (Adjective adjective, ScenarioType.PairWithNoun) => CreatePair(adjective),
+            (Preposition preposition, ScenarioType.PairWithNoun) => CreatePrepositionPair(preposition),
             (Numeral numeral, ScenarioType.NumberToText or ScenarioType.TextToNumber) => CreateNumeral(numeral, type),
             _ => throw new ArgumentException($"Unsupported scenario {type}.", nameof(type))
         };
@@ -104,14 +106,7 @@ public class ScenarioFactory(IRandomSource random, LearnLibrary library)
     /// <summary>bajo + mujeres: the user types "mujeres bajas" (the article is optional).</summary>
     private Scenario CreatePair(Adjective adjective)
     {
-        var nouns = library.LinkedNounsOf(adjective);
-        if (nouns.Count == 0)
-        {
-            // Links are kept in sync with the library, so this means the adjective is not in it.
-            throw new ArgumentException($"\"{adjective.BaseValue}\" is not linked to a noun in the library.", nameof(adjective));
-        }
-
-        var noun = nouns[random.Next(nouns.Count)];
+        var noun = DrawLinkedNoun(adjective);
         var plural = noun.PluralValue.Length > 0 && random.Next(2) == 1;
         var nounForm = plural ? noun.PluralValue : noun.BaseValue;
         var article = plural ? noun.PluralArticle : noun.SingularArticle;
@@ -124,6 +119,39 @@ public class ScenarioFactory(IRandomSource random, LearnLibrary library)
         var pair = new TypedScenario(adjective, ScenarioType.PairWithNoun, PairInstruction,
             $"{adjective.BaseValue} + {nounForm}", detail, [phrase, $"{article.ToText()} {phrase}"]);
         return WithNotes(pair, [..Irregularities.For(adjective, ScenarioType.PairWithNoun), ..Irregularities.OfPairedNoun(noun)]);
+    }
+
+    /// <summary>
+    /// de + parque: the user translates "from the park" to "del parque"; the Spanish noun is shown so that only
+    /// the preposition and the article are asked. Other prepositions meaning "from" are accepted too (desde el parque).
+    /// Only singular nouns are used: the English plural isn't known, and a/de contract only with el.
+    /// </summary>
+    private Scenario CreatePrepositionPair(Preposition preposition)
+    {
+        var noun = DrawLinkedNoun(preposition);
+        var english = preposition.TranslationAlternatives[random.Next(preposition.TranslationAlternatives.Count)];
+        var answers = library.Prepositions
+            .Where(p => p.TranslationAlternatives.Contains(english, StringComparer.OrdinalIgnoreCase))
+            .Select(p => p.WithNoun(noun))
+            .Prepend(preposition.WithNoun(noun))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        var pair = new TypedScenario(preposition, ScenarioType.PairWithNoun, PrepositionPairInstruction,
+            $"{english} the {noun.TranslationAlternatives[0]}", noun.BaseValue, answers);
+        return WithNotes(pair, Irregularities.OfPairedNoun(noun));
+    }
+
+    /// <summary>A random linked noun the pair can use.</summary>
+    private Noun DrawLinkedNoun(NounLinkedUnit unit)
+    {
+        var nouns = library.LinkedNounsOf(unit).Where(unit.CanPairWith).ToList();
+        if (nouns.Count == 0)
+        {
+            // Links are kept in sync with the library, so this means the word is not in it.
+            throw new ArgumentException($"\"{unit.BaseValue}\" is not linked to a noun in the library.", nameof(unit));
+        }
+        return nouns[random.Next(nouns.Count)];
     }
 
     /// <summary>A random value of the numeral's category, e.g. 21 -> veintiuno or the other way round.</summary>

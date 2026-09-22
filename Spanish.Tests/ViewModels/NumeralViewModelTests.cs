@@ -136,7 +136,8 @@ public class NumeralPagesTests
     {
         IncludeNouns = false,
         IncludeVerbs = false,
-        IncludeAdjectives = false
+        IncludeAdjectives = false,
+        IncludePrepositions = false
     };
 
     [Test]

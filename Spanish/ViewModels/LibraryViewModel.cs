@@ -16,6 +16,7 @@ public partial class LibraryViewModel : ObservableObject, IPage
         Nouns = new WordListViewModel(context, WordKind.Noun);
         Verbs = new WordListViewModel(context, WordKind.Verb);
         Adjectives = new WordListViewModel(context, WordKind.Adjective);
+        Prepositions = new WordListViewModel(context, WordKind.Preposition);
         Numerals = new NumeralListViewModel(context.Library);
         Topics = new TopicsViewModel(context);
         // Tabs edit the same library; keep every tab (and open editors) in sync. While the page is
@@ -35,6 +36,7 @@ public partial class LibraryViewModel : ObservableObject, IPage
     public WordListViewModel Nouns { get; }
     public WordListViewModel Verbs { get; }
     public WordListViewModel Adjectives { get; }
+    public WordListViewModel Prepositions { get; }
     public NumeralListViewModel Numerals { get; }
     public TopicsViewModel Topics { get; }
 
@@ -48,6 +50,7 @@ public partial class LibraryViewModel : ObservableObject, IPage
         0 => Nouns,
         1 => Verbs,
         2 => Adjectives,
+        3 => Prepositions,
         _ => null
     };
 
@@ -70,6 +73,7 @@ public partial class LibraryViewModel : ObservableObject, IPage
         Nouns.Refresh();
         Verbs.Refresh();
         Adjectives.Refresh();
+        Prepositions.Refresh();
         Topics.Refresh();
     }
 }
@@ -158,6 +162,7 @@ public partial class WordListViewModel : ObservableObject
     {
         WordKind.Noun => new NounEditorViewModel(_context, unit as Noun, _callbacks),
         WordKind.Adjective => new AdjectiveEditorViewModel(_context, unit as Adjective, _callbacks),
+        WordKind.Preposition => new PrepositionEditorViewModel(_context, unit as Preposition, _callbacks),
         _ => new VerbEditorViewModel(_context, unit as Verb, _callbacks)
     };
 

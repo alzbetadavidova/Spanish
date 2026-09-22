@@ -52,24 +52,7 @@
                 </StackPanel>
 
                 <TextBlock Grid.Row="3" Text="Nouns" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
-                <StackPanel Grid.Row="3" Grid.Column="1" Spacing="4">
-                    <ItemsControl ItemsSource="{Binding Nouns}" IsVisible="{Binding HasNouns}" VerticalAlignment="Top">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate><UniformGrid Columns="4" /></ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate x:DataType="vm:ToggleOption">
-                                <ToggleButton Classes="chip" Content="{Binding Label}" IsChecked="{Binding IsSelected}" Margin="0,0,8,8" />
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                    <TextBlock Text="Pick the nouns to practice this adjective with." Classes="muted"
-                               IsVisible="{Binding HasNouns}" />
-                    <TextBlock Text="No nouns yet. Add them on the Nouns tab." Classes="muted" Margin="0,7,0,0"
-                               IsVisible="{Binding !HasNouns}" />
-                    <TextBlock Text="{Binding NounsError}" Classes="error"
-                               IsVisible="{Binding NounsError, Converter={x:Static ObjectConverters.IsNotNull}}" />
-                </StackPanel>
+                <views:NounChips Grid.Row="3" Grid.Column="1" />
 
                 <TextBlock Grid.Row="4" Text="Topics" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
                 <views:TopicChips Grid.Row="4" Grid.Column="1" />

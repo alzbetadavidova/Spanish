@@ -19,6 +19,8 @@ public class LearnLibrary : IJsonOnDeserialized
     public List<Verb> Verbs { get => _verbs; set => _verbs = value ?? []; }
     private List<Adjective> _adjectives = [];
     public List<Adjective> Adjectives { get => _adjectives; set => _adjectives = value ?? []; }
+    private List<Preposition> _prepositions = [];
+    public List<Preposition> Prepositions { get => _prepositions; set => _prepositions = value ?? []; }
     private List<string> _topics = [];
     public List<string> Topics { get => _topics; set => _topics = value ?? []; }
 
@@ -49,7 +51,10 @@ public class LearnLibrary : IJsonOnDeserialized
 
     /// <summary>The user's words, which can be edited and put into topics.</summary>
     [JsonIgnore]
-    public IEnumerable<LearnUnit> Words => Nouns.Cast<LearnUnit>().Concat(Verbs).Concat(Adjectives);
+    public IEnumerable<LearnUnit> Words => Nouns.Cast<LearnUnit>().Concat(Verbs).Concat(Adjectives).Concat(Prepositions);
+
+    /// <summary>The words practiced with linked nouns.</summary>
+    private IEnumerable<NounLinkedUnit> NounLinkedWords => Words.OfType<NounLinkedUnit>();
 
     /// <summary>Everything that can be practiced: the words and the built-in numerals.</summary>
     [JsonIgnore]
@@ -61,6 +66,7 @@ public class LearnLibrary : IJsonOnDeserialized
         Nouns.RemoveAll(n => n is null);
         Verbs.RemoveAll(v => v is null);
         Adjectives.RemoveAll(a => a is null);
+        Prepositions.RemoveAll(p => p is null);
         Topics.RemoveAll(t => t is null);
         foreach (var unit in Units)
         {
@@ -79,18 +85,18 @@ public class LearnLibrary : IJsonOnDeserialized
             verb.PresentConjugations = verb.PresentConjugations.Select(f => f ?? string.Empty).ToArray();
             verb.PreteriteConjugations = verb.PreteriteConjugations.Select(f => f ?? string.Empty).ToArray();
         }
-        foreach (var adjective in Adjectives)
+        foreach (var linked in NounLinkedWords)
         {
             // Links to nouns that are not in the file cannot be practiced.
-            NormalizeLinks(adjective);
+            NormalizeLinks(linked);
         }
     }
 
-    /// <summary>The nouns <paramref name="adjective"/> is linked to, in link order.</summary>
-    public IReadOnlyList<Noun> LinkedNounsOf(Adjective adjective)
+    /// <summary>The nouns <paramref name="unit"/> is linked to, in link order.</summary>
+    public IReadOnlyList<Noun> LinkedNounsOf(NounLinkedUnit unit)
     {
-        ArgumentNullException.ThrowIfNull(adjective);
-        return adjective.LinkedNouns.Select(FindNoun).OfType<Noun>().ToList();
+        ArgumentNullException.ThrowIfNull(unit);
+        return unit.LinkedNouns.Select(FindNoun).OfType<Noun>().ToList();
     }
 
     /// <summary>Validates a new unit (<paramref name="existing"/> null) or an edit of <paramref name="existing"/>.</summary>
@@ -129,14 +135,14 @@ public class LearnLibrary : IJsonOnDeserialized
             AddConjugationError(errors, nameof(Verb.PreteriteConjugations), verb.PreteriteConjugations, "preterite");
         }
 
-        if (candidate is Adjective adjective)
+        if (candidate is NounLinkedUnit linked)
         {
-            var unknownNouns = adjective.LinkedNouns
+            var unknownNouns = linked.LinkedNouns
                 .Where(n => !string.IsNullOrWhiteSpace(n) && FindNoun(n) is null)
                 .ToList();
             if (unknownNouns.Count > 0)
             {
-                errors.Add(new(nameof(Adjective.LinkedNouns), $"Unknown noun: {string.Join(", ", unknownNouns)}."));
+                errors.Add(new(nameof(NounLinkedUnit.LinkedNouns), $"Unknown noun: {string.Join(", ", unknownNouns)}."));
             }
         }
 
@@ -153,7 +159,7 @@ public class LearnLibrary : IJsonOnDeserialized
             throw new LibraryValidationException(errors);
         }
 
-        if (candidate is Adjective linking)
+        if (candidate is NounLinkedUnit linking)
         {
             NormalizeLinks(linking);
         }
@@ -186,6 +192,9 @@ public class LearnLibrary : IJsonOnDeserialized
             case Adjective adjective:
                 Adjectives.Add(adjective);
                 break;
+            case Preposition preposition:
+                Prepositions.Add(preposition);
+                break;
             default:
                 throw new ArgumentException($"Unsupported unit type {candidate.GetType().Name}.", nameof(candidate));
         }
@@ -197,6 +206,7 @@ public class LearnLibrary : IJsonOnDeserialized
         Noun noun => RemoveNoun(noun),
         Verb verb => Verbs.Remove(verb),
         Adjective adjective => Adjectives.Remove(adjective),
+        Preposition preposition => Prepositions.Remove(preposition),
         _ => false
     };
 
@@ -209,16 +219,16 @@ public class LearnLibrary : IJsonOnDeserialized
         // Another noun may still carry the name (duplicates in a hand-edited file).
         if (FindNoun(noun.BaseValue) is null)
         {
-            foreach (var adjective in Adjectives)
+            foreach (var linked in NounLinkedWords)
             {
-                adjective.LinkedNouns.RemoveAll(n => SameWord(n, noun.BaseValue));
+                linked.LinkedNouns.RemoveAll(n => SameWord(n, noun.BaseValue));
             }
         }
         return true;
     }
 
     /// <summary>
-    /// Keeps adjective links pointing at a noun whose Spanish word was edited. Like removing, it leaves the
+    /// Keeps noun links pointing at a noun whose Spanish word was edited. Like removing, it leaves the
     /// links alone while another noun still has the old name (duplicates in a hand-edited file).
     /// </summary>
     private void RenameNounLinks(Noun renamed, string oldName)
@@ -229,15 +239,15 @@ public class LearnLibrary : IJsonOnDeserialized
         {
             return;
         }
-        foreach (var adjective in Adjectives)
+        foreach (var linked in NounLinkedWords)
         {
-            adjective.LinkedNouns = adjective.LinkedNouns.Select(n => SameWord(n, oldName) ? newName : n).ToList();
+            linked.LinkedNouns = linked.LinkedNouns.Select(n => SameWord(n, oldName) ? newName : n).ToList();
         }
     }
 
     /// <summary>Keeps only links to nouns in the library, once each and in the noun's own spelling.</summary>
-    private void NormalizeLinks(Adjective adjective) =>
-        adjective.LinkedNouns = adjective.LinkedNouns
+    private void NormalizeLinks(NounLinkedUnit unit) =>
+        unit.LinkedNouns = unit.LinkedNouns
             .Select(FindNoun)
             .OfType<Noun>()
             .Select(n => n.BaseValue)
@@ -253,7 +263,7 @@ public class LearnLibrary : IJsonOnDeserialized
         ArgumentNullException.ThrowIfNull(unit);
         return unit.CanPractice(type) && (unit, type) switch
         {
-            (Adjective adjective, ScenarioType.PairWithNoun) => adjective.LinkedNouns.Any(n => FindNoun(n) is not null),
+            (NounLinkedUnit linked, ScenarioType.PairWithNoun) => LinkedNounsOf(linked).Any(linked.CanPairWith),
             _ => true
         };
     }

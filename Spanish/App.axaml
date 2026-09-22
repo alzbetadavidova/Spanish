@@ -48,6 +48,7 @@
         <DataTemplate DataType="vm:NounEditorViewModel"><views:NounEditorView /></DataTemplate>
         <DataTemplate DataType="vm:VerbEditorViewModel"><views:VerbEditorView /></DataTemplate>
         <DataTemplate DataType="vm:AdjectiveEditorViewModel"><views:AdjectiveEditorView /></DataTemplate>
+        <DataTemplate DataType="vm:PrepositionEditorViewModel"><views:PrepositionEditorView /></DataTemplate>
     </Application.DataTemplates>
 
     <Application.Styles>

@@ -23,6 +23,7 @@ public class LearnViewModelTests
     {
         IncludeVerbs = false,
         IncludeAdjectives = false,
+        IncludePrepositions = false,
         IncludeNumerals = false,
         NounScenarioTypes = [ScenarioType.Gender]
     };
@@ -47,7 +48,7 @@ public class LearnViewModelTests
     [Test]
     public void Constructor_NothingMatches_IsEmpty()
     {
-        var learn = Create(new SessionSettings { IncludeNouns = false, IncludeVerbs = false, IncludeAdjectives = false, IncludeNumerals = false });
+        var learn = Create(new SessionSettings { IncludeNouns = false, IncludeVerbs = false, IncludeAdjectives = false, IncludePrepositions = false, IncludeNumerals = false });
 
         Assert.That(learn.IsEmpty, Is.True);
         Assert.That(learn.SummaryChips[0], Is.EqualTo("No word types"));
@@ -368,11 +369,12 @@ public class LearnViewModelTests
     {
         Assert.Multiple(() =>
         {
-            Assert.That(Create(new SessionSettings()).SummaryChips[0], Is.EqualTo("Nouns, verbs, adjectives, numerals"));
-            Assert.That(Create(new SessionSettings { IncludeNouns = false, IncludeNumerals = false }).SummaryChips[0], Is.EqualTo("Verbs, adjectives"));
-            Assert.That(Create(new SessionSettings { IncludeNouns = false, IncludeVerbs = false, IncludeNumerals = false }).SummaryChips[0], Is.EqualTo("Adjectives"));
-            Assert.That(Create(new SessionSettings { IncludeVerbs = false, IncludeAdjectives = false, IncludeNumerals = false }).SummaryChips[0], Is.EqualTo("Nouns"));
-            Assert.That(Create(new SessionSettings { IncludeNouns = false, IncludeVerbs = false, IncludeAdjectives = false }).SummaryChips[0], Is.EqualTo("Numerals"));
+            Assert.That(Create(new SessionSettings()).SummaryChips[0], Is.EqualTo("Nouns, verbs, adjectives, prepositions, numerals"));
+            Assert.That(Create(new SessionSettings { IncludeNouns = false, IncludePrepositions = false, IncludeNumerals = false }).SummaryChips[0], Is.EqualTo("Verbs, adjectives"));
+            Assert.That(Create(new SessionSettings { IncludeNouns = false, IncludeVerbs = false, IncludePrepositions = false, IncludeNumerals = false }).SummaryChips[0], Is.EqualTo("Adjectives"));
+            Assert.That(Create(new SessionSettings { IncludeVerbs = false, IncludeAdjectives = false, IncludePrepositions = false, IncludeNumerals = false }).SummaryChips[0], Is.EqualTo("Nouns"));
+            Assert.That(Create(new SessionSettings { IncludeNouns = false, IncludeVerbs = false, IncludeAdjectives = false, IncludeNumerals = false }).SummaryChips[0], Is.EqualTo("Prepositions"));
+            Assert.That(Create(new SessionSettings { IncludeNouns = false, IncludeVerbs = false, IncludeAdjectives = false, IncludePrepositions = false }).SummaryChips[0], Is.EqualTo("Numerals"));
         });
     }
 }
