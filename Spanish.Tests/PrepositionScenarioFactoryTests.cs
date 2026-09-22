@@ -7,7 +7,7 @@ public class PrepositionScenarioFactoryTests
     private static ScenarioFactory Factory(LearnLibrary library, params int[] rolls) => new(new FakeRandom(rolls), library);
 
     [Test]
-    public void Create_CardBothDirections_HasNoDetail()
+    public void Create_CardBothDirections_ToSpanishListsOtherPrepositionsMeaningTheSame()
     {
         var library = TestData.PrepositionLibrary();
         var de = library.Prepositions[0];
@@ -19,10 +19,24 @@ public class PrepositionScenarioFactoryTests
         {
             Assert.That(toSpanish.Front, Is.EqualTo("of, from"));
             Assert.That(toSpanish.Back, Is.EqualTo("de"));
-            Assert.That(toSpanish.BackDetail, Is.Null);
+            // "desde" also means "from".
+            Assert.That(toSpanish.BackDetail, Is.EqualTo("also: desde"));
             Assert.That(toEnglish.Front, Is.EqualTo("de"));
             Assert.That(toEnglish.Back, Is.EqualTo("of, from"));
+            Assert.That(toEnglish.BackDetail, Is.Null);
         });
+    }
+
+    [Test]
+    public void Create_CardToSpanish_WithoutSynonyms_HasNoDetail()
+    {
+        var library = TestData.PrepositionLibrary();
+        var sin = new Preposition { BaseValue = "sin", Translation = "without" };
+        library.Prepositions.Add(sin);
+
+        var card = (CardScenario)Factory(library).Create(sin, ScenarioType.Card, Direction.EnglishToSpanish);
+
+        Assert.That(card.BackDetail, Is.Null);
     }
 
     [Test]
@@ -33,18 +47,60 @@ public class PrepositionScenarioFactoryTests
 
         var toSpanish = (TypedScenario)Factory(library).Create(de, ScenarioType.Fill, Direction.EnglishToSpanish);
         var toEnglish = (TypedScenario)Factory(library).Create(de, ScenarioType.Fill, Direction.SpanishToEnglish);
+        // desde shares "from", its first alternative, with de's second one.
+        var desdeToSpanish = (TypedScenario)Factory(library).Create(library.Prepositions[1], ScenarioType.Fill, Direction.EnglishToSpanish);
 
         Assert.Multiple(() =>
         {
             Assert.That(toSpanish.Prompt, Is.EqualTo("of, from"));
-            Assert.That(toSpanish.ExpectedAnswers, Is.EqualTo(new[] { "de" }));
+            Assert.That(toSpanish.ExpectedAnswers, Is.EqualTo(new[] { "de", "desde" }));
             Assert.That(toEnglish.Prompt, Is.EqualTo("de"));
             Assert.That(toEnglish.ExpectedAnswers, Is.EqualTo(new[] { "of", "from" }));
+            Assert.That(desdeToSpanish.ExpectedAnswers, Is.EqualTo(new[] { "desde", "de" }));
         });
     }
 
-    // Rolls: the linked noun (perro, ciudad), then the English alternative (of, from).
-    // "desde" also means "from", so it is accepted for "from".
+    [Test]
+    public void Create_FillToSpanish_TrimsTheWord()
+    {
+        var library = TestData.PrepositionLibrary();
+        var de = library.Prepositions[0];
+        de.BaseValue = " de "; // a hand-edited file
+
+        var fill = (TypedScenario)Factory(library).Create(de, ScenarioType.Fill, Direction.EnglishToSpanish);
+
+        Assert.That(fill.ExpectedAnswers, Is.EqualTo(new[] { "de", "desde" }));
+    }
+
+    [Test]
+    public void Create_FillToSpanish_AcceptsPrepositionsSharingAMeaning()
+    {
+        var library = new LearnLibrary
+        {
+            Prepositions =
+            [
+                new Preposition { BaseValue = "tras", Translation = "after" },
+                new Preposition { BaseValue = "después de", Translation = "After" },
+                new Preposition { BaseValue = " ", Translation = "after" }, // blank in a hand-edited file
+                new Preposition { BaseValue = "ante", Translation = "in front of; in the presence of" },
+                new Preposition { BaseValue = "delante de", Translation = "in front of" },
+                new Preposition { BaseValue = "antes de", Translation = "before" }
+            ]
+        };
+
+        TypedScenario FillOf(int index) =>
+            (TypedScenario)Factory(library).Create(library.Prepositions[index], ScenarioType.Fill, Direction.EnglishToSpanish);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(FillOf(0).ExpectedAnswers, Is.EqualTo(new[] { "tras", "después de" }));
+            Assert.That(FillOf(4).ExpectedAnswers, Is.EqualTo(new[] { "delante de", "ante" }));
+            Assert.That(FillOf(5).ExpectedAnswers, Is.EqualTo(new[] { "antes de" }));
+        });
+    }
+
+    // Rolls: the linked noun (perro, ciudad), then the English alternative (of, from), then one more that would
+    // pick the noun's second translation if it were drawn too. "desde" also means "from", so it is accepted for "from".
     [TestCase(0, 0, "of the dog", "perro", new[] { "del perro" })]
     [TestCase(0, 1, "from the dog", "perro", new[] { "del perro", "desde el perro" })]
     [TestCase(1, 1, "from the city", "ciudad", new[] { "de la ciudad", "desde la ciudad" })]
@@ -52,7 +108,7 @@ public class PrepositionScenarioFactoryTests
     {
         var library = TestData.PrepositionLibrary();
 
-        var pair = (TypedScenario)Factory(library, noun, english).Create(library.Prepositions[0], ScenarioType.PairWithNoun, Direction.Mixed);
+        var pair = (TypedScenario)Factory(library, noun, english, 1).Create(library.Prepositions[0], ScenarioType.PairWithNoun, Direction.Mixed);
 
         Assert.Multiple(() =>
         {
@@ -70,10 +126,44 @@ public class PrepositionScenarioFactoryTests
     {
         var library = TestData.PrepositionLibrary();
 
-        // Rolls: the only linked noun (ciudad: "city; town"), then "since".
-        var pair = (TypedScenario)Factory(library, 0, 1).Create(library.Prepositions[1], ScenarioType.PairWithNoun, Direction.Mixed);
+        // Rolls: the only linked noun (ciudad: "city; town"), then "since", then one that would pick "town".
+        var random = new FakeRandom(0, 1, 1);
 
-        Assert.That(pair.Prompt, Is.EqualTo("since the city"));
+        var pair = (TypedScenario)new ScenarioFactory(random, library)
+            .Create(library.Prepositions[1], ScenarioType.PairWithNoun, Direction.Mixed);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(pair.Prompt, Is.EqualTo("since the city"));
+            Assert.That(random.Requests, Is.EqualTo(new[] { 1, 2 }));
+        });
+    }
+
+    [Test]
+    public void Create_Pair_SynonymSharingAnotherAlternative_IsAccepted()
+    {
+        var library = TestData.PrepositionLibrary();
+
+        // Rolls: the only linked noun (ciudad), then "from", which is de's second alternative.
+        var pair = (TypedScenario)Factory(library, 0, 0).Create(library.Prepositions[1], ScenarioType.PairWithNoun, Direction.Mixed);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(pair.Prompt, Is.EqualTo("from the city"));
+            Assert.That(pair.ExpectedAnswers, Is.EqualTo(new[] { "desde la ciudad", "de la ciudad" }));
+        });
+    }
+
+    [Test]
+    public void Create_Pair_MatchesSynonymsIgnoringCaseAndSkipsBlankPrepositions()
+    {
+        var library = TestData.PrepositionLibrary();
+        library.Prepositions[1].Translation = "From; since";
+        library.Prepositions.Add(new Preposition { BaseValue = " ", Translation = "from" });
+
+        var pair = (TypedScenario)Factory(library, 0, 1).Create(library.Prepositions[0], ScenarioType.PairWithNoun, Direction.Mixed);
+
+        Assert.That(pair.ExpectedAnswers, Is.EqualTo(new[] { "del perro", "desde el perro" }));
     }
 
     [Test]
@@ -116,6 +206,24 @@ public class PrepositionScenarioFactoryTests
     }
 
     [Test]
+    public void Create_Pair_NotesOnlyTheNounsGender()
+    {
+        // Masculine although it ends in -a, with an irregular plural that a singular pair never shows.
+        var dia = new Noun { BaseValue = "día", Translation = "day", Gender = Gender.Masculine, PluralValue = "diases" };
+        var library = new LearnLibrary { Nouns = [dia] };
+        var preposition = new Preposition { BaseValue = "de", Translation = "of", LinkedNouns = ["día"] };
+
+        var pair = (TypedScenario)Factory(library).Create(preposition, ScenarioType.PairWithNoun, Direction.Mixed);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(Irregularities.Of(dia).Select(n => n.Kind), Has.Member(IrregularityKind.IrregularPlural));
+            Assert.That(pair.ExpectedAnswers, Is.EqualTo(new[] { "del día" }));
+            Assert.That(pair.Notes.Select(n => n.Kind), Is.EqualTo(new[] { IrregularityKind.MasculineEndingInA }));
+        });
+    }
+
+    [Test]
     public void Create_Pair_SkipsNounsWithoutTranslation()
     {
         var library = TestData.PrepositionLibrary();
@@ -136,7 +244,18 @@ public class PrepositionScenarioFactoryTests
     public void Create_Pair_LinkedNounNotInLibrary_Throws()
     {
         Assert.That(() => Factory(new LearnLibrary()).Create(TestData.De(), ScenarioType.PairWithNoun, Direction.Mixed),
-            Throws.ArgumentException.With.Message.Contains("not linked to a noun"));
+            Throws.ArgumentException.With.Message.Contains("no linked noun"));
+    }
+
+    [Test]
+    public void Create_Pair_NoLinkedNounHasATranslation_Throws()
+    {
+        var library = TestData.PrepositionLibrary();
+        library.Nouns[0].Translation = string.Empty; // ciudad
+        library.Nouns[1].Translation = string.Empty; // perro
+
+        Assert.That(() => Factory(library).Create(library.Prepositions[0], ScenarioType.PairWithNoun, Direction.Mixed),
+            Throws.ArgumentException.With.Message.Contains("no linked noun"));
     }
 
     [Test]

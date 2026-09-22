@@ -2,7 +2,7 @@ namespace Spanish.Core;
 
 public class ScenarioFactory(IRandomSource random, LearnLibrary library)
 {
-    public const string PairInstruction = "Put the adjective with the noun";
+    public const string AdjectivePairInstruction = "Put the adjective with the noun";
     public const string PrepositionPairInstruction = "Translate the phrase to Spanish";
     public const string NumberToTextInstruction = "Write it in Spanish words";
     public const string TextToNumberInstruction = "Write it in digits";
@@ -40,7 +40,7 @@ public class ScenarioFactory(IRandomSource random, LearnLibrary library)
         ? random.Next(2) == 0 ? Direction.EnglishToSpanish : Direction.SpanishToEnglish
         : direction;
 
-    private static CardScenario CreateCard(LearnUnit unit, Direction direction)
+    private CardScenario CreateCard(LearnUnit unit, Direction direction)
     {
         var english = unit.TranslationDisplay;
         var spanish = SpanishDisplay(unit);
@@ -51,6 +51,9 @@ public class ScenarioFactory(IRandomSource random, LearnLibrary library)
                 adjective.GetForm(Gender.Feminine, false),
                 adjective.GetForm(Gender.Masculine, true),
                 adjective.GetForm(Gender.Feminine, true)),
+            // The learner may have recalled another preposition with the same meaning.
+            Preposition preposition when SynonymsOf(preposition) is { Count: > 0 } synonyms =>
+                $"also: {string.Join(", ", synonyms)}",
             _ => null
         };
 
@@ -59,13 +62,16 @@ public class ScenarioFactory(IRandomSource random, LearnLibrary library)
             : new CardScenario(unit, direction, spanish, english, null);
     }
 
-    private static TypedScenario CreateFill(LearnUnit unit, Direction direction)
+    private TypedScenario CreateFill(LearnUnit unit, Direction direction)
     {
         if (direction == Direction.EnglishToSpanish)
         {
-            var expected = unit is Noun noun
-                ? new[] { noun.BaseValue, SpanishDisplay(noun) }
-                : new[] { unit.BaseValue };
+            IReadOnlyList<string> expected = unit switch
+            {
+                Noun noun => [noun.BaseValue, SpanishDisplay(noun)],
+                Preposition preposition => [preposition.BaseValue.Trim(), ..SynonymsOf(preposition)],
+                _ => [unit.BaseValue]
+            };
             return new TypedScenario(unit, ScenarioType.Fill, "Translate to Spanish",
                 unit.TranslationDisplay, null, expected);
         }
@@ -116,7 +122,7 @@ public class ScenarioFactory(IRandomSource random, LearnLibrary library)
             ? null
             : $"{adjective.TranslationAlternatives[0]} + {noun.TranslationAlternatives[0]}{(plural ? " (plural)" : string.Empty)}";
 
-        var pair = new TypedScenario(adjective, ScenarioType.PairWithNoun, PairInstruction,
+        var pair = new TypedScenario(adjective, ScenarioType.PairWithNoun, AdjectivePairInstruction,
             $"{adjective.BaseValue} + {nounForm}", detail, [phrase, $"{article.ToText()} {phrase}"]);
         return WithNotes(pair, [..Irregularities.For(adjective, ScenarioType.PairWithNoun), ..Irregularities.OfPairedNoun(noun)]);
     }
@@ -130,8 +136,7 @@ public class ScenarioFactory(IRandomSource random, LearnLibrary library)
     {
         var noun = DrawLinkedNoun(preposition);
         var english = preposition.TranslationAlternatives[random.Next(preposition.TranslationAlternatives.Count)];
-        var answers = library.Prepositions
-            .Where(p => p.TranslationAlternatives.Contains(english, StringComparer.OrdinalIgnoreCase))
+        var answers = PrepositionsMeaning([english])
             .Select(p => p.WithNoun(noun))
             .Prepend(preposition.WithNoun(noun))
             .Distinct(StringComparer.OrdinalIgnoreCase)
@@ -142,14 +147,35 @@ public class ScenarioFactory(IRandomSource random, LearnLibrary library)
         return WithNotes(pair, Irregularities.OfPairedNoun(noun));
     }
 
+    /// <summary>The other prepositions of the library meaning one of <paramref name="preposition"/>'s alternatives.</summary>
+    private List<string> SynonymsOf(Preposition preposition)
+    {
+        var word = preposition.BaseValue.Trim();
+        return PrepositionsMeaning(preposition.TranslationAlternatives)
+            .Select(p => p.BaseValue.Trim())
+            .Where(p => !string.Equals(p, word, StringComparison.OrdinalIgnoreCase))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+    }
+
+    /// <summary>
+    /// The library's prepositions meaning one of <paramref name="english"/>. Prepositions often share a meaning
+    /// (after: tras, después de), so each of them is a right answer. Alternatives must match exactly: "on the table"
+    /// accepts sobre la mesa only while en has no "on" (which would give prompts like "on the house").
+    /// </summary>
+    private IEnumerable<Preposition> PrepositionsMeaning(IReadOnlyList<string> english) =>
+        library.Prepositions.Where(p => !string.IsNullOrWhiteSpace(p.BaseValue)
+                                        && p.TranslationAlternatives.Any(t => english.Contains(t, StringComparer.OrdinalIgnoreCase)));
+
     /// <summary>A random linked noun the pair can use.</summary>
     private Noun DrawLinkedNoun(NounLinkedUnit unit)
     {
         var nouns = library.LinkedNounsOf(unit).Where(unit.CanPairWith).ToList();
         if (nouns.Count == 0)
         {
-            // Links are kept in sync with the library, so this means the word is not in it.
-            throw new ArgumentException($"\"{unit.BaseValue}\" is not linked to a noun in the library.", nameof(unit));
+            // Links are kept in sync with the library, so the word is not in it, or (a preposition) none of its
+            // nouns has a translation.
+            throw new ArgumentException($"\"{unit.BaseValue}\" has no linked noun in the library to pair with.", nameof(unit));
         }
         return nouns[random.Next(nouns.Count)];
     }

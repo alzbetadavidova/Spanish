@@ -129,14 +129,25 @@ public class PrepositionEditorViewModelTests
 
 public class PrepositionLibraryPagesTests
 {
+    private static readonly SessionSettings PrepositionPairsOnly = new()
+    {
+        IncludeNouns = false,
+        IncludeVerbs = false,
+        IncludeAdjectives = false,
+        IncludeNumerals = false,
+        PrepositionScenarioTypes = [ScenarioType.PairWithNoun]
+    };
+
     private LearnLibrary _library = null!;
+    private InMemoryStore<LearnLibrary> _store = null!;
     private LibraryContext _context = null!;
 
     [SetUp]
     public void Setup()
     {
         _library = TestData.PrepositionLibrary();
-        _context = new LibraryContext(_library, new InMemoryStore<LearnLibrary>(_library));
+        _store = new InMemoryStore<LearnLibrary>(_library);
+        _context = new LibraryContext(_library, _store);
     }
 
     [Test]
@@ -209,16 +220,7 @@ public class PrepositionLibraryPagesTests
     [Test]
     public void SessionSettings_LoadsAndAppliesPrepositionChoices()
     {
-        var settings = new SessionSettings
-        {
-            IncludeNouns = false,
-            IncludeVerbs = false,
-            IncludeAdjectives = false,
-            IncludeNumerals = false,
-            PrepositionScenarioTypes = [ScenarioType.PairWithNoun]
-        };
-
-        var vm = new SessionSettingsViewModel(_library, settings);
+        var vm = new SessionSettingsViewModel(_library, PrepositionPairsOnly);
 
         Assert.Multiple(() =>
         {
@@ -244,17 +246,8 @@ public class PrepositionLibraryPagesTests
     [Test]
     public async Task Learn_PracticesPrepositionPairAndSavesProgress()
     {
-        var store = new InMemoryStore<LearnLibrary>(_library);
-        var context = new LibraryContext(_library, store);
-        var settings = new SessionSettings
-        {
-            IncludeNouns = false,
-            IncludeVerbs = false,
-            IncludeAdjectives = false,
-            IncludeNumerals = false,
-            PrepositionScenarioTypes = [ScenarioType.PairWithNoun]
-        };
-        var learn = new LearnViewModel(context, new InMemoryStore<SessionSettings>(settings), settings, new FakeRandom(), new FakeClock());
+        var learn = new LearnViewModel(_context, new InMemoryStore<SessionSettings>(PrepositionPairsOnly), PrepositionPairsOnly,
+            new FakeRandom(), new FakeClock());
 
         var typed = (TypedScenarioViewModel)learn.CurrentScenario!;
         Assert.Multiple(() =>
@@ -273,7 +266,7 @@ public class PrepositionLibraryPagesTests
         Assert.Multiple(() =>
         {
             Assert.That(_library.Prepositions[0].GetProgress(ScenarioType.PairWithNoun)!.Attempts, Is.EqualTo(1));
-            Assert.That(store.SaveCount, Is.EqualTo(1));
+            Assert.That(_store.SaveCount, Is.EqualTo(1));
         });
     }
 }

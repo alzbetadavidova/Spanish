@@ -97,6 +97,23 @@ public class PrepositionLibraryTests
     }
 
     [Test]
+    public void Save_EditAcrossNounLinkedKinds_Throws()
+    {
+        var library = TestData.PrepositionLibrary();
+        library.Adjectives.Add(new Adjective { BaseValue = "bajo", Translation = "short" });
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(() => library.Save(new Preposition { BaseValue = "bajo", Translation = "under" }, library.Adjectives[0]),
+                Throws.ArgumentException);
+            Assert.That(() => library.Save(new Adjective { BaseValue = "de", Translation = "of" }, library.Prepositions[0]),
+                Throws.ArgumentException);
+            Assert.That(library.Adjectives[0].Translation, Is.EqualTo("short"));
+            Assert.That(library.Prepositions[0].Translation, Is.EqualTo("of; from"));
+        });
+    }
+
+    [Test]
     public void Remove_Preposition()
     {
         var library = TestData.PrepositionLibrary();
@@ -234,6 +251,8 @@ public class PrepositionLibraryTests
                 // "entre" has no links: "between the park" needs a plural.
                 Assert.That(library.CanPractice(preposition, ScenarioType.PairWithNoun),
                     Is.EqualTo(preposition.BaseValue != "entre"), preposition.BaseValue);
+                // A linked noun the pair can't use would silently never be practiced.
+                Assert.That(library.LinkedNounsOf(preposition), Has.All.Matches<Noun>(preposition.CanPairWith), preposition.BaseValue);
             }
         });
     }

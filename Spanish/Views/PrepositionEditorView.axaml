@@ -7,6 +7,8 @@
 
     <DockPanel>
         <TextBlock DockPanel.Dock="Top" Text="{Binding Title}" Classes="heading" Margin="0,0,0,16" />
+        <views:ExceptionNotes DockPanel.Dock="Top" Notes="{Binding ExceptionNotes}"
+                              IsVisible="{Binding HasExceptionNotes}" Margin="0,0,0,16" />
         <views:EditorFooter DockPanel.Dock="Bottom" />
 
         <ScrollViewer>
@@ -14,7 +16,7 @@
                 <TextBlock Grid.Row="0" Text="Spanish" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
                 <StackPanel Grid.Row="0" Grid.Column="1" Spacing="4">
                     <TextBox Text="{Binding Spanish}" PlaceholderText="cerca de" />
-                    <TextBlock Text="One word (de) or several (al lado de)." Classes="muted" />
+                    <TextBlock Text="One word (de) or several (al lado de)." Classes="muted" TextWrapping="Wrap" />
                     <TextBlock Text="{Binding SpanishError}" Classes="error"
                                IsVisible="{Binding SpanishError, Converter={x:Static ObjectConverters.IsNotNull}}" />
                 </StackPanel>
@@ -29,7 +31,8 @@
                 </StackPanel>
 
                 <TextBlock Grid.Row="2" Text="Nouns" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
-                <views:NounChips Grid.Row="2" Grid.Column="1" />
+                <views:NounChips Grid.Row="2" Grid.Column="1"
+                                 Hint="Pick nouns that read naturally after it with &quot;the&quot;: near the park." />
 
                 <TextBlock Grid.Row="3" Text="Topics" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
                 <views:TopicChips Grid.Row="3" Grid.Column="1" />
