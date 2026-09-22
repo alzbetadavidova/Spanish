@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Spanish.ViewModels"
+             x:Class="Spanish.Views.VerbFormsTable"
+             x:DataType="vm:VerbFormsTableViewModel">
+
+    <!-- All forms of a verb, laid out like the verb editor; the host decides when it is shown. -->
+    <Border Background="{DynamicResource SubtleSurface}" CornerRadius="6" Padding="12,8">
+        <StackPanel Spacing="4" Grid.IsSharedSizeScope="True">
+            <TextBlock Text="All forms" FontWeight="SemiBold" />
+            <StackPanel Spacing="4" IsVisible="{Binding HasConjugations}">
+                <Grid ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="Person" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="1" Text="Present" Classes="muted" />
+                    <TextBlock Grid.Column="2" Text="Preterite (past)" Classes="muted" />
+                </Grid>
+                <ItemsControl ItemsSource="{Binding Rows}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:VerbFormRow">
+                            <Grid ColumnSpacing="12" Margin="0,0,0,2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Person" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding Person}" Classes="label" />
+                                <TextBlock Grid.Column="1" Text="{Binding Present}" />
+                                <TextBlock Grid.Column="2" Text="{Binding Preterite}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+            <Grid ColumnSpacing="12" IsVisible="{Binding HasGerund}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="Person" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="gerund" Classes="label" />
+                <TextBlock Grid.Column="1" Text="{Binding Gerund}" />
+            </Grid>
+        </StackPanel>
+    </Border>
+</UserControl>

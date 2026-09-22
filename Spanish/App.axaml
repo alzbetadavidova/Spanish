@@ -44,6 +44,7 @@
         <DataTemplate DataType="vm:StatsViewModel"><views:StatsView /></DataTemplate>
         <DataTemplate DataType="vm:CardScenarioViewModel"><views:CardScenarioView /></DataTemplate>
         <DataTemplate DataType="vm:TypedScenarioViewModel"><views:TypedScenarioView /></DataTemplate>
+        <DataTemplate DataType="vm:VerbFormsTableViewModel"><views:VerbFormsTable /></DataTemplate>
         <DataTemplate DataType="vm:GenderScenarioViewModel"><views:GenderScenarioView /></DataTemplate>
         <DataTemplate DataType="vm:NounEditorViewModel"><views:NounEditorView /></DataTemplate>
         <DataTemplate DataType="vm:VerbEditorViewModel"><views:VerbEditorView /></DataTemplate>

@@ -163,6 +163,68 @@ public class ScenarioViewModelTests
         });
     }
 
+    [TestCase(ScenarioType.Present, true)]
+    [TestCase(ScenarioType.Preterite, true)]
+    [TestCase(ScenarioType.Gerund, true)]
+    [TestCase(ScenarioType.Fill, false)]
+    public void VerbForms_OnlyForVerbConjugations(ScenarioType type, bool expected)
+    {
+        var typed = new TypedScenarioViewModel(new TypedScenario(TestData.Hablar(), type, "i", "p", null, ["x"]), OnCompleted);
+
+        Assert.That(typed.VerbForms, expected ? Is.Not.Null : Is.Null);
+    }
+
+    [Test]
+    public void VerbForms_NotForOtherWords()
+    {
+        var typed = new TypedScenarioViewModel(new TypedScenario(TestData.Ciudad(), ScenarioType.Plural, "i", "p", null, ["x"]), OnCompleted);
+
+        Assert.That(typed.VerbForms, Is.Null);
+    }
+
+    [Test]
+    public async Task Typed_WrongConjugation_ShowsVerbForms()
+    {
+        var typed = Typed();
+        Assert.That(typed.ShowVerbForms, Is.False);
+
+        typed.Answer = "hablo";
+        await typed.SubmitCommand.ExecuteAsync(null);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(typed.ShowVerbForms, Is.True);
+            Assert.That(typed.VerbForms!.Rows[0], Is.EqualTo(new VerbFormRow("yo", "hablo", "hablé")));
+        });
+    }
+
+    [Test]
+    public async Task Typed_RightConjugation_HidesVerbForms()
+    {
+        var typed = Typed();
+        typed.Answer = "hablás";
+
+        await typed.SubmitCommand.ExecuteAsync(null);
+
+        Assert.That(typed.ShowVerbForms, Is.False);
+    }
+
+    [Test]
+    public async Task Typed_WrongTranslation_HasNoVerbForms()
+    {
+        var typed = new TypedScenarioViewModel(
+            new TypedScenario(TestData.Hablar(), ScenarioType.Fill, "Translate to Spanish", "to speak", null, ["hablar"]), OnCompleted);
+        typed.Answer = "comer";
+
+        await typed.SubmitCommand.ExecuteAsync(null);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(typed.IsIncorrect, Is.True);
+            Assert.That(typed.ShowVerbForms, Is.False);
+        });
+    }
+
     private GenderScenarioViewModel Gender() =>
         new(new GenderScenario(TestData.Ciudad(), "ciudades", Article.Las), OnCompleted);
 

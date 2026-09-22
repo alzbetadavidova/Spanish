@@ -18,6 +18,15 @@ public abstract partial class ScenarioViewModel(Scenario scenario, Func<Scenario
     public IReadOnlyList<string> Notes { get; } = scenario.Notes.Select(n => n.Reason).ToList();
     public bool HasNotes => Notes.Count > 0;
 
+    /// <summary>All forms of the verb in a conjugation exercise, shown after a wrong answer; null for other exercises.</summary>
+    public VerbFormsTableViewModel? VerbForms { get; } = scenario is
+    {
+        Unit: Verb verb,
+        Type: ScenarioType.Present or ScenarioType.Preterite or ScenarioType.Gerund
+    }
+        ? new VerbFormsTableViewModel(verb)
+        : null;
+
     /// <summary>True once the answer was handed over; further input is ignored.</summary>
     public bool IsCompleted { get; private set; }
 
@@ -82,13 +91,15 @@ public partial class TypedScenarioViewModel(TypedScenario scenario, Func<Scenari
     private string? _validationMessage;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsChecked), nameof(IsCorrect), nameof(IsIncorrect), nameof(Feedback), nameof(ShowNotes))]
+    [NotifyPropertyChangedFor(nameof(IsChecked), nameof(IsCorrect), nameof(IsIncorrect), nameof(Feedback), nameof(ShowNotes),
+        nameof(ShowVerbForms))]
     private AnswerResult? _result;
 
     public bool IsChecked => Result is not null;
     public bool ShowNotes => IsChecked && HasNotes;
     public bool IsCorrect => Result?.IsCorrect == true;
     public bool IsIncorrect => Result is { IsCorrect: false };
+    public bool ShowVerbForms => IsIncorrect && VerbForms is not null;
 
     public string? Feedback => Result switch
     {
