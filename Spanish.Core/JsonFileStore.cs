@@ -1,5 +1,7 @@
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 
 namespace Spanish.Core;
 
@@ -21,7 +23,8 @@ public class JsonFileStore<T>(string path, string? seedPath, Func<T> createEmpty
     public static readonly JsonSerializerOptions Options = new()
     {
         WriteIndented = true,
-        Converters = { new JsonStringEnumConverter() }
+        Converters = { new JsonStringEnumConverter() },
+        TypeInfoResolver = new DefaultJsonTypeInfoResolver { Modifiers = { IgnoreOverridesOfIgnoredProperties } }
     };
 
     public string Path { get; } = path;
@@ -60,6 +63,23 @@ public class JsonFileStore<T>(string path, string? seedPath, Func<T> createEmpty
         var temp = Path + ".tmp";
         await File.WriteAllBytesAsync(temp, bytes, cancellationToken);
         File.Move(temp, Path, overwrite: true);
+    }
+
+    /// <summary>
+    /// System.Text.Json reads [JsonIgnore] only from the most derived declaration, so an override such as
+    /// <see cref="Noun.Kind"/> would be stored although <see cref="LearnUnit.Kind"/> is ignored. This honors the
+    /// attribute from the overridden declaration too, so new overrides can't forget it.
+    /// </summary>
+    private static void IgnoreOverridesOfIgnoredProperties(JsonTypeInfo typeInfo)
+    {
+        for (var i = typeInfo.Properties.Count - 1; i >= 0; i--)
+        {
+            if (typeInfo.Properties[i].AttributeProvider is PropertyInfo property
+                && property.GetCustomAttribute<JsonIgnoreAttribute>(inherit: true) is { Condition: JsonIgnoreCondition.Always })
+            {
+                typeInfo.Properties.RemoveAt(i);
+            }
+        }
     }
 
     private async Task<T> LoadSeedAsync(CancellationToken cancellationToken) =>
