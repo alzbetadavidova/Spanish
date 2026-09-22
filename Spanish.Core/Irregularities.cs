@@ -147,9 +147,9 @@ public static class Irregularities
     private static bool EndsWith(string word, char letter) => char.ToLowerInvariant(word[^1]) == letter;
 
     /// <summary>
-    /// Whether a stored form is the one the rules give, ignoring case and surrounding spaces. Also decides which
-    /// rows of an endings exercise keep the root, so the notes and the exercise agree.
+    /// Whether a stored form is the one the rules give (false when they give none), ignoring case and surrounding
+    /// spaces. Also decides which rows of an endings exercise keep the root, so the notes and the exercise agree.
     /// </summary>
     internal static bool MatchesRule(string form, string? ruleForm) =>
-        ruleForm is not null && string.Equals(form.Trim(), ruleForm, StringComparison.OrdinalIgnoreCase);
+        string.Equals(form.Trim(), ruleForm, StringComparison.OrdinalIgnoreCase);
 }

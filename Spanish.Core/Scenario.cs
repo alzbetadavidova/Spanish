@@ -49,8 +49,8 @@ public sealed record EndingRow(string Person, string Root, string Ending)
         ArgumentNullException.ThrowIfNull(root);
         ArgumentNullException.ThrowIfNull(form);
         var trimmed = form.Trim();
-        var keepsRoot = root.Length > 0
-                        && trimmed.Length > root.Length
+        // An empty root (ir) splits off nothing, which is the same as typing the whole form.
+        var keepsRoot = trimmed.Length > root.Length
                         && trimmed.StartsWith(root, StringComparison.OrdinalIgnoreCase)
                         && Irregularities.MatchesRule(trimmed, regularForm);
         return keepsRoot

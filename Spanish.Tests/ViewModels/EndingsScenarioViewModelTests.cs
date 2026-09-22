@@ -93,15 +93,32 @@ public class EndingsScenarioViewModelTests
         Assert.That(vm.ValidationMessage, Is.Null);
     }
 
+    /// <summary>What <see cref="EndingsScenarioViewModel.Feedback"/> reads when it is announced, as the view reads it.</summary>
+    private static List<string?> FeedbackWhenNotified(EndingsScenarioViewModel vm)
+    {
+        var seen = new List<string?>();
+        vm.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(EndingsScenarioViewModel.Feedback))
+            {
+                seen.Add(vm.Feedback);
+            }
+        };
+        return seen;
+    }
+
     [Test]
     public async Task Submit_AllRight_ChecksThenCompletesOnce()
     {
         var vm = HablarPreterite();
         FillIn(vm, "é", "aste", "ó", "amos", "hablaron");
+        var announced = FeedbackWhenNotified(vm);
 
         await vm.SubmitCommand.ExecuteAsync(null);
         Assert.Multiple(() =>
         {
+            // The rows are checked before the exercise says it is, so the view never reads a stale result.
+            Assert.That(announced, Is.EqualTo(new[] { "Correct" }));
             Assert.That(vm.IsChecked, Is.True);
             Assert.That(vm.IsCorrect, Is.True);
             Assert.That(vm.IsIncorrect, Is.False);
@@ -145,10 +162,12 @@ public class EndingsScenarioViewModelTests
         FillIn(vm, "é", "aste", "ó", "emos", "ieron");
         var changed = new List<string?>();
         vm.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
+        var announced = FeedbackWhenNotified(vm);
 
         await vm.SubmitCommand.ExecuteAsync(null);
         Assert.Multiple(() =>
         {
+            Assert.That(announced, Is.EqualTo(new[] { "3 of 5 correct" }));
             Assert.That(vm.IsCorrect, Is.False);
             Assert.That(vm.IsIncorrect, Is.True);
             Assert.That(vm.Feedback, Is.EqualTo("3 of 5 correct"));
@@ -236,19 +255,29 @@ public class EndingsScenarioViewModelTests
             {
                 nameof(EndingRowViewModel.IsChecked), nameof(EndingRowViewModel.IsCorrect),
                 nameof(EndingRowViewModel.IsIncorrect), nameof(EndingRowViewModel.HasAccentHint),
-                nameof(EndingRowViewModel.Feedback)
+                nameof(EndingRowViewModel.Feedback), nameof(EndingRowViewModel.AccessibleFeedback)
             }));
         });
     }
 
-    [Test]
-    public void Row_AccessibleName_SaysThePersonAndTheRoot()
+    [TestCase("ó", "correct")]
+    [TestCase("o", "correct, watch the accent: habló")]
+    [TestCase("a", "wrong, the answer is habló")]
+    public void Row_AccessibleFeedback_PutsTheResultInWords(string answer, string expected)
     {
-        Assert.Multiple(() =>
-        {
-            Assert.That(new EndingRowViewModel(new EndingRow("yo", "habl", "o")).AccessibleName, Is.EqualTo("yo, habl…"));
-            Assert.That(new EndingRowViewModel(new EndingRow("yo", "", "tengo")).AccessibleName, Is.EqualTo("yo, whole form"));
-        });
+        var row = new EndingRowViewModel(new EndingRow("él / ella / usted", "habl", "ó")) { Answer = answer };
+        Assert.That(row.AccessibleFeedback, Is.Null);
+
+        row.Check();
+
+        Assert.That(row.AccessibleFeedback, Is.EqualTo(expected));
+    }
+
+    [TestCase("habl", "o", "yo, habl…")]
+    [TestCase("", "tengo", "yo, whole form")]
+    public void Row_AccessibleName_SaysThePersonAndTheRoot(string root, string ending, string expected)
+    {
+        Assert.That(new EndingRowViewModel(new EndingRow("yo", root, ending)).AccessibleName, Is.EqualTo(expected));
     }
 
     [Test]
@@ -299,10 +328,14 @@ public class EndingsScenarioViewModelTests
     {
         var vm = HablarPreterite();
 
-        Assert.Multiple(() =>
-        {
-            Assert.That(() => vm.NextEmptyRow(HablarPreterite().Rows[0]), Throws.ArgumentException);
-            Assert.That(() => vm.NextEmptyRow(null!), Throws.ArgumentNullException);
-        });
+        Assert.That(() => vm.NextEmptyRow(HablarPreterite().Rows[0]),
+            Throws.ArgumentException.With.Property(nameof(ArgumentException.ParamName)).EqualTo("current"));
+    }
+
+    [Test]
+    public void NextEmptyRow_Null_Throws()
+    {
+        Assert.That(() => HablarPreterite().NextEmptyRow(null!),
+            Throws.ArgumentNullException.With.Property(nameof(ArgumentException.ParamName)).EqualTo("current"));
     }
 }

@@ -140,7 +140,8 @@ public partial class EndingRowViewModel(EndingRow row) : ObservableObject
     private string _answer = string.Empty;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsChecked), nameof(IsCorrect), nameof(IsIncorrect), nameof(HasAccentHint), nameof(Feedback))]
+    [NotifyPropertyChangedFor(nameof(IsChecked), nameof(IsCorrect), nameof(IsIncorrect), nameof(HasAccentHint), nameof(Feedback),
+        nameof(AccessibleFeedback))]
     private AnswerResult? _result;
 
     public bool IsChecked => Result is not null;
@@ -155,6 +156,15 @@ public partial class EndingRowViewModel(EndingRow row) : ObservableObject
         AnswerOutcome.Correct => "✓",
         AnswerOutcome.CorrectWithAccentHint => $"✓ {row.Form}",
         _ => $"→ {row.Form}"
+    };
+
+    /// <summary><see cref="Feedback"/> in words, for screen readers that skip the symbols.</summary>
+    public string? AccessibleFeedback => Result?.Outcome switch
+    {
+        null => null,
+        AnswerOutcome.Correct => "correct",
+        AnswerOutcome.CorrectWithAccentHint => $"correct, watch the accent: {row.Form}",
+        _ => $"wrong, the answer is {row.Form}"
     };
 
     public void Check() => Result = AnswerChecker.Check(Answer, row.ExpectedAnswers);

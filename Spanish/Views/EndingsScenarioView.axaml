@@ -40,7 +40,7 @@
                         <TextBox Grid.Column="2" Text="{Binding Answer}" PlaceholderText="{Binding Placeholder}"
                                  FontSize="16" IsReadOnly="{Binding IsChecked}"
                                  AutomationProperties.Name="{Binding AccessibleName}"
-                                 AutomationProperties.HelpText="{Binding Feedback}" />
+                                 AutomationProperties.HelpText="{Binding AccessibleFeedback}" />
                         <TextBlock Grid.Column="3" Text="{Binding Feedback}" Margin="10,0,0,0"
                                    VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
                                    ToolTip.Tip="{Binding Feedback}"
