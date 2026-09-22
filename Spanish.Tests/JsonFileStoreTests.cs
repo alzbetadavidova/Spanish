@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Spanish.Core;
 
 namespace Spanish.Tests;
@@ -81,6 +82,80 @@ public class JsonFileStoreTests
 
         Assert.That(() => JsonDocument.Parse(File.ReadAllText(store.Path)), Throws.Nothing);
         Assert.That((await store.LoadAsync()).Value.Words, Is.Empty);
+    }
+
+    [Test]
+    public async Task Save_OmitsComputedUnitProperties()
+    {
+        var library = TestData.Library();
+        library.Adjectives.Add(TestData.Bajo());
+        library.Prepositions.Add(TestData.De());
+        TestData.NumeralOf(NumeralCategory.Times, library).RecordAnswer(ScenarioType.NumberToText, true, _clock.Now);
+        var store = Store();
+
+        await store.SaveAsync(library);
+
+        using var json = JsonDocument.Parse(await File.ReadAllTextAsync(store.Path));
+        Assert.That(PropertyNames(json.RootElement), Has.None.EqualTo(nameof(LearnUnit.Kind))
+            .And.None.EqualTo(nameof(LearnUnit.SupportedScenarios))
+            .And.Some.EqualTo(nameof(LearnUnit.BaseValue)));
+    }
+
+    // Future unit types are covered without having to remember [JsonIgnore] on their overrides.
+    private static IEnumerable<Type> UnitTypes() =>
+        typeof(LearnUnit).Assembly.GetTypes()
+            .Where(t => t.IsSubclassOf(typeof(LearnUnit)) && !t.IsAbstract)
+            .Append(typeof(UnknownUnit));
+
+    [TestCaseSource(nameof(UnitTypes))]
+    public void Options_IgnoreOverridesOfIgnoredUnitProperties(Type unitType)
+    {
+        var names = JsonFileStore<LearnLibrary>.Options.GetTypeInfo(unitType).Properties.Select(p => p.Name);
+
+        Assert.That(names, Has.None.EqualTo(nameof(LearnUnit.Kind))
+            .And.None.EqualTo(nameof(LearnUnit.SupportedScenarios))
+            .And.Some.EqualTo(nameof(LearnUnit.Progress)));
+    }
+
+    [Test]
+    public async Task Load_FileWithComputedUnitProperties_LoadsAndDropsThemOnSave()
+    {
+        var store = Store();
+        // Written by older versions; the values can be stale (Removed is no scenario type) or hand-edited.
+        await File.WriteAllTextAsync(store.Path, """
+            {
+              "Nouns": [ { "Kind": "Noun", "SupportedScenarios": [ "Card", "Gender" ], "BaseValue": "perro", "Gender": "Masculine" } ],
+              "Verbs": [ { "Kind": "Noun", "SupportedScenarios": [ "Removed" ], "BaseValue": "hablar", "NonPersonalGerund": "hablando" } ],
+              "Adjectives": [ { "Kind": "Adjective", "SupportedScenarios": null, "BaseValue": "bajo", "FeminineValue": "baja" } ],
+              "Prepositions": [ { "Kind": "Preposition", "SupportedScenarios": [], "BaseValue": "de", "Translation": "of" } ]
+            }
+            """);
+
+        var result = await store.LoadAsync();
+        var library = result.Value;
+        await store.SaveAsync(library);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.CorruptFileBackupPath, Is.Null);
+            Assert.That(library.Nouns.Single().Gender, Is.EqualTo(Gender.Masculine));
+            Assert.That(library.Verbs.Single().NonPersonalGerund, Is.EqualTo("hablando"));
+            Assert.That(library.Adjectives.Single().FeminineValue, Is.EqualTo("baja"));
+            Assert.That(library.Prepositions.Single().Translation, Is.EqualTo("of"));
+            Assert.That(File.ReadAllText(store.Path), Does.Not.Contain("\"Kind\"").And.Not.Contain("\"SupportedScenarios\""));
+        });
+    }
+
+    [Test]
+    public void Options_StillApplyOtherIgnoreConditions()
+    {
+        var options = JsonFileStore<ConditionallyIgnored>.Options;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(JsonSerializer.Serialize(new ConditionallyIgnored { Note = "kept" }, options), Does.Contain("\"Note\": \"kept\""));
+            Assert.That(JsonSerializer.Serialize(new ConditionallyIgnored(), options), Does.Not.Contain("Note"));
+        });
     }
 
     [Test]
@@ -246,5 +321,19 @@ public class JsonFileStoreTests
             Assert.That(new SystemClock().Now, Is.EqualTo(DateTime.Now).Within(TimeSpan.FromMinutes(1)));
             Assert.That(new SystemRandomSource().Next(3), Is.InRange(0, 2));
         });
+    }
+
+    /// <summary>The names of all properties in <paramref name="element"/>, at any depth.</summary>
+    private static IEnumerable<string> PropertyNames(JsonElement element) => element.ValueKind switch
+    {
+        JsonValueKind.Object => element.EnumerateObject().SelectMany(p => PropertyNames(p.Value).Prepend(p.Name)),
+        JsonValueKind.Array => element.EnumerateArray().SelectMany(PropertyNames),
+        _ => []
+    };
+
+    public class ConditionallyIgnored
+    {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Note { get; set; }
     }
 }
