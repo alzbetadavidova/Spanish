@@ -52,7 +52,7 @@
                 </StackPanel>
 
                 <TextBlock Grid.Row="3" Text="Nouns" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
-                <views:NounChips Grid.Row="3" Grid.Column="1" />
+                <views:NounChips Grid.Row="3" Grid.Column="1" Hint="Pick the nouns to practice this adjective with." />
 
                 <TextBlock Grid.Row="4" Text="Topics" Classes="label" VerticalAlignment="Top" Margin="0,7,0,0" />
                 <views:TopicChips Grid.Row="4" Grid.Column="1" />

@@ -44,7 +44,7 @@ public static class Irregularities
     public static IReadOnlyList<Irregularity> For(LearnUnit unit, ScenarioType type) =>
         Of(unit).Where(i => IsRelevant(i.Kind, type)).ToList();
 
-    /// <summary>The gender and article irregularities of a noun, which decide how an adjective agrees with it.</summary>
+    /// <summary>The gender and article irregularities of a noun, which decide its article and how an adjective agrees with it.</summary>
     public static IReadOnlyList<Irregularity> OfPairedNoun(Noun noun) =>
         Of(noun).Where(i => GenderKinds.Contains(i.Kind)).ToList();
 
