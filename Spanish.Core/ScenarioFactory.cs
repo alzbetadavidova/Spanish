@@ -40,7 +40,7 @@ public class ScenarioFactory(IRandomSource random, LearnLibrary library)
         ? random.Next(2) == 0 ? Direction.EnglishToSpanish : Direction.SpanishToEnglish
         : direction;
 
-    private static CardScenario CreateCard(LearnUnit unit, Direction direction)
+    private CardScenario CreateCard(LearnUnit unit, Direction direction)
     {
         var english = unit.TranslationDisplay;
         var spanish = SpanishDisplay(unit);
@@ -51,6 +51,9 @@ public class ScenarioFactory(IRandomSource random, LearnLibrary library)
                 adjective.GetForm(Gender.Feminine, false),
                 adjective.GetForm(Gender.Masculine, true),
                 adjective.GetForm(Gender.Feminine, true)),
+            // The learner may have recalled another preposition with the same meaning.
+            Preposition preposition when SynonymsOf(preposition) is { Count: > 0 } synonyms =>
+                $"also: {string.Join(", ", synonyms)}",
             _ => null
         };
 
@@ -66,11 +69,7 @@ public class ScenarioFactory(IRandomSource random, LearnLibrary library)
             IReadOnlyList<string> expected = unit switch
             {
                 Noun noun => [noun.BaseValue, SpanishDisplay(noun)],
-                Preposition preposition => PrepositionsMeaning(preposition.TranslationAlternatives)
-                    .Select(p => p.BaseValue.Trim())
-                    .Prepend(preposition.BaseValue)
-                    .Distinct(StringComparer.OrdinalIgnoreCase)
-                    .ToList(),
+                Preposition preposition => [preposition.BaseValue.Trim(), ..SynonymsOf(preposition)],
                 _ => [unit.BaseValue]
             };
             return new TypedScenario(unit, ScenarioType.Fill, "Translate to Spanish",
@@ -148,9 +147,21 @@ public class ScenarioFactory(IRandomSource random, LearnLibrary library)
         return WithNotes(pair, Irregularities.OfPairedNoun(noun));
     }
 
+    /// <summary>The other prepositions of the library meaning one of <paramref name="preposition"/>'s alternatives.</summary>
+    private List<string> SynonymsOf(Preposition preposition)
+    {
+        var word = preposition.BaseValue.Trim();
+        return PrepositionsMeaning(preposition.TranslationAlternatives)
+            .Select(p => p.BaseValue.Trim())
+            .Where(p => !string.Equals(p, word, StringComparison.OrdinalIgnoreCase))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+    }
+
     /// <summary>
     /// The library's prepositions meaning one of <paramref name="english"/>. Prepositions often share a meaning
-    /// (after: tras, después de), so each of them is a right answer.
+    /// (after: tras, después de), so each of them is a right answer. Alternatives must match exactly: "on the table"
+    /// accepts sobre la mesa only while en has no "on" (which would give prompts like "on the house").
     /// </summary>
     private IEnumerable<Preposition> PrepositionsMeaning(IReadOnlyList<string> english) =>
         library.Prepositions.Where(p => !string.IsNullOrWhiteSpace(p.BaseValue)

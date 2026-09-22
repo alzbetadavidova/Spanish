@@ -7,7 +7,7 @@ namespace Spanish.Views;
 public partial class NounChips : UserControl
 {
     public static readonly StyledProperty<string?> HintProperty =
-        AvaloniaProperty.Register<NounChips, string?>(nameof(Hint));
+        AvaloniaProperty.Register<NounChips, string?>(nameof(Hint), "Pick the nouns to practice it with.");
 
     public NounChips()
     {

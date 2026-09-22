@@ -5294,7 +5294,7 @@
     { "BaseValue": "al lado de", "Translation": "next to; beside", "LinkedNouns": ["banco", "hospital", "ventana", "supermercado"], "Topics": ["basics"] },
     { "BaseValue": "enfrente de", "Translation": "opposite; across from", "LinkedNouns": ["hotel", "estación", "parque", "iglesia"], "Topics": ["basics"] },
     { "BaseValue": "junto a", "Translation": "next to; beside", "LinkedNouns": ["río", "lago", "ventana", "mar"], "Topics": ["basics"] },
-    { "BaseValue": "alrededor de", "Translation": "around", "LinkedNouns": ["mundo", "lago", "plaza", "mesa"], "Topics": ["basics"] },
+    { "BaseValue": "alrededor de", "Translation": "around", "LinkedNouns": ["mundo", "lago", "plaza", "casa"], "Topics": ["basics"] },
     { "BaseValue": "a través de", "Translation": "through; across", "LinkedNouns": ["bosque", "ciudad", "calle", "parque"], "Topics": ["basics"] },
     { "BaseValue": "antes de", "Translation": "before", "LinkedNouns": ["cena", "examen", "viaje", "desayuno"], "Topics": ["basics"] },
     { "BaseValue": "después de", "Translation": "after", "LinkedNouns": ["clase", "reunión", "partido", "almuerzo"], "Topics": ["basics"] },
