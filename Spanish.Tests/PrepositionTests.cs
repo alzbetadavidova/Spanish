@@ -24,8 +24,13 @@ public class PrepositionTests
     [TestCase("de", "parque", Gender.Masculine, false, "del parque")]
     [TestCase("a", "playa", Gender.Feminine, false, "a la playa")]
     [TestCase("de", "agua", Gender.Feminine, true, "del agua")] // el agua
+    [TestCase("a", "aula", Gender.Feminine, true, "al aula")]
     [TestCase("en", "parque", Gender.Masculine, false, "en el parque")]
     [TestCase("desde", "ciudad", Gender.Feminine, false, "desde la ciudad")]
+    // Only the words a and de contract, not words ending in a or de.
+    [TestCase("hacia", "mar", Gender.Masculine, false, "hacia el mar")]
+    [TestCase("para", "examen", Gender.Masculine, false, "para el examen")]
+    [TestCase("desde", "parque", Gender.Masculine, false, "desde el parque")]
     [TestCase("cerca de", "río", Gender.Masculine, false, "cerca del río")]
     [TestCase("junto a", "lago", Gender.Masculine, false, "junto al lago")]
     [TestCase("al lado de", "banco", Gender.Masculine, false, "al lado del banco")] // only the last word contracts
