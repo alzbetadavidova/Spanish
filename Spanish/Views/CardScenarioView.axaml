@@ -14,26 +14,27 @@
         <KeyBinding Gesture="NumPad2" Command="{Binding KnewItCommand}" />
     </UserControl.KeyBindings>
 
-    <StackPanel Spacing="16" Width="360">
+    <StackPanel Spacing="16" Width="460">
         <TextBlock Text="{Binding Heading}" Classes="muted" HorizontalAlignment="Center" />
 
         <Button Classes="card" Command="{Binding FlipCommand}" HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Stretch" Focusable="False">
-            <Border MinHeight="160" Padding="20">
-                <StackPanel VerticalAlignment="Center" Spacing="4">
-                    <TextBlock Text="{Binding Front}" FontSize="26" FontWeight="SemiBold" HorizontalAlignment="Center"
-                               TextWrapping="Wrap" TextAlignment="Center" IsVisible="{Binding !IsFlipped}" />
-                    <TextBlock Text="Click or press Space to flip" Classes="muted" HorizontalAlignment="Center"
-                               IsVisible="{Binding !IsFlipped}" />
+            <Grid RowDefinitions="4,*">
+                <!-- A pastel rule along the card's top edge; the corners match the card's radius. -->
+                <Border Background="{StaticResource PastelRainbow}" CornerRadius="12,12,0,0" />
+                <Border Grid.Row="1" MinHeight="216" Padding="24">
+                    <StackPanel VerticalAlignment="Center" Spacing="6">
+                        <TextBlock Text="{Binding Front}" Classes="prompt" IsVisible="{Binding !IsFlipped}" />
+                        <TextBlock Text="Click or press Space to flip" Classes="muted" HorizontalAlignment="Center"
+                                   Margin="0,8,0,0" IsVisible="{Binding !IsFlipped}" />
 
-                    <TextBlock Text="{Binding Front}" Classes="muted" HorizontalAlignment="Center"
-                               IsVisible="{Binding IsFlipped}" />
-                    <TextBlock Text="{Binding Back}" FontSize="26" FontWeight="SemiBold" HorizontalAlignment="Center"
-                               TextWrapping="Wrap" TextAlignment="Center" IsVisible="{Binding IsFlipped}" />
-                    <TextBlock Text="{Binding BackDetail}" Classes="label" HorizontalAlignment="Center"
-                               IsVisible="{Binding IsFlipped}" />
-                </StackPanel>
-            </Border>
+                        <!-- Once flipped the question becomes the context line and the answer takes the focus. -->
+                        <TextBlock Text="{Binding Front}" Classes="translation" IsVisible="{Binding IsFlipped}" />
+                        <TextBlock Text="{Binding Back}" Classes="prompt" IsVisible="{Binding IsFlipped}" />
+                        <TextBlock Text="{Binding BackDetail}" Classes="translation" IsVisible="{Binding IsFlipped}" />
+                    </StackPanel>
+                </Border>
+            </Grid>
         </Button>
 
         <views:ExceptionNotes Notes="{Binding Notes}" IsVisible="{Binding ShowNotes}" />

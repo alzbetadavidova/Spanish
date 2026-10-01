@@ -19,21 +19,26 @@
         <KeyBinding Gesture="Enter" Command="{Binding SubmitCommand}" />
     </UserControl.KeyBindings>
 
-    <StackPanel Spacing="12" Width="360">
+    <StackPanel Spacing="14" Width="460">
         <TextBlock Text="{Binding Heading}" Classes="muted" HorizontalAlignment="Center" />
-        <StackPanel Spacing="2">
-            <TextBlock Text="{Binding Word}" FontSize="26" FontWeight="SemiBold" HorizontalAlignment="Center" />
-            <TextBlock Text="{Binding Translation}" Classes="label" HorizontalAlignment="Center" />
+        <StackPanel Spacing="6">
+            <TextBlock Text="{Binding Word}" Classes="prompt" />
+            <TextBlock Text="{Binding Translation}" Classes="translation" />
         </StackPanel>
 
         <UniformGrid Columns="4" IsEnabled="{Binding !IsChecked}">
-            <Button Content="el · 1" Command="{Binding ChooseCommand}" CommandParameter="{x:Static core:Article.El}"
+            <!-- Tints are decorative only; el/la/los/las are not colour-coded by gender or number. -->
+            <Button Content="el · 1" Classes="pastel5" Command="{Binding ChooseCommand}" CommandParameter="{x:Static core:Article.El}"
+                    FontSize="16" Padding="8,10"
                     HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0,0,6,0" />
-            <Button Content="la · 2" Command="{Binding ChooseCommand}" CommandParameter="{x:Static core:Article.La}"
+            <Button Content="la · 2" Classes="pastel1" Command="{Binding ChooseCommand}" CommandParameter="{x:Static core:Article.La}"
+                    FontSize="16" Padding="8,10"
                     HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="3,0" />
-            <Button Content="los · 3" Command="{Binding ChooseCommand}" CommandParameter="{x:Static core:Article.Los}"
+            <Button Content="los · 3" Classes="pastel4" Command="{Binding ChooseCommand}" CommandParameter="{x:Static core:Article.Los}"
+                    FontSize="16" Padding="8,10"
                     HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="3,0" />
-            <Button Content="las · 4" Command="{Binding ChooseCommand}" CommandParameter="{x:Static core:Article.Las}"
+            <Button Content="las · 4" Classes="pastel2" Command="{Binding ChooseCommand}" CommandParameter="{x:Static core:Article.Las}"
+                    FontSize="16" Padding="8,10"
                     HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="6,0,0,0" />
         </UniformGrid>
 
