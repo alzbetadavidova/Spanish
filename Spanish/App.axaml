@@ -20,6 +20,24 @@
                     <SolidColorBrush x:Key="WarningForeground" Color="#633806" />
                     <SolidColorBrush x:Key="SubtleSurface" Color="#F6F5F2" />
                     <SolidColorBrush x:Key="Divider" Color="#1F000000" />
+
+                    <!--
+                    A six-step pastel rainbow used for decoration only: chips, nav icons, the article
+                    buttons and the card's top edge. Nothing that carries meaning is colour-coded with
+                    it, so the hues stay free to be pretty.
+                    -->
+                    <SolidColorBrush x:Key="Pastel1Background" Color="#FBE3E8" />
+                    <SolidColorBrush x:Key="Pastel1Foreground" Color="#8B3A4A" />
+                    <SolidColorBrush x:Key="Pastel2Background" Color="#FCEEDB" />
+                    <SolidColorBrush x:Key="Pastel2Foreground" Color="#8A571B" />
+                    <SolidColorBrush x:Key="Pastel3Background" Color="#F8F3D2" />
+                    <SolidColorBrush x:Key="Pastel3Foreground" Color="#6F6210" />
+                    <SolidColorBrush x:Key="Pastel4Background" Color="#DFF1E4" />
+                    <SolidColorBrush x:Key="Pastel4Foreground" Color="#2D6940" />
+                    <SolidColorBrush x:Key="Pastel5Background" Color="#DFECF8" />
+                    <SolidColorBrush x:Key="Pastel5Foreground" Color="#295880" />
+                    <SolidColorBrush x:Key="Pastel6Background" Color="#ECE5F6" />
+                    <SolidColorBrush x:Key="Pastel6Foreground" Color="#573E7C" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
                     <SolidColorBrush x:Key="SuccessBackground" Color="#173404" />
@@ -32,9 +50,41 @@
                     <SolidColorBrush x:Key="WarningForeground" Color="#FAC775" />
                     <SolidColorBrush x:Key="SubtleSurface" Color="#262624" />
                     <SolidColorBrush x:Key="Divider" Color="#26FFFFFF" />
+
+                    <!-- Same six hues, dimmed so they sit on a dark surface without glowing. -->
+                    <SolidColorBrush x:Key="Pastel1Background" Color="#3C2027" />
+                    <SolidColorBrush x:Key="Pastel1Foreground" Color="#F0BEC9" />
+                    <SolidColorBrush x:Key="Pastel2Background" Color="#3B2C17" />
+                    <SolidColorBrush x:Key="Pastel2Foreground" Color="#EFCB99" />
+                    <SolidColorBrush x:Key="Pastel3Background" Color="#37331A" />
+                    <SolidColorBrush x:Key="Pastel3Foreground" Color="#E3D795" />
+                    <SolidColorBrush x:Key="Pastel4Background" Color="#1D3326" />
+                    <SolidColorBrush x:Key="Pastel4Foreground" Color="#AFDABD" />
+                    <SolidColorBrush x:Key="Pastel5Background" Color="#1C2E3F" />
+                    <SolidColorBrush x:Key="Pastel5Foreground" Color="#A7CAE6" />
+                    <SolidColorBrush x:Key="Pastel6Background" Color="#2A2440" />
+                    <SolidColorBrush x:Key="Pastel6Foreground" Color="#C6B8E4" />
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
             <views:StringToGeometryConverter x:Key="Geometry" />
+
+            <!-- The full arc of the palette, for the sidebar edge and the card's top rule. -->
+            <LinearGradientBrush x:Key="PastelRainbow" StartPoint="0%,0%" EndPoint="100%,0%">
+                <GradientStop Color="#F2B8C6" Offset="0" />
+                <GradientStop Color="#F7CFA4" Offset="0.2" />
+                <GradientStop Color="#EFE3A0" Offset="0.4" />
+                <GradientStop Color="#AEDCBE" Offset="0.6" />
+                <GradientStop Color="#A9CCE8" Offset="0.8" />
+                <GradientStop Color="#C8B9E6" Offset="1" />
+            </LinearGradientBrush>
+            <LinearGradientBrush x:Key="PastelRainbowVertical" StartPoint="0%,0%" EndPoint="0%,100%">
+                <GradientStop Color="#F2B8C6" Offset="0" />
+                <GradientStop Color="#F7CFA4" Offset="0.2" />
+                <GradientStop Color="#EFE3A0" Offset="0.4" />
+                <GradientStop Color="#AEDCBE" Offset="0.6" />
+                <GradientStop Color="#A9CCE8" Offset="0.8" />
+                <GradientStop Color="#C8B9E6" Offset="1" />
+            </LinearGradientBrush>
         </ResourceDictionary>
     </Application.Resources>
 
@@ -73,6 +123,27 @@
         <Style Selector="TextBlock.heading">
             <Setter Property="FontSize" Value="16" />
             <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+
+        <!-- The word being practiced: the one thing the eye should land on first. -->
+        <Style Selector="TextBlock.prompt">
+            <Setter Property="FontSize" Value="40" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="LineHeight" Value="48" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <!--
+        Translations and hints read at full contrast: they are the second half of the exercise,
+        not decoration, so they only step down in size rather than fading into the background.
+        -->
+        <Style Selector="TextBlock.translation">
+            <Setter Property="FontSize" Value="19" />
+            <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
 
         <Style Selector="ToggleButton.chip">
@@ -115,7 +186,9 @@
 
         <Style Selector="Border.feedback">
             <Setter Property="CornerRadius" Value="6" />
-            <Setter Property="Padding" Value="12,8" />
+            <Setter Property="Padding" Value="14,10" />
+            <!-- Holds the correct answer after a wrong guess, so it reads above body size. -->
+            <Setter Property="TextElement.FontSize" Value="16" />
         </Style>
         <Style Selector="Border.feedback.success">
             <Setter Property="Background" Value="{DynamicResource SuccessBackground}" />
@@ -142,6 +215,64 @@
             <Setter Property="CornerRadius" Value="6" />
             <Setter Property="Padding" Value="10,4" />
             <Setter Property="Margin" Value="0,0,6,0" />
+        </Style>
+
+        <!--
+        Decorative pastel tints. Applied by hand where the element order is fixed (the article
+        buttons) and by :nth-child where a list decides how many there are.
+        -->
+        <Style Selector=":is(Button).pastel1">
+            <Setter Property="Background" Value="{DynamicResource Pastel1Background}" />
+            <Setter Property="Foreground" Value="{DynamicResource Pastel1Foreground}" />
+        </Style>
+        <Style Selector=":is(Button).pastel2">
+            <Setter Property="Background" Value="{DynamicResource Pastel2Background}" />
+            <Setter Property="Foreground" Value="{DynamicResource Pastel2Foreground}" />
+        </Style>
+        <Style Selector=":is(Button).pastel4">
+            <Setter Property="Background" Value="{DynamicResource Pastel4Background}" />
+            <Setter Property="Foreground" Value="{DynamicResource Pastel4Foreground}" />
+        </Style>
+        <Style Selector=":is(Button).pastel5">
+            <Setter Property="Background" Value="{DynamicResource Pastel5Background}" />
+            <Setter Property="Foreground" Value="{DynamicResource Pastel5Foreground}" />
+        </Style>
+
+        <!-- The summary chips cycle through the palette; there are only ever a handful. -->
+        <Style Selector="ItemsControl.pastelCycle > ContentPresenter:nth-child(6n+1) > Border.chipLabel">
+            <Setter Property="Background" Value="{DynamicResource Pastel1Background}" />
+            <Setter Property="TextElement.Foreground" Value="{DynamicResource Pastel1Foreground}" />
+        </Style>
+        <Style Selector="ItemsControl.pastelCycle > ContentPresenter:nth-child(6n+2) > Border.chipLabel">
+            <Setter Property="Background" Value="{DynamicResource Pastel3Background}" />
+            <Setter Property="TextElement.Foreground" Value="{DynamicResource Pastel3Foreground}" />
+        </Style>
+        <Style Selector="ItemsControl.pastelCycle > ContentPresenter:nth-child(6n+3) > Border.chipLabel">
+            <Setter Property="Background" Value="{DynamicResource Pastel4Background}" />
+            <Setter Property="TextElement.Foreground" Value="{DynamicResource Pastel4Foreground}" />
+        </Style>
+        <Style Selector="ItemsControl.pastelCycle > ContentPresenter:nth-child(6n+4) > Border.chipLabel">
+            <Setter Property="Background" Value="{DynamicResource Pastel5Background}" />
+            <Setter Property="TextElement.Foreground" Value="{DynamicResource Pastel5Foreground}" />
+        </Style>
+        <Style Selector="ItemsControl.pastelCycle > ContentPresenter:nth-child(6n+5) > Border.chipLabel">
+            <Setter Property="Background" Value="{DynamicResource Pastel6Background}" />
+            <Setter Property="TextElement.Foreground" Value="{DynamicResource Pastel6Foreground}" />
+        </Style>
+        <Style Selector="ItemsControl.pastelCycle > ContentPresenter:nth-child(6n+6) > Border.chipLabel">
+            <Setter Property="Background" Value="{DynamicResource Pastel2Background}" />
+            <Setter Property="TextElement.Foreground" Value="{DynamicResource Pastel2Foreground}" />
+        </Style>
+
+        <!-- One hue per nav entry, on the icon only so the labels stay plain text. -->
+        <Style Selector="ListBox.nav > ListBoxItem:nth-child(1) PathIcon">
+            <Setter Property="Foreground" Value="{DynamicResource Pastel1Foreground}" />
+        </Style>
+        <Style Selector="ListBox.nav > ListBoxItem:nth-child(2) PathIcon">
+            <Setter Property="Foreground" Value="{DynamicResource Pastel4Foreground}" />
+        </Style>
+        <Style Selector="ListBox.nav > ListBoxItem:nth-child(3) PathIcon">
+            <Setter Property="Foreground" Value="{DynamicResource Pastel6Foreground}" />
         </Style>
 
         <Style Selector="ProgressBar.index">

@@ -5,17 +5,17 @@
              x:Class="Spanish.Views.TypedScenarioView"
              x:DataType="vm:TypedScenarioViewModel">
 
-    <StackPanel Spacing="12" Width="360">
+    <StackPanel Spacing="14" Width="460">
         <TextBlock Text="{Binding Heading}" Classes="muted" HorizontalAlignment="Center" />
-        <StackPanel Spacing="2">
-            <TextBlock Text="{Binding Prompt}" FontSize="26" FontWeight="SemiBold"
-                       HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" />
-            <TextBlock Text="{Binding PromptDetail}" Classes="label" HorizontalAlignment="Center"
+        <StackPanel Spacing="6">
+            <TextBlock Text="{Binding Prompt}" Classes="prompt" />
+            <TextBlock Text="{Binding PromptDetail}" Classes="translation"
                        IsVisible="{Binding PromptDetail, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
         </StackPanel>
 
         <!-- Wraps long answers (dates with times); Enter still submits because AcceptsReturn stays off. -->
         <TextBox x:Name="AnswerBox" Text="{Binding Answer}" PlaceholderText="Type your answer"
+                 FontSize="20" Padding="12,10"
                  HorizontalContentAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"
                  IsReadOnly="{Binding IsChecked}">
             <TextBox.KeyBindings>

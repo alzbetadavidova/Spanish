@@ -7,14 +7,30 @@
         x:Class="Spanish.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Title="Spanish"
+        Icon="/Assets/spanish.ico"
         Width="1000" Height="680" MinWidth="760" MinHeight="520">
 
     <Grid ColumnDefinitions="180,*">
+        <!-- The rail's edge is the one place the whole palette shows at once. -->
         <Border Grid.Column="0" Background="{DynamicResource SubtleSurface}"
-                BorderBrush="{DynamicResource Divider}" BorderThickness="0,0,1,0">
+                BorderBrush="{StaticResource PastelRainbowVertical}" BorderThickness="0,0,2,0">
             <DockPanel>
                 <TextBlock DockPanel.Dock="Top" Text="Spanish" FontSize="18" FontWeight="SemiBold" Margin="20,18,20,14" />
-                <ListBox ItemsSource="{Binding NavItems}" SelectedItem="{Binding SelectedNav}"
+
+                <!--
+                The label stays put because it would clip in this 180px rail; the checked state and
+                the icon, swapped in code-behind, carry whether full screen is on.
+                -->
+                <ToggleButton DockPanel.Dock="Bottom" x:Name="FullScreenToggle" Click="OnFullScreenToggleClick"
+                              Margin="12,12,12,14" Padding="10,7" HorizontalAlignment="Stretch"
+                              HorizontalContentAlignment="Left" ToolTip.Tip="Toggle full screen (F11)">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <PathIcon x:Name="FullScreenIcon" Width="14" Height="14" />
+                        <TextBlock Text="Full screen" VerticalAlignment="Center" />
+                    </StackPanel>
+                </ToggleButton>
+
+                <ListBox Classes="nav" ItemsSource="{Binding NavItems}" SelectedItem="{Binding SelectedNav}"
                          Background="Transparent" Margin="8,0">
                     <ListBox.ItemTemplate>
                         <DataTemplate x:DataType="vm:NavItem">
